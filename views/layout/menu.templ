@@ -1,0 +1,59 @@
+package layout
+
+import "miners_game/views/components"
+
+templ Menu() {
+    @MenuStyle()
+    <div class="menu">
+        <div class="menu__logo">
+        <a href="/">
+        <img src="/public/images/logo.svg" />
+        </a>
+        </div>
+        <div class="menu__right">
+                <a class="menu__right-link" href="/login">Войти</a>
+                @components.LinkButton("/register"){
+                <span>Зарегистрироваться</span>
+                }
+
+        </div>
+    </div>
+}
+
+templ MenuStyle() {
+        <style>
+            .menu {
+                display: flex;
+                margin-bottom: 100px; 
+                justify-content: space-between;
+                padding: 20px 0;
+                max-width: 1290px;
+                align-items: center;
+                width: 100%;
+            }
+        
+            .menu__right {
+                display: flex;
+                gap: 20px;
+                align-items: center;
+            }
+        
+            .menu__right-link {
+                text-decoration: none;
+                color: var(--color-white);
+                font-size: 16px;
+            }
+        
+            .menu__right-link:hover {
+                color: #9f9f9f;
+                cursor: pointer;
+            }
+            .menu__logo img{
+                width: 46px;
+                height: auto;
+            }
+            .menu__right-email{
+                color: var(--color-white);
+            }
+        </style>
+}

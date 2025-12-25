@@ -1,0 +1,21 @@
+package layout
+
+templ Header(backgroundColor string) {
+    @HeaderStyle()
+    <div class="header" style={"background:"+backgroundColor+";"}>
+    @Menu()
+    {children...} 
+    </div>
+}
+
+templ HeaderStyle() {
+    <style>
+    .header{
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+        padding-bottom: 45px;
+    }
+    </style>
+}

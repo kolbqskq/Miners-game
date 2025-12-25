@@ -11,24 +11,24 @@ import (
 	"github.com/rs/zerolog"
 )
 
-type GameRepository struct {
+type Repository struct {
 	DbPool *pgxpool.Pool
 	Logger *zerolog.Logger
 }
 
-type GameRepositoryDeps struct {
+type RepositoryDeps struct {
 	DbPool *pgxpool.Pool
 	Logger *zerolog.Logger
 }
 
-func NewRepository(deps GameRepositoryDeps) *GameRepository {
-	return &GameRepository{
+func NewRepository(deps RepositoryDeps) *Repository {
+	return &Repository{
 		DbPool: deps.DbPool,
 		Logger: deps.Logger,
 	}
 }
 
-func (r *GameRepository) SaveGameState(gameState *GameState) error {
+func (r *Repository) SaveGameState(gameState *GameState) error {
 	minersJSON, err := json.Marshal(gameState.Miners)
 	if err != nil {
 		r.Logger.Error().Err(err).Msg("error Marshal SaveGameState")
@@ -37,7 +37,7 @@ func (r *GameRepository) SaveGameState(gameState *GameState) error {
 	query := `
 			INSERT INTO game_saves (user_id, save_id, balance, last_update_at, miners)
 			VAlUES (@user_id, @save_id, @balance, @last_update_at, @miners)
-			ON CONFLICT (user_id, save_id) DO UPDATE SET balance = EXCLUDED.balance, last_update_at = EXCLUDED.last_update_at, miner = EXCLUDED.miners`
+			ON CONFLICT (user_id, save_id) DO UPDATE SET balance = EXCLUDED.balance, last_update_at = EXCLUDED.last_update_at, miners = EXCLUDED.miners`
 	args := pgx.NamedArgs{
 		"user_id":        gameState.UserID,
 		"save_id":        gameState.SaveID,
@@ -53,7 +53,7 @@ func (r *GameRepository) SaveGameState(gameState *GameState) error {
 	return nil
 }
 
-func (r *GameRepository) GetGameState(userID, saveID string) (*GameState, error) {
+func (r *Repository) GetGameState(userID, saveID string) (*GameState, error) {
 	query := `
 		SELECT balance, last_update_at, miners
 		FROM game_saves
@@ -76,7 +76,7 @@ func (r *GameRepository) GetGameState(userID, saveID string) (*GameState, error)
 		return nil, err
 	}
 
-	var miners []miners.Miner
+	var miners map[string]miners.Miner
 	if err := json.Unmarshal(minersJSON, &miners); err != nil {
 		r.Logger.Error().Err(err).Msg("error Unmarshal GetGameState")
 		return nil, err

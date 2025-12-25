@@ -28,6 +28,6 @@ func NewHandler(deps HandlerDeps) {
 
 func (h *Handler) error(c *fiber.Ctx) error {
 	h.logger.Error().Msg("Error")
-	component := views.Hello()
+	component := views.Main()
 	return tadapter.Render(c, component)
 }

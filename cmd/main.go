@@ -2,6 +2,7 @@ package main
 
 import (
 	"miners_game/config"
+	"miners_game/internal/game"
 	"miners_game/internal/home"
 	"miners_game/pkg/database"
 	"miners_game/pkg/logger"
@@ -29,10 +30,26 @@ func main() {
 	dbPool := database.CreateDbPool(dbConfig, customLogger)
 	defer dbPool.Close()
 
+	//Repositories:
+	gameRepository := game.NewRepository(game.RepositoryDeps{
+		DbPool: dbPool,
+		Logger: customLogger,
+	})
+
+	//Services:
+	gameService := game.NewService(game.ServiceDeps{
+		GameRepository: gameRepository,
+	})
+
 	//Handlers:
 	home.NewHandler(home.HandlerDeps{
 		Router: app,
 		Logger: customLogger,
+	})
+	game.NewHandler(game.HandlerDeps{
+		Router:      app,
+		Logger:      customLogger,
+		GameService: gameService,
 	})
 
 	if err := app.Listen(":3000"); err != nil {

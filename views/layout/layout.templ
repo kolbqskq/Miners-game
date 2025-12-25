@@ -1,0 +1,41 @@
+package layout
+
+type LayoutProps struct{
+    Title string
+    MetaDescription string
+}
+
+templ Layout(props LayoutProps) {
+    <!DOCTYPE html>
+    <html lang="ru">
+    
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{props.Title}</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap"
+            rel="stylesheet">
+
+         <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.8/dist/htmx.min.js" integrity="sha384-/TgkGk7p307TH7EXJDuUlgG3Ce1UVolAOFopFekQkkXihi5u/6OCvVKyz1W+idaz" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/htmx-ext-response-targets@2.0.4" integrity="sha384-T41oglUPvXLGBVyRdZsVRxNWnOOqCynaPubjUVjxhsjFTKrFJGEMm3/0KGmNQ+Pg" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="/public/styles.css">
+        <link rel="icon" type="image/png" href="public/favicon/favicon-96x96.png" sizes="96x96" />
+        <link rel="icon" type="image/svg+xml" href="public/favicon/favicon.svg" />
+        <link rel="shortcut icon" href="/favicon.ico" />
+        <link rel="apple-touch-icon" sizes="180x180" href="public/favicon/apple-touch-icon.png" />
+        <meta name="apple-mobile-web-app-title" content="Miners" />
+        <link rel="manifest" href="public/favicon/site.webmanifest" />
+        <meta name="description" content={props.MetaDescription}/>
+        <meta property="og:title" content={props.Title} />
+        <meta property="og:description" content={props.MetaDescription} />
+    </head>
+    
+    <body>
+        {children...}
+    </body>
+
+    
+    </html>
+}

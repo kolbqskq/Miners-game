@@ -1,0 +1,16 @@
+package views
+
+import "miners_game/views/layout"
+
+templ Main() {
+    @layout.Layout(layout.LayoutProps{
+        Title: "Начни майнить",
+        MetaDescription: "Сайт по майнингу",
+    })
+    <form hx-post="/save" hx-trigger="submit">
+        <div>
+            @SubmitButton(){Купить}
+        </div>
+    </form>
+
+}

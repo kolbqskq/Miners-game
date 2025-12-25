@@ -1,8 +1,28 @@
 package miners
 
+import (
+	"time"
+
+	"github.com/google/uuid"
+)
+
+type Miner struct {
+	ID      string
+	Class   string
+	StartAt int64
+	EndAt   int64
+}
+
+type MinerConfig struct {
+	Price     int64
+	Power     int64
+	Energy    int64
+	BreakTime int64
+	Progress  int64
+}
+
 var MinerPresets = map[string]MinerConfig{
 	"small": {
-		Class:     "small",
 		Price:     5,
 		Power:     1,
 		Energy:    30,
@@ -10,7 +30,6 @@ var MinerPresets = map[string]MinerConfig{
 		Progress:  0,
 	},
 	"normal": {
-		Class:     "normal",
 		Price:     50,
 		Energy:    45,
 		Power:     3,
@@ -18,7 +37,6 @@ var MinerPresets = map[string]MinerConfig{
 		Progress:  0,
 	},
 	"strong": {
-		Class:     "strong",
 		Price:     450,
 		Energy:    60,
 		Power:     10,
@@ -27,17 +45,21 @@ var MinerPresets = map[string]MinerConfig{
 	},
 }
 
-type MinerConfig struct {
-	Class     string
-	Price     int64
-	Power     int
-	Energy    int
-	BreakTime int
-	Progress  int
+func GetMinerConfig(class string) MinerConfig {
+	return MinerPresets[class]
 }
 
-type Miner struct {
-	ID      string
-	StartAt int64
-	MinerConfig
+func NewMiner(class string) *Miner {
+
+	cfg := GetMinerConfig(class)
+	lifetime := cfg.Energy * cfg.BreakTime
+
+	now := time.Now().Unix()
+	miner := &Miner{
+		ID:      uuid.NewString(),
+		Class:   class,
+		StartAt: now,
+		EndAt:   now + int64(lifetime),
+	}
+	return miner
 }
