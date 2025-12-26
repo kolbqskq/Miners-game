@@ -28,7 +28,8 @@ func NewHandler(deps HandlerDeps) {
 		gameService: deps.GameService,
 	}
 	h.router.Post("/save", h.save)
-	h.router.Post("/balance/:userID/:saveID", h.balance)
+	h.router.Post("/balance", h.balance)
+	h.router.Post("/new", h.newGame)
 }
 
 func (h *Handler) save(c *fiber.Ctx) error {
@@ -38,7 +39,7 @@ func (h *Handler) save(c *fiber.Ctx) error {
 		SaveID:       uuid.NewString(),
 		Balance:      100,
 		LastUpdateAt: time.Now().Unix(),
-		Miners:       map[string]miners.Miner{},
+		Miners:       map[string]*miners.Miner{},
 	}); err != nil {
 		h.logger.Error().Msg("unluck")
 		return c.SendStatus(fiber.StatusBadRequest)
@@ -48,6 +49,11 @@ func (h *Handler) save(c *fiber.Ctx) error {
 }
 
 func (h *Handler) balance(c *fiber.Ctx) error {
+
+	return c.SendStatus(fiber.StatusOK)
+}
+
+func (h *Handler) newGame(c *fiber.Ctx) error {
 
 	return c.SendStatus(fiber.StatusOK)
 }

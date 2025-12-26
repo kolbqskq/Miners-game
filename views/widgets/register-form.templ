@@ -1,0 +1,107 @@
+package widgets
+
+import "miners_game/views/components"
+
+templ RegisterForm() {
+    @RegisterFormStyle()
+<div class="register-form" hx-ext="response-targets">
+    <div class="register-form__text">
+        @components.Title2("Зарегистрироваться на сайте", "100px", "var(--color-white)")
+        @components.Title2("Заполните все необходимые поля", "24px", "var(--color-white)")
+    </div>
+    <div id="register-result"> </div>
+    <form hx-post="/auth/register" hx-trigger="submit" hx-target-error="#register-result" hx-swap="innerHTML swap:1s"  class="register-form__inputs" hx-on:htmx:after-request="document.querySelector('input[name=password]').value = '';">
+            @components.Input(components.InputProps{
+                Name: "email",
+                Placeholder: "Email",
+            })
+
+            @components.Input(components.InputProps{
+                Name: "userName",
+                Placeholder: "username",
+            })
+
+            @components.Input(components.InputProps{
+                Name: "password",
+                Placeholder: "Пароль",
+                Type: "password",
+            })
+
+            @components.Input(components.InputProps{
+                Name: "passwordConfirm",
+                Placeholder: "Подтвердить",
+                Type: "password",
+            })
+            
+        <div class="register-form__button">
+            @components.SubmitButton(){
+                <div class="register-form__submit">Зарегистрироваться</div>
+                <div class="register-form__loader"></div>
+            }
+        </div>
+    </form>
+    
+    </div>
+}
+
+templ RegisterFormStyle() {
+    <style>
+    .register-form{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        margin-top: 100px;
+        padding: 20px;
+    }
+    .register-form__inputs{
+        display: flex;
+        box-sizing: border-box;
+        flex-direction: column;
+        gap: 30px;
+        margin-top: 40px;
+        width: 100%;
+        max-width: 520px;
+    }
+    .register-form__button{
+        display: flex;
+        justify-content: center;
+    }
+    .register-form__text{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+        .register-form__loader {
+        display: none;
+    }
+    .htmx-request .register-form__submit{
+        display: none;
+    }
+
+   .htmx-request .register-form__loader {
+        display: block;
+        width: 40px;
+        aspect-ratio: 1;
+        display: grid;
+    }
+    .register-form__loader::before,
+    .register-form__loader::after {
+        content: "";
+        grid-area: 1/1;
+        background: white;
+        clip-path: polygon(0 0,50% 50%, 0 100%);
+        animation: l11 2s infinite;
+    }
+    .register-form__loader::after {
+        animation-delay: -1.5s;
+        --s:90deg;
+    }
+    @keyframes l11 {
+        0%,12.5%    {transform:rotate(var(--s,0deg)) rotate(0deg)}
+        37.5%,62.5% {transform:rotate(var(--s,0deg)) rotate(-180deg)}
+        87.5%,100%  {transform:rotate(var(--s,0deg)) rotate(-360deg)}
+    }
+    </style>
+}

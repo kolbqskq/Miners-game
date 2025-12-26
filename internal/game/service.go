@@ -21,22 +21,44 @@ func NewService(deps ServiceDeps) *Service {
 	}
 }
 
+func (s *Service) StartNewGame(userID, saveID string) (*GameState, error) {
+	gameState := NewGameState(userID, saveID)
+	if err := s.repo.SaveGameState(gameState); err != nil {
+		return gameState, err
+	}
+	k := userID + "/" + saveID
+	s.mu.Lock()
+	s.memoryGameState[k] = gameState
+	s.mu.Unlock()
+	return gameState, nil
+}
+
 func (s *Service) BuyMiner(class, userID, saveID string) (*GameState, error) {
 	miner := miners.NewMiner(class)
 	price := miners.GetMinerConfig(class).Price
+	k := userID + "/" + saveID
 
 	gameState, err := s.repo.GetGameState(userID, saveID)
 	if err != nil {
+		s.mu.Lock()
+		gameState = s.memoryGameState[k]
+		s.mu.Unlock()
 		return gameState, err
 	}
 
-	gameState.RecalculateBalance()
-	k := userID + "/" + saveID
+	s.mu.Lock()
 	s.memoryGameState[k] = gameState
-	if err := gameState.ValidateBalance(price); err != nil {
+	s.mu.Unlock()
+
+	gameState.RecalculateBalance()
+
+	if err := gameState.SpendBalance(price); err != nil {
 		return gameState, err
 	}
-	gameState.Miners[miner.ID] = *miner
+
+	gameState.mu.Lock()
+	gameState.Miners[miner.ID] = miner
+	gameState.mu.Unlock()
 
 	if err := s.repo.SaveGameState(gameState); err != nil {
 		return gameState, err

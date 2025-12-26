@@ -2,21 +2,28 @@ package main
 
 import (
 	"miners_game/config"
+	"miners_game/internal/auth"
 	"miners_game/internal/game"
-	"miners_game/internal/home"
+	"miners_game/internal/pages"
+	"miners_game/internal/user"
 	"miners_game/pkg/database"
 	"miners_game/pkg/logger"
+	"time"
 
 	"github.com/gofiber/contrib/fiberzerolog"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/recover"
+	"github.com/gofiber/fiber/v2/middleware/session"
+	"github.com/gofiber/storage/postgres/v3"
+	"github.com/gookit/validate/locales/ruru"
 )
 
 func main() {
-	//config
+	//configs
 	config.Init()
 	loggerConfig := config.NewLogConfig()
 	dbConfig := config.NewDatabaseConfig()
+	ruru.RegisterGlobal()
 
 	customLogger := logger.NewLogger(loggerConfig)
 
@@ -29,9 +36,27 @@ func main() {
 	app.Static("/public", "./public")
 	dbPool := database.CreateDbPool(dbConfig, customLogger)
 	defer dbPool.Close()
+	storage := postgres.New(postgres.Config{
+		DB:         dbPool,
+		Table:      "session",
+		Reset:      false,
+		GCInterval: 10 * time.Second,
+	})
+	store := session.New(session.Config{
+		Storage: storage,
+	})
+	//app.Use(middleware.AuthMiddleware(store))
 
 	//Repositories:
 	gameRepository := game.NewRepository(game.RepositoryDeps{
+		DbPool: dbPool,
+		Logger: customLogger,
+	})
+	userRepository := user.NewRepository(user.RepositoryDeps{
+		DbPool: dbPool,
+		Logger: customLogger,
+	})
+	authRepository := auth.NewRepository(auth.RepositoryDeps{
 		DbPool: dbPool,
 		Logger: customLogger,
 	})
@@ -40,9 +65,13 @@ func main() {
 	gameService := game.NewService(game.ServiceDeps{
 		GameRepository: gameRepository,
 	})
+	authService := auth.NewService(auth.ServiceDeps{
+		UserRepository: userRepository,
+		AuthRepository: authRepository,
+	})
 
 	//Handlers:
-	home.NewHandler(home.HandlerDeps{
+	pages.NewHandler(pages.HandlerDeps{
 		Router: app,
 		Logger: customLogger,
 	})
@@ -50,6 +79,12 @@ func main() {
 		Router:      app,
 		Logger:      customLogger,
 		GameService: gameService,
+	})
+	auth.NewHandler(auth.HandlerDeps{
+		Router:      app,
+		Logger:      customLogger,
+		AuthService: authService,
+		Store:       store,
 	})
 
 	if err := app.Listen(":3000"); err != nil {

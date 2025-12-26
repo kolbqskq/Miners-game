@@ -1,14 +1,14 @@
 package miners
 
-func (g *Miner) CalcIncome(from, to int64) int64 {
-	cfg := GetMinerConfig(g.Class)
-
-	var times int64
-	if (to - from) >= (g.EndAt - g.StartAt) {
-		times = (g.EndAt - g.StartAt) / cfg.BreakTime
-	} else {
-		times = (to - from) / cfg.BreakTime
+func (m *Miner) CalcIncome(from, to int64) int64 {
+	cfg := GetMinerConfig(m.Class)
+	if from < m.StartAt {
+		from = m.StartAt
 	}
+	if to > m.EndAt {
+		to = m.EndAt
+	}
+	times := (to - from) / cfg.BreakTime
 	if times <= 0 {
 		return 0
 	}

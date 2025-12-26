@@ -1,0 +1,84 @@
+package components
+
+type NotificationStatus string
+
+const (
+    NotificationSuccess NotificationStatus= "success"
+    NotificationFail NotificationStatus= "fail"
+)
+
+templ Notification(message string, status NotificationStatus) {
+    @NotificationStyle()
+    <div class={
+        "notification auto-hide",
+        templ.KV("notification_success", status== NotificationSuccess),
+        templ.KV("notification_fail", status== NotificationFail)
+        }>{message}</div>
+}
+
+templ NotificationStyle() {
+<style>
+    .notification {
+        width: 100%;
+        max-width: 500px;
+        margin: 10px auto;
+        padding: 20px 25px;
+        color: #fff;
+        font-size: 16px;
+        font-weight: 500;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        opacity: 1;
+        transition: opacity 0.5s ease, transform 0.3s ease;
+        transform: translateY(0);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .notification_success {
+        background: linear-gradient(135deg, #31b4a3, #2a918b);
+    }
+
+    .notification_fail {
+        background: linear-gradient(135deg, #d46a6a, #b23d3d);
+    }
+
+    .notification .icon {
+        font-size: 20px;
+    }
+
+    .htmx-swapping .notification {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+
+    .notification.auto-hide {
+        animation: slideInOut 4s forwards;
+    }
+
+    @keyframes slideInOut {
+        0% {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+
+        10% {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        90% {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        100% {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+    }
+</style>
+}

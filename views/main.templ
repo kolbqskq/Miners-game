@@ -1,16 +1,33 @@
 package views
 
 import "miners_game/views/layout"
+import "miners_game/views/components"
 
 templ Main() {
-    @layout.Layout(layout.LayoutProps{
-        Title: "Начни майнить",
-        MetaDescription: "Сайт по майнингу",
-    })
-    <form hx-post="/save" hx-trigger="submit">
-        <div>
-            @SubmitButton(){Купить}
-        </div>
-    </form>
+
+@layout.Layout(layout.LayoutProps{
+    Title: "Начни майнить",
+    MetaDescription: "Сайт по майнингу",
+}){
+<main>
+    @MainStyle()
+    @layout.Header("#222222"){
+        @components.Title("Начни майнить вместе со всеми","70px","var(--color-white)")
+        @components.SubTitle("Просто попробуй!")
+    }
+</main>
+}
+}
+
+templ MainStyle() {
+    <style>
+        .main_submit-form{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(48, 150, 137, 0.10);
+            padding: 60px 0 120px 0;
+    }
+    </style>
 
 }

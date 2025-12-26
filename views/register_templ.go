@@ -9,9 +9,9 @@ import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
 import "miners_game/views/layout"
-import "miners_game/views/components"
+import "miners_game/views/widgets"
 
-func Main() templ.Component {
+func Register() templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -44,11 +44,11 @@ func Main() templ.Component {
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<main>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<main class=\"register-main\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = MainStyle().Render(ctx, templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = RegisterStyle().Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -64,33 +64,25 @@ func Main() templ.Component {
 					}()
 				}
 				ctx = templ.InitializeContext(ctx)
-				templ_7745c5c3_Err = components.Title("Начни майнить вместе со всеми", "70px", "var(--color-white)").Render(ctx, templ_7745c5c3_Buffer)
-				if templ_7745c5c3_Err != nil {
-					return templ_7745c5c3_Err
-				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, " ")
-				if templ_7745c5c3_Err != nil {
-					return templ_7745c5c3_Err
-				}
-				templ_7745c5c3_Err = components.SubTitle("Просто попробуй!").Render(ctx, templ_7745c5c3_Buffer)
+				templ_7745c5c3_Err = widgets.RegisterForm().Render(ctx, templ_7745c5c3_Buffer)
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
 				return nil
 			})
-			templ_7745c5c3_Err = layout.Header("#222222").Render(templ.WithChildren(ctx, templ_7745c5c3_Var3), templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = layout.Header("0").Render(templ.WithChildren(ctx, templ_7745c5c3_Var3), templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "</main>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "</main>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			return nil
 		})
 		templ_7745c5c3_Err = layout.Layout(layout.LayoutProps{
-			Title:           "Начни майнить",
-			MetaDescription: "Сайт по майнингу",
+			Title:           "Регистрация",
+			MetaDescription: "Регистрация",
 		}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var2), templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
@@ -99,7 +91,7 @@ func Main() templ.Component {
 	})
 }
 
-func MainStyle() templ.Component {
+func RegisterStyle() templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -120,7 +112,7 @@ func MainStyle() templ.Component {
 			templ_7745c5c3_Var4 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "<style>\r\n        .main_submit-form{\r\n            display: flex;\r\n            align-items: center;\r\n            justify-content: center;\r\n            background-color: rgba(48, 150, 137, 0.10);\r\n            padding: 60px 0 120px 0;\r\n    }\r\n    </style>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "<style>\r\n    html, body{\r\n        height: 100%;\r\n        margin: 0;\r\n    }\r\n    .register-main{\r\n        background-image: url(/public/images/background.webp);\r\n        background-size: cover;\r\n        background-position: center;\r\n        background-repeat: no-repeat;\r\n        min-height: 100%;\r\n    }\r\n    .register-main__title{\r\n        display: flex;\r\n        flex-direction: column;\r\n        align-items: center;\r\n    }\r\n    </style>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

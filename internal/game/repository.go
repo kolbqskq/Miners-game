@@ -45,8 +45,7 @@ func (r *Repository) SaveGameState(gameState *GameState) error {
 		"last_update_at": gameState.LastUpdateAt,
 		"miners":         minersJSON,
 	}
-	_, err = r.DbPool.Exec(context.Background(), query, args)
-	if err != nil {
+	if _, err = r.DbPool.Exec(context.Background(), query, args); err != nil {
 		r.Logger.Error().Err(err).Msg("Ошибка сохранения игры в БД")
 		return fmt.Errorf("Невозможно сохронить игру: %w", err)
 	}
@@ -76,7 +75,7 @@ func (r *Repository) GetGameState(userID, saveID string) (*GameState, error) {
 		return nil, err
 	}
 
-	var miners map[string]miners.Miner
+	var miners map[string]*miners.Miner
 	if err := json.Unmarshal(minersJSON, &miners); err != nil {
 		r.Logger.Error().Err(err).Msg("error Unmarshal GetGameState")
 		return nil, err

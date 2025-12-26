@@ -1,0 +1,31 @@
+package components
+
+
+templ Button(onclick templ.ComponentScript) {
+    @ButtonStyle()
+    <button class="button" onclick={onclick}>
+    {children...}
+    </button>
+    
+}
+
+templ ButtonStyle() {
+<style>
+    .button {
+        background-color: var(--color-primary);
+        color: var(--color-white);
+        font-size: 16px;
+        padding: 15px 20px;
+        display: inline-block;
+        text-align: center;
+        border-radius: 8px;
+        text-decoration: none;
+        border: 2px solid transparent;
+    }
+
+    .button:hover {
+        color: var(--color-primary-hover);
+        cursor: pointer;
+    }
+</style>
+}

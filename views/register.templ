@@ -1,0 +1,42 @@
+package views
+
+import "miners_game/views/layout"
+import "miners_game/views/widgets"
+
+templ Register() {
+
+@layout.Layout(layout.LayoutProps{
+    Title: "Регистрация",
+    MetaDescription: "Регистрация",
+}){
+<main class="register-main">
+    @RegisterStyle()
+    @layout.Header("0"){    
+    @widgets.RegisterForm()
+    }
+
+</main>
+}
+}
+
+templ RegisterStyle() {
+    <style>
+    html, body{
+        height: 100%;
+        margin: 0;
+    }
+    .register-main{
+        background-image: url(/public/images/background.webp);
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        min-height: 100%;
+    }
+    .register-main__title{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    </style>
+
+}
