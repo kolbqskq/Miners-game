@@ -12,12 +12,15 @@ func AuthMiddleware(store *session.Store) fiber.Handler {
 			return c.SendStatus(500)
 		}
 		userID := ""
+		userName := ""
 		ID, ok := sess.Get("user_id").(string)
 		if ok {
 			userID = ID
-
+			name, _ := sess.Get("username").(string)
+			userName = name
 		}
 		c.Locals("user_id", userID)
+		c.Locals("username", userName)
 		return c.Next()
 	}
 

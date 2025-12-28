@@ -3,61 +3,106 @@ package layout
 import "miners_game/views/components"
 
 templ Menu() {
-    @MenuStyle()
-    <div class="menu">
+@MenuStyle()
+<div class="menu" id="menu">
+    <div class="menu__inner">
         <div class="menu__logo">
-        <a href="/">
-        <img src="/public/images/logo.svg" />
-        </a>
+            <a href="/">
+                <img src="/public/images/logo.svg" />
+            </a>
         </div>
+
         <div class="menu__right">
-                <a class="menu__right-link" href="/login">Войти</a>
-                @components.LinkButton("/register"){
-                <span>Зарегистрироваться</span>
-                }
+            {{userName:=ctx.Value("username").(string)}}
+            {{userID:=ctx.Value("user_id").(string)}}
+
+            if userID == ""{
+            <a class="menu__link" href="/login">Войти</a>
+            @components.LinkButton("/register"){
+            <span>Регистрация</span>
+            }
+            } else {
+            <span class="menu__user">
+                {userName}
+            </span>
+            
+            <button class="menu__logout" hx-post="/auth/logout" hx-target="#menu">
+                Выйти
+            </button>
+            }
         </div>
     </div>
+</div>
 }
 
+
 templ MenuStyle() {
-        <style>
-            .menu {
-                display: flex;
-                margin-bottom: 120px; 
-                justify-content: space-between;
-                padding: 28px 0;
-                max-width: 1290px;
-                align-items: center;
-                width: 100%;
-                font-size: 15px;
-            }
-        
-            .menu__right {
-                display: flex;
-                gap: 28px;
-                align-items: center;
-            }
-        
-            .menu__right-link {
-                text-decoration: none;
-                color: rgba(255,255,255,0.75);
-                font-size: 15px;
-                transition: color 0.2s ease;
-            }
-        
-            .menu__right-link:hover {
-                color: rgba(255,255,255,0.75);
-            }
-            .menu__logo img{
-                width: 42px;
-                opacity: 0.85;
-                transition: opacity 0.2s ease;
-            }
-            .menu__logo img:hover{
-                opacity: 1;
-            }
-            .menu__right-email{
-                color: var(--color-white);
-            }
-        </style>
+<style>
+.menu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+
+    height: 72px;
+    z-index: 1000;
+
+    background: rgba(17, 17, 17, 0.65);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.menu__inner {
+    max-width: 1290px;
+    height: 100%;
+    margin: 0 auto;
+    padding: 0 24px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.menu__logo img {
+    width: 42px;
+    display: block;
+}
+.menu__right {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+.menu__link {
+    color: rgba(255,255,255,0.75);
+    text-decoration: none;
+    font-size: 14px;
+    transition: color .2s ease;
+}
+.menu__link:hover {
+    color: #fff;
+}
+.menu__user {
+    padding: 6px 14px;
+    font-size: 14px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.08);
+    color: #fff;
+}
+.menu__logout {
+    padding: 8px 14px;
+    font-size: 14px;
+    border-radius: 10px;
+    border: none;
+
+    background: rgba(255,255,255,0.12);
+    color: #fff;
+    cursor: pointer;
+
+    transition:
+        background .2s ease,
+        transform .15s ease;
+}
+.menu__logout:hover {
+    background: rgba(255,255,255,0.18);
+    transform: translateY(-1px);
+}
+</style>
 }

@@ -9,18 +9,15 @@ import (
 
 type Service struct {
 	userRepo user.IUserRepository
-	authRepo IAuthRepository
 }
 
 type ServiceDeps struct {
 	UserRepository user.IUserRepository
-	AuthRepository IAuthRepository
 }
 
 func NewService(deps ServiceDeps) *Service {
 	return &Service{
 		userRepo: deps.UserRepository,
-		authRepo: deps.AuthRepository,
 	}
 }
 
@@ -42,13 +39,13 @@ func (s *Service) Register(email, password, userName string) (string, error) {
 	return user.ID, nil
 }
 
-func (s *Service) Login(email, password string) (string, error) {
+func (s *Service) Login(email, password string) (string, string, error) {
 	user, _ := s.userRepo.FindByEmail(email)
 	if user == nil {
-		return "", fmt.Errorf("Непральный email или пароль") //errs
+		return "", "", fmt.Errorf("Непральный email или пароль") //errs
 	}
 	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password)); err != nil {
-		return "", fmt.Errorf("Непральный email или пароль") //errs
+		return "", "", fmt.Errorf("Непральный email или пароль") //errs
 	}
-	return user.ID, nil
+	return user.ID, user.UserName, nil
 }

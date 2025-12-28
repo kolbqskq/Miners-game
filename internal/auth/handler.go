@@ -3,6 +3,7 @@ package auth
 import (
 	"miners_game/pkg/tadapter"
 	"miners_game/views/components"
+	"miners_game/views/layout"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/session"
@@ -38,8 +39,20 @@ func NewHandler(deps HandlerDeps) {
 }
 
 func (h *Handler) logout(c *fiber.Ctx) error {
+	sess, err := h.store.Get(c)
+	if err != nil {
+		h.logger.Error().Msg(err.Error())
+		return c.SendStatus(fiber.StatusInternalServerError)
+	}
+	if err := sess.Destroy(); err != nil {
+		h.logger.Error().Msg(err.Error())
+		return c.SendStatus(fiber.StatusInternalServerError)
+	}
+	c.Locals("user_id", "")
+	c.Locals("username", "")
 
-	return c.SendStatus(fiber.StatusOK)
+	component := layout.Menu()
+	return tadapter.Render(c, component, fiber.StatusOK)
 }
 
 func (h *Handler) login(c *fiber.Ctx) error {
@@ -54,7 +67,7 @@ func (h *Handler) login(c *fiber.Ctx) error {
 		return tadapter.Render(c, component, fiber.StatusBadRequest)
 	}
 
-	userID, err := h.authService.Login(form.Email, form.Password)
+	userID, userName, err := h.authService.Login(form.Email, form.Password)
 	if err != nil {
 		h.logger.Error().Msg(err.Error())
 		component := components.Notification(err.Error(), components.NotificationFail)
@@ -67,12 +80,15 @@ func (h *Handler) login(c *fiber.Ctx) error {
 		component := components.Notification("Server error", components.NotificationFail)
 		return tadapter.Render(c, component, fiber.StatusInternalServerError)
 	}
+
 	sess.Set("user_id", userID)
+	sess.Set("username", userName)
 	if err := sess.Save(); err != nil {
 		h.logger.Error().Msg(err.Error()) //err
 		component := components.Notification("Server error", components.NotificationFail)
 		return tadapter.Render(c, component, fiber.StatusInternalServerError)
 	}
+
 	c.Set("HX-Redirect", "/")
 	return c.SendStatus(fiber.StatusOK)
 }

@@ -9,7 +9,7 @@ templ Main() {
     Title: "Начни майнить",
     MetaDescription: "Сайт по майнингу",
 }){
-<main class="main">
+<main class="main" id="main">
     @MainStyle()
     @layout.Header("#111"){
         <div class="main__hero">
@@ -32,6 +32,10 @@ templ Main() {
 
 templ MainStyle() {
     <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+        }
         .main{
             width: 100%;
         }

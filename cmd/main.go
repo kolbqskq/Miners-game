@@ -57,10 +57,6 @@ func main() {
 		DbPool: dbPool,
 		Logger: customLogger,
 	})
-	authRepository := auth.NewRepository(auth.RepositoryDeps{
-		DbPool: dbPool,
-		Logger: customLogger,
-	})
 
 	//Services:
 	gameService := game.NewService(game.ServiceDeps{
@@ -68,7 +64,6 @@ func main() {
 	})
 	authService := auth.NewService(auth.ServiceDeps{
 		UserRepository: userRepository,
-		AuthRepository: authRepository,
 	})
 
 	//Handlers:
