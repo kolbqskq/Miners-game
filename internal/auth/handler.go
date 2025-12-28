@@ -64,12 +64,14 @@ func (h *Handler) login(c *fiber.Ctx) error {
 	sess, err := h.store.Get(c)
 	if err != nil {
 		h.logger.Error().Msg(err.Error())
-		return c.SendStatus(500)
+		component := components.Notification("Server error", components.NotificationFail)
+		return tadapter.Render(c, component, fiber.StatusInternalServerError)
 	}
 	sess.Set("user_id", userID)
 	if err := sess.Save(); err != nil {
 		h.logger.Error().Msg(err.Error()) //err
-		return c.SendStatus(500)
+		component := components.Notification("Server error", components.NotificationFail)
+		return tadapter.Render(c, component, fiber.StatusInternalServerError)
 	}
 	c.Set("HX-Redirect", "/")
 	return c.SendStatus(fiber.StatusOK)
@@ -97,12 +99,14 @@ func (h *Handler) register(c *fiber.Ctx) error {
 	sess, err := h.store.Get(c)
 	if err != nil {
 		h.logger.Error().Msg(err.Error()) //err
-		return c.SendStatus(500)
+		component := components.Notification("Server error", components.NotificationFail)
+		return tadapter.Render(c, component, fiber.StatusInternalServerError)
 	}
 	sess.Set("user_id", userID)
 	if err := sess.Save(); err != nil {
 		h.logger.Error().Msg(err.Error()) //err
-		return c.SendStatus(500)
+		component := components.Notification("Server error", components.NotificationFail)
+		return tadapter.Render(c, component, fiber.StatusInternalServerError)
 	}
 	c.Set("HX-Redirect", "/")
 	return c.SendStatus(fiber.StatusOK)
