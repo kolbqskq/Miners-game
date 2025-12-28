@@ -33,7 +33,7 @@ func SubmitButton() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<button class=\"submit-button\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<button class=\"submit-button\" type=\"submit\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -70,7 +70,7 @@ func SubmitButtonStyle() templ.Component {
 			templ_7745c5c3_Var2 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "<style>\r\n    .submit-button {\r\n        background-color: var(--color-primary);\r\n        color: var(--color-white);\r\n        height: 80px;\r\n        padding: 14px 20px;\r\n        border-radius: 20px;\r\n        border: none;\r\n        cursor: pointer;\r\n        font-size: 18px;\r\n        font-style: normal;\r\n        font-weight: 600px;\r\n    }\r\n\r\n    .submit-button:hover {\r\n        color: var(--color-primary-hover);\r\n    }\r\n</style>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "<style>\r\n    .submit-button {\r\n        display: flex;\r\n        align-items: center;\r\n        justify-content: center;\r\n        gap: 12px;\r\n\r\n        height: 80px;\r\n        width: 100%;\r\n\r\n        background: linear-gradient(\r\n            180deg,\r\n            #f6c453 0%,\r\n            #e0a800 100%\r\n        );\r\n\r\n        color: #111;\r\n        border-radius: 20px;\r\n        border: none;\r\n\r\n        font-size: 20px;\r\n        font-weight: 600;\r\n\r\n        cursor: pointer;\r\n\r\n        transition:\r\n            transform 0.15s ease,\r\n            box-shadow 0.15s ease;\r\n    }\r\n\r\n    .submit-button:hover {\r\n        transform: translateY(-1px);\r\n        box-shadow: 0 10px 30px rgba(0,0,0,0.3);\r\n    }\r\n</style>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

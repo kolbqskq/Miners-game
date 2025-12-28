@@ -11,10 +11,7 @@ templ Login() {
 }){
 <main class="login-main">
     @LoginStyle()
-    @layout.Header("0"){    
     @widgets.LoginForm()
-    }
-
 </main>
 }
 }
@@ -26,15 +23,14 @@ templ LoginStyle() {
         margin: 0;
     }
     .login-main{
-        background-image: url(/public/images/background.png);
-        background-size: cover;
-        background-position: center;
-        background-repeat: no-repeat;
-        min-height: 100%;
-    }
-    .login-main__title{
+        min-height: 100vh;
+        background: radial-gradient(
+            circle at top,
+            #1a1a1a 0%,
+            #0b0b0b 70%
+        );
         display: flex;
-        flex-direction: column;
+        justify-content: center;
         align-items: center;
     }
     </style>

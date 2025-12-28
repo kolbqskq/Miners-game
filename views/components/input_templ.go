@@ -107,7 +107,7 @@ func InputStyle() templ.Component {
 			templ_7745c5c3_Var5 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "<style>\r\n    .input {\r\n        height: 80px;\r\n        padding: 20px;\r\n        border-radius: 20px;\r\n        background: var(--color-white);\r\n        border: none;\r\n    }\r\n    .input::placeholder{\r\n        color: var(--color-gray);\r\n    }\r\n    </style>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "<style>\r\n    .input {\r\n        height: 72px;\r\n        padding: 0 20px;\r\n\r\n        border-radius: 16px;\r\n        background: rgba(255,255,255,0.08);\r\n\r\n        color: var(--color-white);\r\n        font-size: 16px;\r\n\r\n        border: 1px solid rgba(255,255,255,0.1);\r\n        outline: none;\r\n\r\n        transition: border-color 0.2s ease, background 0.2s ease;\r\n    }\r\n    .input:focus{\r\n        border-color:rgba(255,255,255,0.35);\r\n        background: rgba(255,255,255,0.12);\r\n    }\r\n    .input::placeholder{\r\n        color: rgba(255,255,255,0.5);\r\n    }\r\n    </style>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

@@ -8,6 +8,7 @@ import (
 	"miners_game/internal/user"
 	"miners_game/pkg/database"
 	"miners_game/pkg/logger"
+	"miners_game/pkg/middleware"
 	"time"
 
 	"github.com/gofiber/contrib/fiberzerolog"
@@ -45,7 +46,7 @@ func main() {
 	store := session.New(session.Config{
 		Storage: storage,
 	})
-	//app.Use(middleware.AuthMiddleware(store))
+	app.Use(middleware.AuthMiddleware(store))
 
 	//Repositories:
 	gameRepository := game.NewRepository(game.RepositoryDeps{

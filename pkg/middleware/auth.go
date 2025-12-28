@@ -11,10 +11,10 @@ func AuthMiddleware(store *session.Store) fiber.Handler {
 		if err != nil {
 			return c.SendStatus(500)
 		}
-
-		userID, ok := sess.Get("user_id").(string)
-		if !ok {
-			return c.SendStatus(fiber.StatusUnauthorized)
+		userID := ""
+		ID, ok := sess.Get("user_id").(string)
+		if ok {
+			userID = ID
 
 		}
 		c.Locals("user_id", userID)

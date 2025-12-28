@@ -14,14 +14,26 @@ templ Input(props InputProps) {
 templ InputStyle() {
     <style>
     .input {
-        height: 80px;
-        padding: 20px;
-        border-radius: 20px;
-        background: var(--color-white);
-        border: none;
+        height: 72px;
+        padding: 0 20px;
+
+        border-radius: 16px;
+        background: rgba(255,255,255,0.08);
+
+        color: var(--color-white);
+        font-size: 16px;
+
+        border: 1px solid rgba(255,255,255,0.1);
+        outline: none;
+
+        transition: border-color 0.2s ease, background 0.2s ease;
+    }
+    .input:focus{
+        border-color:rgba(255,255,255,0.35);
+        background: rgba(255,255,255,0.12);
     }
     .input::placeholder{
-        color: var(--color-gray);
+        color: rgba(255,255,255,0.5);
     }
     </style>
 }

@@ -9,11 +9,22 @@ templ Main() {
     Title: "Начни майнить",
     MetaDescription: "Сайт по майнингу",
 }){
-<main>
+<main class="main">
     @MainStyle()
-    @layout.Header("#222222"){
-        @components.Title("Начни майнить вместе со всеми","70px","var(--color-white)")
-        @components.SubTitle("Просто попробуй!")
+    @layout.Header("#111"){
+        <div class="main__hero">
+                @components.Title("Начни майнить вместе со всеми","70px","var(--color-white)")
+                @components.SubTitle("Просто попробуй!")
+
+                <div class="main__hero-cta">
+                    <a class="main__link-button" href="/game">
+                        Начать игру
+                    </a>
+                </div>
+                <div class="main__hero-art">
+                    <img src="/public/images/home-miner.png" alt="Шахтер">
+                </div>
+        </div>
     }
 </main>
 }
@@ -21,13 +32,89 @@ templ Main() {
 
 templ MainStyle() {
     <style>
-        .main_submit-form{
+        .main{
+            width: 100%;
+        }
+        .main__hero{
+            max-width: 720px;
+            margin: 0 auto;
+
             display: flex;
+            flex-direction: column;
             align-items: center;
+            text-align: center;
+
+            gap: 24px;
+            margin-top: 80px;
+        }
+        .main__hero-cta{
+            margin-top: 40px;
+        }
+        .main__hero p{
+            opacity: 0.75;
+        }
+        .main__link-button{
+            text-decoration: none;
+            display: inline-block;
+            padding: 18px 36px;
+            font-size: 17px;
+            font-weight: 500;
+
+            background: linear-gradient(
+                180deg,
+                #f6c453 0%,
+                #e0a800 100%
+            );
+            color: #111;
+
+            border: none;
+            border-radius: 14px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+            transition: 
+                transform 0.15s ease,
+                box-shadow 0.15s ease;
+            animation: ctaPulse 2.8s ease-in-out infinite;
+        }
+        .main__link-button:hover{
+            transform: translateY(-2px);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.45);
+        }
+        .main__hero-art {
+            margin-top: 64px;
+
+            display: flex;
             justify-content: center;
-            background-color: rgba(48, 150, 137, 0.10);
-            padding: 60px 0 120px 0;
-    }
+            pointer-events: none;
+        }
+        .main__hero-art img{
+            width: 280px;
+            height: auto;
+
+            opacity: 0.9;
+
+            filter: drop-shadow(0 20px 40px rgba(0,0,0,0.45));
+            animation: minerIdle 4s ease-in-out infinite;
+        }
+        .main__hero h1{
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            line-height: 1.05;
+        }
+        .main__hero p{
+            font-size: 18px;
+            line-height: 1.5;
+            opacity: 0.7;
+        }
+
+        @keyframes ctaPulse{
+            0%, 100% {transform: translateY(0) scale(1);}
+            50% {transform: translateY(-4px) scale(1.03);}
+            100% {transform: translateY(0) scale(1);}
+        }
+        @keyframes minerIdle{
+            0%, 100%{transform: translateY(0);}
+            50%{transform: translateY(8px);}
+        }
     </style>
 
 }

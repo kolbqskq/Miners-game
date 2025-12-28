@@ -45,10 +45,10 @@ func (s *Service) Register(email, password, userName string) (string, error) {
 func (s *Service) Login(email, password string) (string, error) {
 	user, _ := s.userRepo.FindByEmail(email)
 	if user == nil {
-		return "", fmt.Errorf("Пользователь не найден") //errs
+		return "", fmt.Errorf("Непральный email или пароль") //errs
 	}
 	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password)); err != nil {
-		return "", fmt.Errorf("Непральный пароль") //errs
+		return "", fmt.Errorf("Непральный email или пароль") //errs
 	}
 	return user.ID, nil
 }

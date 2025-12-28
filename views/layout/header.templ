@@ -11,11 +11,14 @@ templ Header(backgroundColor string) {
 templ HeaderStyle() {
     <style>
     .header{
+        width: 100%;
+        min-height: 100vh;
         display: flex;
-        justify-content: center;
         flex-direction: column;
         align-items: center;
-        padding-bottom: 45px;
+        position: relative;
+        overflow: hidden;
+        padding-bottom: 80px;
     }
     </style>
 }

@@ -83,7 +83,7 @@ func LinkButtonStyle() templ.Component {
 			templ_7745c5c3_Var3 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "<style>\r\n    .link-button {\r\n        background-color: var(--color-primary);\r\n        color: var(--color-white);\r\n        font-size: 16px;\r\n        padding: 15px 20px;\r\n        display: inline-block;\r\n        text-align: center;\r\n        border-radius: 8px;\r\n        text-decoration: none;\r\n        border: 2px solid transparent;\r\n    }\r\n\r\n    .link-button:hover {\r\n        color: var(--color-primary-hover);\r\n        cursor: pointer;\r\n    }\r\n</style>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "<style>\r\n    .link-button {\r\n        background: transparent;\r\n        color: var(--color-white);\r\n        font-size: 15px;\r\n        padding: 12px 20px;\r\n        border-radius: 10px;\r\n        text-decoration: none;\r\n        border: 1px solid rgba(255,255,255,0.25);\r\n        transition: \r\n            background  0.2s ease,\r\n            border-color 0.2s ease,\r\n            transform 0.15s ease;\r\n\r\n    }\r\n\r\n\r\n    .link-button:hover {\r\n        color: rgba(255,255,255,0.06);\r\n        border-color: rgba(255,255,255,0.5);\r\n        transform: translateY(-1px);\r\n    }\r\n</style>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

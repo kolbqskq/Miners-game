@@ -3,7 +3,7 @@ package components
 
 templ SubmitButton() {
 @SubmitButtonStyle()
-<button class="submit-button">
+<button class="submit-button" type="submit">
     {children...}
 </button>
 }
@@ -11,20 +11,37 @@ templ SubmitButton() {
 templ SubmitButtonStyle() {
 <style>
     .submit-button {
-        background-color: var(--color-primary);
-        color: var(--color-white);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+
         height: 80px;
-        padding: 14px 20px;
+        width: 100%;
+
+        background: linear-gradient(
+            180deg,
+            #f6c453 0%,
+            #e0a800 100%
+        );
+
+        color: #111;
         border-radius: 20px;
         border: none;
+
+        font-size: 20px;
+        font-weight: 600;
+
         cursor: pointer;
-        font-size: 18px;
-        font-style: normal;
-        font-weight: 600px;
+
+        transition:
+            transform 0.15s ease,
+            box-shadow 0.15s ease;
     }
 
     .submit-button:hover {
-        color: var(--color-primary-hover);
+        transform: translateY(-1px);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.3);
     }
 </style>
 }

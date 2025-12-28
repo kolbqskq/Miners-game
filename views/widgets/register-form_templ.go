@@ -39,15 +39,11 @@ func RegisterForm() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = components.Title2("Зарегистрироваться на сайте", "100px", "var(--color-white)").Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = components.Title2("Регистрация", "56px", "var(--color-white)").Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = components.Title2("Заполните все необходимые поля", "24px", "var(--color-white)").Render(ctx, templ_7745c5c3_Buffer)
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "</div><div id=\"register-result\"></div><form hx-post=\"/auth/register\" hx-trigger=\"submit\" hx-target-error=\"#register-result\" hx-swap=\"innerHTML swap:1s\" class=\"register-form__inputs\" hx-on:htmx:after-request=\"document.querySelector('input[name=password]').value = '';\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "<p class=\"register-form__subtitle\">Станьте на шаг ближе к своей мечте</p></div><div id=\"register-result\"></div><form hx-post=\"/auth/register\" hx-trigger=\"submit\" hx-target-error=\"#register-result\" hx-swap=\"innerHTML swap:1s\" class=\"register-form__inputs\" hx-on:htmx:after-request=\"document.querySelector('input[name=password]').value = '';\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -60,7 +56,7 @@ func RegisterForm() templ.Component {
 		}
 		templ_7745c5c3_Err = components.Input(components.InputProps{
 			Name:        "userName",
-			Placeholder: "username",
+			Placeholder: "Никнейм",
 		}).Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
@@ -81,7 +77,7 @@ func RegisterForm() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "<div class=\"register-form__button\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "<div class=\"register-form__auth-switch\"><span>Уже есть аккаунт?</span> <a href=\"/login\">Войти</a></div><div class=\"register-form__button\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -97,7 +93,7 @@ func RegisterForm() templ.Component {
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "<div class=\"register-form__submit\">Зарегистрироваться</div><div class=\"register-form__loader\"></div>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "<span class=\"register-form__submit_text\">Зарегистрироваться</span><div class=\"register-form__loader\"></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -136,7 +132,7 @@ func RegisterFormStyle() templ.Component {
 			templ_7745c5c3_Var3 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "<style>\r\n    .register-form{\r\n        display: flex;\r\n        flex-direction: column;\r\n        align-items: center;\r\n        justify-content: center;\r\n        margin-top: 100px;\r\n        padding: 20px;\r\n    }\r\n    .register-form__inputs{\r\n        display: flex;\r\n        box-sizing: border-box;\r\n        flex-direction: column;\r\n        gap: 30px;\r\n        margin-top: 40px;\r\n        width: 100%;\r\n        max-width: 520px;\r\n    }\r\n    .register-form__button{\r\n        display: flex;\r\n        justify-content: center;\r\n    }\r\n    .register-form__text{\r\n        display: flex;\r\n        flex-direction: column;\r\n        align-items: center;\r\n        justify-content: center;\r\n    }\r\n        .register-form__loader {\r\n        display: none;\r\n    }\r\n    .htmx-request .register-form__submit{\r\n        display: none;\r\n    }\r\n\r\n   .htmx-request .register-form__loader {\r\n        display: block;\r\n        width: 40px;\r\n        aspect-ratio: 1;\r\n        display: grid;\r\n    }\r\n    .register-form__loader::before,\r\n    .register-form__loader::after {\r\n        content: \"\";\r\n        grid-area: 1/1;\r\n        background: white;\r\n        clip-path: polygon(0 0,50% 50%, 0 100%);\r\n        animation: l11 2s infinite;\r\n    }\r\n    .register-form__loader::after {\r\n        animation-delay: -1.5s;\r\n        --s:90deg;\r\n    }\r\n    @keyframes l11 {\r\n        0%,12.5%    {transform:rotate(var(--s,0deg)) rotate(0deg)}\r\n        37.5%,62.5% {transform:rotate(var(--s,0deg)) rotate(-180deg)}\r\n        87.5%,100%  {transform:rotate(var(--s,0deg)) rotate(-360deg)}\r\n    }\r\n    </style>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "<style>\r\n        .register-form {\r\n            width: 100%;\r\n            max-width: 520px;\r\n\r\n            padding: 48px 40px;\r\n            border-radius: 24px;\r\n\r\n            background: rgba(255,255,255,0.04);\r\n            backdrop-filter: blur(12px);\r\n\r\n            box-shadow: 0 20px 60px rgba(0,0,0,0.6);\r\n\r\n            display: flex;\r\n            flex-direction: column;\r\n            align-items: center;\r\n        }\r\n\r\n        .register-form__inputs {\r\n            display: flex;\r\n            flex-direction: column;\r\n            gap: 30px;\r\n            margin-top: 40px;\r\n            width: 100%;\r\n        }\r\n\r\n        .register-form__text {\r\n            display: flex;\r\n            flex-direction: column;\r\n            align-items: center;\r\n            color: var(--color-white);\r\n        }\r\n\r\n        .register-form__text h1 {\r\n            font-size: 40px;\r\n            font-weight: 700;\r\n            letter-spacing: -0.02em;\r\n            line-height: 1.1;\r\n        }\r\n\r\n        .register-form__subtitle {\r\n            margin-top: 12px;\r\n            font-size: 18px;\r\n            opacity: 0.7;\r\n            max-width: 360px;\r\n            text-align: center;\r\n        }\r\n        .register-form__auth-switch{\r\n            margin-top: 28px;\r\n\r\n            font-size: 15px;\r\n            color: rgba(255,255,255,0.65);\r\n\r\n            display: flex;\r\n            gap: 6px;\r\n            justify-content: center;\r\n        }\r\n        .register-form__auth-switch a {\r\n            color: rgba(255,255,255,0.9);\r\n            text-decoration: none;\r\n\r\n            border-bottom: 1px solid rgba(255,255,255,0.3);\r\n\r\n            transition: border-color 0.2s ease, color 0.2s ease;\r\n        }\r\n        .register-form__auth-switch a:hover{\r\n            color: #fff;\r\n            border-bottom-color: rgba(255,255,255,0.8);\r\n        }\r\n    </style>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

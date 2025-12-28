@@ -6,8 +6,10 @@ templ LoginForm() {
     @LoginFormStyle()
 <div class="login-form" hx-ext="response-targets">
     <div class="login-form__text">
-        @components.Title2("Войти на сайт", "100px", "var(--color-white)")
-        @components.Title2("Войдите под своей учетной записью", "24px", "var(--color-white)")
+        @components.Title2("Войти", "56px", "var(--color-white)")
+        <p class="login-form__subtitle">
+            Войдите под своей учетной записью
+        </p>
     </div>
     <div id="login-result"> </div>
     <form hx-post="/auth/login" hx-trigger="submit" hx-target-error="#login-result" hx-swap="innerHTML swap:1s"  class="login-form__inputs" hx-on:htmx:after-request="document.querySelector('input[name=password]').value = '';">
@@ -22,9 +24,14 @@ templ LoginForm() {
                 Type: "password",
             })
             
+        <div class="login-form__auth-switch">
+            <span>Нет аккаунта?</span>
+            <a href="/register">Зарегистрироваться</a>
+        </div>
+ 
         <div class="login-form__button">
             @components.SubmitButton(){
-                <div class="login-form__submit">Войти</div>
+                <span class="login-form__submit_text">Войти</span>
                 <div class="login-form__loader"></div>
             }
         </div>
@@ -34,63 +41,77 @@ templ LoginForm() {
 }
 
 templ LoginFormStyle() {
-    <style>
-    .login-form{
+<style>
+    .login-form {
+        width: 100%;
+        max-width: 520px;
+
+        padding: 48px 40px;
+        border-radius: 24px;
+
+        background: rgba(255, 255, 255, 0.04);
+        backdrop-filter: blur(12px);
+
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+
         display: flex;
         flex-direction: column;
         align-items: center;
-        justify-content: center;
-        margin-top: 100px;
-        padding: 20px;
     }
-    .login-form__inputs{
+
+    .login-form__inputs {
         display: flex;
-        box-sizing: border-box;
         flex-direction: column;
         gap: 30px;
         margin-top: 40px;
         width: 100%;
-        max-width: 520px;
     }
-    .login-form__button{
-        display: flex;
-        justify-content: center;
-    }
-    .login-form__text{
+
+    .login-form__text {
         display: flex;
         flex-direction: column;
         align-items: center;
-        justify-content: center;
-    }
-        .login-form__loader {
-        display: none;
-    }
-    .htmx-request .login-form__submit{
-        display: none;
+        color: var(--color-white);
     }
 
-   .htmx-request .login-form__loader {
-        display: block;
-        width: 40px;
-        aspect-ratio: 1;
-        display: grid;
+    .login-form__text h1 {
+        font-size: 40px;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        line-height: 1.1;
     }
-    .login-form__loader::before,
-    .login-form__loader::after {
-        content: "";
-        grid-area: 1/1;
-        background: white;
-        clip-path: polygon(0 0,50% 50%, 0 100%);
-        animation: l11 2s infinite;
+
+    .login-form__subtitle {
+        margin-top: 12px;
+        font-size: 18px;
+        opacity: 0.7;
+        max-width: 360px;
+        text-align: center;
     }
-    .login-form__loader::after {
-        animation-delay: -1.5s;
-        --s:90deg;
+
+    .login-form__auth-switch {
+        margin-top: 28px;
+
+        font-size: 15px;
+        color: rgba(255, 255, 255, 0.65);
+
+        display: flex;
+        gap: 6px;
+        justify-content: center;
     }
-    @keyframes l11 {
-        0%,12.5%    {transform:rotate(var(--s,0deg)) rotate(0deg)}
-        37.5%,62.5% {transform:rotate(var(--s,0deg)) rotate(-180deg)}
-        87.5%,100%  {transform:rotate(var(--s,0deg)) rotate(-360deg)}
+
+    .login-form__auth-switch a {
+        color: rgba(255, 255, 255, 0.9);
+        text-decoration: none;
+
+        border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+
+        transition: border-color 0.2s ease, color 0.2s ease;
     }
-    </style>
+
+    .login-form__auth-switch a:hover {
+        color: #fff;
+        border-bottom-color: rgba(255, 255, 255, 0.8);
+    }
+</style>
 }
