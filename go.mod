@@ -4,6 +4,7 @@ go 1.25.1
 
 require (
 	github.com/a-h/templ v0.3.960
+	github.com/go-resty/resty/v2 v2.17.1
 	github.com/gofiber/contrib/fiberzerolog v1.0.3
 	github.com/gofiber/fiber/v2 v2.52.10
 	github.com/gofiber/storage/postgres/v3 v3.3.1
@@ -30,6 +31,7 @@ require (
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasthttp v1.51.0 // indirect
 	github.com/valyala/tcplisten v1.0.0 // indirect
+	golang.org/x/net v0.47.0 // indirect
 	golang.org/x/sync v0.18.0 // indirect
 	golang.org/x/sys v0.38.0 // indirect
 	golang.org/x/text v0.31.0 // indirect

@@ -2,47 +2,35 @@ package widgets
 
 import "miners_game/views/components"
 
-templ LoginForm() {
-    @LoginFormStyle()
-<div class="login-form" hx-ext="response-targets">
-    <div class="login-form__text">
-        @components.Title2("Войти", "56px", "var(--color-white)")
-        <p class="login-form__subtitle">
-            Войдите под своей учетной записью
+templ VerificationForm() {
+<div class="verification-form" >
+    <div class="verification-form__text">
+        @components.Title2("Подтверждение", "56px", "var(--color-white)")
+        <p class="verification-form__subtitle">
+            Введи код отправленный на email
         </p>
     </div>
-    <div id="login-result"> </div>
-    <form hx-post="/auth/login" hx-trigger="submit" hx-target-error="#login-result" hx-swap="innerHTML swap:1s"  class="login-form__inputs">
-            @components.Input(components.InputProps{
-                Name: "email",
-                Placeholder: "Email",
-            })
-
-            @components.Input(components.InputProps{
-                Name: "password",
-                Placeholder: "Пароль",
-                Type: "password",
-            })
-            
-        <div class="login-form__auth-switch">
-            <span>Нет аккаунта?</span>
-            <a href="/register">Зарегистрироваться</a>
-        </div>
- 
-        <div class="login-form__button">
+    <div id="verification-result"> </div>
+    @VerificationFormStyle()
+    <form hx-ext="response-targets" hx-post="/auth/register" hx-trigger="submit" hx-vals='{"step":"email"}' hx-target-error="#verification-result" hx-swap="innerHTML swap:1s" class="verification-form__inputs">
+        @components.Input(components.InputProps{
+        Name: "code",
+        Placeholder: "код",
+        })
+        <div class="verification-form__button">
             @components.SubmitButton(){
-                <span class="login-form__submit_text">Войти</span>
-                <div class="login-form__loader"></div>
+            <span class="verification-form__submit_text">Подтвердить</span>
+            <div class="verification-form__loader"></div>
             }
         </div>
     </form>
-    
-    </div>
+
+</div>
 }
 
-templ LoginFormStyle() {
+templ VerificationFormStyle() {
 <style>
-    .login-form {
+    .verification-form {
         width: 100%;
         max-width: 520px;
 
@@ -59,7 +47,7 @@ templ LoginFormStyle() {
         align-items: center;
     }
 
-    .login-form__inputs {
+    .verification-form__inputs {
         display: flex;
         flex-direction: column;
         gap: 30px;
@@ -67,21 +55,21 @@ templ LoginFormStyle() {
         width: 100%;
     }
 
-    .login-form__text {
+    .verification-form__text {
         display: flex;
         flex-direction: column;
         align-items: center;
         color: var(--color-white);
     }
 
-    .login-form__text h1 {
+    .verification-form__text h1 {
         font-size: 40px;
         font-weight: 700;
         letter-spacing: -0.02em;
         line-height: 1.1;
     }
 
-    .login-form__subtitle {
+    .verification-form__subtitle {
         margin-top: 12px;
         font-size: 18px;
         opacity: 0.7;
@@ -89,7 +77,7 @@ templ LoginFormStyle() {
         text-align: center;
     }
 
-    .login-form__auth-switch {
+    .verification-form__auth-switch {
         margin-top: 28px;
 
         font-size: 15px;
@@ -100,7 +88,7 @@ templ LoginFormStyle() {
         justify-content: center;
     }
 
-    .login-form__auth-switch a {
+    .verification-form__auth-switch a {
         color: rgba(255, 255, 255, 0.9);
         text-decoration: none;
 
@@ -109,9 +97,10 @@ templ LoginFormStyle() {
         transition: border-color 0.2s ease, color 0.2s ease;
     }
 
-    .login-form__auth-switch a:hover {
+    .verification-form__auth-switch a:hover {
         color: #fff;
         border-bottom-color: rgba(255, 255, 255, 0.8);
     }
 </style>
+
 }

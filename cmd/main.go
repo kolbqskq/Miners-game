@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/gob"
 	"miners_game/config"
 	"miners_game/internal/auth"
 	"miners_game/internal/game"
@@ -24,6 +25,7 @@ func main() {
 	config.Init()
 	loggerConfig := config.NewLogConfig()
 	dbConfig := config.NewDatabaseConfig()
+	gmailConfig := config.NewGmailConfig()
 	ruru.RegisterGlobal()
 
 	customLogger := logger.NewLogger(loggerConfig)
@@ -46,6 +48,7 @@ func main() {
 	store := session.New(session.Config{
 		Storage: storage,
 	})
+	gob.Register(auth.RegisterSession{})
 	app.Use(middleware.AuthMiddleware(store))
 
 	//Repositories:
@@ -57,13 +60,13 @@ func main() {
 		DbPool: dbPool,
 		Logger: customLogger,
 	})
-
 	//Services:
 	gameService := game.NewService(game.ServiceDeps{
 		GameRepository: gameRepository,
 	})
 	authService := auth.NewService(auth.ServiceDeps{
 		UserRepository: userRepository,
+		GmailConfig:    gmailConfig,
 	})
 
 	//Handlers:

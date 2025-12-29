@@ -10,7 +10,7 @@ import templruntime "github.com/a-h/templ/runtime"
 
 import "miners_game/views/components"
 
-func LoginForm() templ.Component {
+func VerificationForm() templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -31,38 +31,34 @@ func LoginForm() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = LoginFormStyle().Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"verification-form\"><div class=\"verification-form__text\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"login-form\" hx-ext=\"response-targets\"><div class=\"login-form__text\">")
+		templ_7745c5c3_Err = components.Title2("Подтверждение", "56px", "var(--color-white)").Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = components.Title2("Войти", "56px", "var(--color-white)").Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "<p class=\"verification-form__subtitle\">Введи код отправленный на email</p></div><div id=\"verification-result\"></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "<p class=\"login-form__subtitle\">Войдите под своей учетной записью</p></div><div id=\"login-result\"></div><form hx-post=\"/auth/login\" hx-trigger=\"submit\" hx-target-error=\"#login-result\" hx-swap=\"innerHTML swap:1s\" class=\"login-form__inputs\">")
+		templ_7745c5c3_Err = VerificationFormStyle().Render(ctx, templ_7745c5c3_Buffer)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "<form hx-ext=\"response-targets\" hx-post=\"/auth/register\" hx-trigger=\"submit\" hx-vals='{\"step\":\"email\"}' hx-target-error=\"#verification-result\" hx-swap=\"innerHTML swap:1s\" class=\"verification-form__inputs\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		templ_7745c5c3_Err = components.Input(components.InputProps{
-			Name:        "email",
-			Placeholder: "Email",
+			Name:        "code",
+			Placeholder: "код",
 		}).Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = components.Input(components.InputProps{
-			Name:        "password",
-			Placeholder: "Пароль",
-			Type:        "password",
-		}).Render(ctx, templ_7745c5c3_Buffer)
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "<div class=\"login-form__auth-switch\"><span>Нет аккаунта?</span> <a href=\"/register\">Зарегистрироваться</a></div><div class=\"login-form__button\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "<div class=\"verification-form__button\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -78,7 +74,7 @@ func LoginForm() templ.Component {
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "<span class=\"login-form__submit_text\">Войти</span><div class=\"login-form__loader\"></div>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "<span class=\"verification-form__submit_text\">Подтвердить</span><div class=\"verification-form__loader\"></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -88,7 +84,7 @@ func LoginForm() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "</div></form></div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "</div></form></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -96,7 +92,7 @@ func LoginForm() templ.Component {
 	})
 }
 
-func LoginFormStyle() templ.Component {
+func VerificationFormStyle() templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -117,7 +113,7 @@ func LoginFormStyle() templ.Component {
 			templ_7745c5c3_Var3 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "<style>\r\n    .login-form {\r\n        width: 100%;\r\n        max-width: 520px;\r\n\r\n        padding: 48px 40px;\r\n        border-radius: 24px;\r\n\r\n        background: rgba(255, 255, 255, 0.04);\r\n        backdrop-filter: blur(12px);\r\n\r\n        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);\r\n\r\n        display: flex;\r\n        flex-direction: column;\r\n        align-items: center;\r\n    }\r\n\r\n    .login-form__inputs {\r\n        display: flex;\r\n        flex-direction: column;\r\n        gap: 30px;\r\n        margin-top: 40px;\r\n        width: 100%;\r\n    }\r\n\r\n    .login-form__text {\r\n        display: flex;\r\n        flex-direction: column;\r\n        align-items: center;\r\n        color: var(--color-white);\r\n    }\r\n\r\n    .login-form__text h1 {\r\n        font-size: 40px;\r\n        font-weight: 700;\r\n        letter-spacing: -0.02em;\r\n        line-height: 1.1;\r\n    }\r\n\r\n    .login-form__subtitle {\r\n        margin-top: 12px;\r\n        font-size: 18px;\r\n        opacity: 0.7;\r\n        max-width: 360px;\r\n        text-align: center;\r\n    }\r\n\r\n    .login-form__auth-switch {\r\n        margin-top: 28px;\r\n\r\n        font-size: 15px;\r\n        color: rgba(255, 255, 255, 0.65);\r\n\r\n        display: flex;\r\n        gap: 6px;\r\n        justify-content: center;\r\n    }\r\n\r\n    .login-form__auth-switch a {\r\n        color: rgba(255, 255, 255, 0.9);\r\n        text-decoration: none;\r\n\r\n        border-bottom: 1px solid rgba(255, 255, 255, 0.3);\r\n\r\n        transition: border-color 0.2s ease, color 0.2s ease;\r\n    }\r\n\r\n    .login-form__auth-switch a:hover {\r\n        color: #fff;\r\n        border-bottom-color: rgba(255, 255, 255, 0.8);\r\n    }\r\n</style>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, "<style>\r\n    .verification-form {\r\n        width: 100%;\r\n        max-width: 520px;\r\n\r\n        padding: 48px 40px;\r\n        border-radius: 24px;\r\n\r\n        background: rgba(255, 255, 255, 0.04);\r\n        backdrop-filter: blur(12px);\r\n\r\n        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);\r\n\r\n        display: flex;\r\n        flex-direction: column;\r\n        align-items: center;\r\n    }\r\n\r\n    .verification-form__inputs {\r\n        display: flex;\r\n        flex-direction: column;\r\n        gap: 30px;\r\n        margin-top: 40px;\r\n        width: 100%;\r\n    }\r\n\r\n    .verification-form__text {\r\n        display: flex;\r\n        flex-direction: column;\r\n        align-items: center;\r\n        color: var(--color-white);\r\n    }\r\n\r\n    .verification-form__text h1 {\r\n        font-size: 40px;\r\n        font-weight: 700;\r\n        letter-spacing: -0.02em;\r\n        line-height: 1.1;\r\n    }\r\n\r\n    .verification-form__subtitle {\r\n        margin-top: 12px;\r\n        font-size: 18px;\r\n        opacity: 0.7;\r\n        max-width: 360px;\r\n        text-align: center;\r\n    }\r\n\r\n    .verification-form__auth-switch {\r\n        margin-top: 28px;\r\n\r\n        font-size: 15px;\r\n        color: rgba(255, 255, 255, 0.65);\r\n\r\n        display: flex;\r\n        gap: 6px;\r\n        justify-content: center;\r\n    }\r\n\r\n    .verification-form__auth-switch a {\r\n        color: rgba(255, 255, 255, 0.9);\r\n        text-decoration: none;\r\n\r\n        border-bottom: 1px solid rgba(255, 255, 255, 0.3);\r\n\r\n        transition: border-color 0.2s ease, color 0.2s ease;\r\n    }\r\n\r\n    .verification-form__auth-switch a:hover {\r\n        color: #fff;\r\n        border-bottom-color: rgba(255, 255, 255, 0.8);\r\n    }\r\n</style>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

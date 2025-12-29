@@ -57,9 +57,21 @@ type LogConfig struct {
 	Format string
 }
 
+type GmailConfig struct{
+	Email string
+	AppPassword string
+}
+
 func NewLogConfig() *LogConfig {
 	return &LogConfig{
 		Level:  getInt("LOG_LEVEL", 0),
 		Format: getString("LOG_FORMAT", "json"),
+	}
+}
+
+func NewGmailConfig() *GmailConfig{
+	return &GmailConfig{
+		Email: getString("SMTP_EMAIL",""),
+		AppPassword: getString("SMTP_PASSWORD",""),
 	}
 }

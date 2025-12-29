@@ -4,13 +4,13 @@ import "miners_game/views/layout"
 import "miners_game/views/widgets"
 
 templ Register() {
-
+    @RegisterStyle()
 @layout.Layout(layout.LayoutProps{
 Title: "Регистрация",
 MetaDescription: "Регистрация",
 }){
-<main class="register-main">
-    @RegisterStyle()
+
+<main class="register-main" id="register-mail__form">
     @widgets.RegisterForm()
 </main>
 }
