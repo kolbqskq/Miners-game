@@ -1,0 +1,53 @@
+package widgets
+
+import "miners_game/views/components"
+
+templ BottomPanel() {
+<div class="bottom-panel">
+
+    <div class="tabs">
+        <button class="tab active">👷 Шахтёры</button>
+        <button class="tab">🛠 Инструменты</button>
+        <button class="tab">🏪 Улучшения</button>
+    </div>
+
+    <div class="shop-grid">
+        @components.ShopCard("Шахтёр", "+1.0/сек", "30 сек", "5", "small")
+        @components.ShopCard("Шахтёр+", "+1.5/сек", "45 сек", "50", "normal")
+    </div>
+
+</div>
+
+<style>
+    .bottom-panel {
+        background: rgba(10,10,10,0.85);
+        backdrop-filter: blur(6px);
+        }
+
+    .tabs {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 12px;
+    }
+
+    .tab {
+        background: rgba(255, 255, 255, 0.05);
+        border: none;
+        color: white;
+        padding: 8px 14px;
+        border-radius: 8px;
+        cursor: pointer;
+    }
+
+    .tab.active {
+        background: var(--accent);
+        color: black;
+    }
+
+    .shop-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        gap: 12px;
+    }
+</style>
+}

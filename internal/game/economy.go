@@ -9,20 +9,21 @@ const (
 	passiveIncome int64 = 1
 )
 
-func (g *GameState) RecalculateBalance() {
+func (g *GameState) RecalculateBalance() int64 {
 	now := time.Now().Unix()
 
 	g.mu.Lock()
 	defer g.mu.Unlock()
-
+	
 	if now <= g.LastUpdateAt {
-		return
+		return 0
 	}
 	income := g.CalcIncome(g.LastUpdateAt, now)
 
 	g.Balance += income
 	g.LastUpdateAt = now
 	g.DeleteExpiredMiners(now)
+	return income
 }
 
 func (g *GameState) CalcIncome(from, to int64) int64 {

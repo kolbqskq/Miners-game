@@ -17,7 +17,8 @@ type ServiceDeps struct {
 
 func NewService(deps ServiceDeps) *Service {
 	return &Service{
-		repo: deps.GameRepository,
+		memoryGameState: make(map[string]*GameState),
+		repo:            deps.GameRepository,
 	}
 }
 
@@ -33,7 +34,7 @@ func (s *Service) StartNewGame(userID, saveID string) (*GameState, error) {
 	return gameState, nil
 }
 
-func (s *Service) BuyMiner(class, userID, saveID string) (*GameState, error) {
+func (s *Service) BuyMiner(class, userID, saveID string) (*GameState, int64, error) {
 	miner := miners.NewMiner(class)
 	price := miners.GetMinerConfig(class).Price
 	k := userID + "/" + saveID
@@ -43,27 +44,27 @@ func (s *Service) BuyMiner(class, userID, saveID string) (*GameState, error) {
 		s.mu.Lock()
 		gameState = s.memoryGameState[k]
 		s.mu.Unlock()
-		return gameState, err
+		return gameState, 0, err
 	}
 
-	s.mu.Lock()
-	s.memoryGameState[k] = gameState
-	s.mu.Unlock()
-
-	gameState.RecalculateBalance()
+	income:=gameState.RecalculateBalance()
 
 	if err := gameState.SpendBalance(price); err != nil {
-		return gameState, err
+		return gameState, 0, err
 	}
 
 	gameState.mu.Lock()
 	gameState.Miners[miner.ID] = miner
 	gameState.mu.Unlock()
 
+	s.mu.Lock()
+	s.memoryGameState[k] = gameState
+	s.mu.Unlock()
+
 	if err := s.repo.SaveGameState(gameState); err != nil {
-		return gameState, err
+		return gameState, 0, err
 	}
-	return gameState, nil
+	return gameState, income, nil
 
 }
 

@@ -1,0 +1,61 @@
+package views
+
+import "miners_game/views/widgets"
+import "miners_game/views/layout"
+
+templ Game() {
+@GameStyle()
+
+<main class="game-page">
+    @layout.Layout(layout.LayoutProps{
+        Title: "Игра",
+        MetaDescription: "Игра",
+    }){
+    <div id="hud-container" hx-get="/game/hud" hx-trigger="every 1s" hx-swap="innerHTML">
+        @widgets.HUD("0", "0")
+    </div>
+    <section class="game-scene-wrapper">
+            @widgets.Scene()
+    </section>
+    
+    <section class="game-bottom-panel">
+        @widgets.BottomPanel()
+    </section>
+    }
+</main>
+}
+
+templ GameStyle() {
+<style>
+    :root {
+        --bg-dark: #0b0b0b;
+        --bg-mid: #141414;
+        --accent: #f5c16c;
+        --text-main: #ffffff;
+    }
+
+    body {
+        margin: 0;
+        background: radial-gradient(circle at top, #1a1a1a, var(--bg-dark));
+        color: var(--text-main);
+        font-family: Inter, system-ui, sans-serif;
+    }
+
+    .game-page {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+    }
+    .game-bottom-panel{
+        flex: 0 0 auto;
+    }
+    .game-scene-wrapper{
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        overflow: visible;
+    }
+</style>
+}

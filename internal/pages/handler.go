@@ -26,6 +26,7 @@ func NewHandler(deps HandlerDeps) {
 	h.router.Get("/", h.home)
 	h.router.Get("/login", h.login)
 	h.router.Get("/register", h.register)
+	h.router.Get("/game", h.game)
 }
 
 func (h *Handler) home(c *fiber.Ctx) error {
@@ -40,5 +41,10 @@ func (h *Handler) login(c *fiber.Ctx) error {
 
 func (h *Handler) register(c *fiber.Ctx) error {
 	component := views.Register()
+	return tadapter.Render(c, component, fiber.StatusOK)
+}
+
+func (h *Handler) game(c *fiber.Ctx) error {
+	component := views.Game()
 	return tadapter.Render(c, component, fiber.StatusOK)
 }

@@ -47,14 +47,14 @@ func Layout(props LayoutProps) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "</title><link rel=\"preconnect\" href=\"https://fonts.googleapis.com\"><link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin><link href=\"https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap\" rel=\"stylesheet\"><script src=\"https://cdn.jsdelivr.net/npm/htmx.org@2.0.8/dist/htmx.min.js\" integrity=\"sha384-/TgkGk7p307TH7EXJDuUlgG3Ce1UVolAOFopFekQkkXihi5u/6OCvVKyz1W+idaz\" crossorigin=\"anonymous\"></script><script src=\"https://cdn.jsdelivr.net/npm/htmx-ext-response-targets@2.0.4\" integrity=\"sha384-T41oglUPvXLGBVyRdZsVRxNWnOOqCynaPubjUVjxhsjFTKrFJGEMm3/0KGmNQ+Pg\" crossorigin=\"anonymous\"></script><link rel=\"stylesheet\" href=\"/public/styles.css\"><link rel=\"icon\" type=\"image/png\" href=\"public/favicon/favicon-96x96.png\" sizes=\"96x96\"><link rel=\"icon\" type=\"image/svg+xml\" href=\"public/favicon/favicon.svg\"><link rel=\"shortcut icon\" href=\"/favicon.ico\"><link rel=\"apple-touch-icon\" sizes=\"180x180\" href=\"public/favicon/apple-touch-icon.png\"><meta name=\"apple-mobile-web-app-title\" content=\"Miners\"><link rel=\"manifest\" href=\"public/favicon/site.webmanifest\"><meta name=\"description\" content=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "</title><link rel=\"preconnect\" href=\"https://fonts.googleapis.com\"><link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin><link href=\"https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap\" rel=\"stylesheet\"><script src=\"https://cdn.jsdelivr.net/npm/htmx.org@2.0.8/dist/htmx.min.js\" integrity=\"sha384-/TgkGk7p307TH7EXJDuUlgG3Ce1UVolAOFopFekQkkXihi5u/6OCvVKyz1W+idaz\" crossorigin=\"anonymous\"></script><script src=\"https://cdn.jsdelivr.net/npm/htmx-ext-response-targets@2.0.4\" integrity=\"sha384-T41oglUPvXLGBVyRdZsVRxNWnOOqCynaPubjUVjxhsjFTKrFJGEMm3/0KGmNQ+Pg\" crossorigin=\"anonymous\"></script><script src=\"https://unpkg.com/htmx.org/dist/ext/morph.js\"></script><link rel=\"stylesheet\" href=\"/public/styles.css\"><link rel=\"icon\" type=\"image/png\" href=\"public/favicon/favicon-96x96.png\" sizes=\"96x96\"><link rel=\"icon\" type=\"image/svg+xml\" href=\"public/favicon/favicon.svg\"><link rel=\"shortcut icon\" href=\"/favicon.ico\"><link rel=\"apple-touch-icon\" sizes=\"180x180\" href=\"public/favicon/apple-touch-icon.png\"><meta name=\"apple-mobile-web-app-title\" content=\"Miners\"><link rel=\"manifest\" href=\"public/favicon/site.webmanifest\"><meta name=\"description\" content=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var3 string
 		templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(props.MetaDescription)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/layout/layout.templ`, Line: 30, Col: 63}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/layout/layout.templ`, Line: 31, Col: 63}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 		if templ_7745c5c3_Err != nil {
@@ -67,7 +67,7 @@ func Layout(props LayoutProps) templ.Component {
 		var templ_7745c5c3_Var4 string
 		templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(props.Title)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/layout/layout.templ`, Line: 31, Col: 54}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/layout/layout.templ`, Line: 32, Col: 54}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 		if templ_7745c5c3_Err != nil {
@@ -80,7 +80,7 @@ func Layout(props LayoutProps) templ.Component {
 		var templ_7745c5c3_Var5 string
 		templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(props.MetaDescription)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/layout/layout.templ`, Line: 32, Col: 70}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/layout/layout.templ`, Line: 33, Col: 70}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
 		if templ_7745c5c3_Err != nil {

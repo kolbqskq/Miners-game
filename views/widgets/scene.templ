@@ -1,0 +1,56 @@
+package widgets
+
+templ Scene() {
+@SceneStyle()
+    <div class={ "scene stage-" + "0" }>
+        <div class="planet-mask">
+            <img class="planet-img" src="/public/planet/lvl_0.png">
+            <img class="planet-img" src="/public/planet/lvl_1.png">
+            <img class="planet-img" src="/public/planet/lvl_2.png">
+            <img class="planet-img" src="/public/planet/lvl_3.png">
+        </div>
+    </div>
+}
+
+templ SceneStyle() {
+<style>
+.scene {
+    position: relative;
+    width: 620px;
+    height: 620px;
+    overflow: visible;
+}
+
+
+.planet-mask {
+    position: absolute;
+    inset: 0;
+    width: 620px;
+    height: 620px;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+
+.planet-img {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+
+    width: 116%;
+    height: 116%;
+
+    object-fit: contain;
+    opacity: 0;
+    transition: opacity 0.25s ease;
+    pointer-events: none;
+}
+
+.scene.stage-0 img[src*="lvl_0"] { opacity: 1; }
+.scene.stage-1 img[src*="lvl_1"] { opacity: 1; }
+.scene.stage-2 img[src*="lvl_2"] { opacity: 1; }
+.scene.stage-3 img[src*="lvl_3"] { opacity: 1; }
+
+</style>
+}

@@ -8,12 +8,11 @@ func (m *Miner) CalcIncome(from, to int64) int64 {
 	if to > m.EndAt {
 		to = m.EndAt
 	}
-	times := (to - from) / cfg.BreakTime
-	if times <= 0 {
+	if to <= from {
 		return 0
 	}
-	income := times*cfg.Power + (times*(times-1)/2)*cfg.Progress
+	seconds := to - from
 
-	return income
+	return seconds * cfg.Power
 
 }

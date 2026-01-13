@@ -1,0 +1,35 @@
+package widgets
+
+templ HUD(Balance, Income string) {
+<div class="hud" id="hud">
+    <div class="hud-balance" id="balance">
+        💰 {Balance} угля
+    </div>
+
+    <div class="hud-income" id="income">
+        ⛏ +{Income}/сек
+    </div>
+</div>
+
+<style>
+    .hud {
+        height: 64px;
+        padding: 0 24px;
+        background: rgba(0, 0, 0, 0.4);
+        backdrop-filter: blur(8px);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-weight: 600;
+        flex: 0 0 64px;
+    }
+
+    #balance {
+        transition: transform 0.15s ease;
+    }
+
+    #balance.updated {
+        transform: scale(1.05);
+    }
+</style>
+}

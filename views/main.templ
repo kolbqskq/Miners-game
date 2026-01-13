@@ -17,7 +17,7 @@ templ Main() {
                 @components.SubTitle("Просто попробуй!")
 
                 <div class="main__hero-cta">
-                    <a class="main__link-button" href="/game">
+                    <a class="main__link-button" hx-get="/game/new" hx-trigger="click">
                         Начать игру
                     </a>
                 </div>

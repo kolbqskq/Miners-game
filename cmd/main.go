@@ -78,6 +78,7 @@ func main() {
 		Router:      app,
 		Logger:      customLogger,
 		GameService: gameService,
+		Store:       store,
 	})
 	auth.NewHandler(auth.HandlerDeps{
 		Router:      app,

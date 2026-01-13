@@ -1,0 +1,39 @@
+package components
+
+templ ShopCard(title, income, duration, price, class string) {
+<div class="shop-card">
+
+    <div class="shop-title">{title}</div>
+
+    <div class="shop-info">{income}</div>
+    <div class="shop-info">⏱ {duration}</div>
+
+    <button class="shop-buy" hx-post="/game/buy" hx-vals={ `{"class":"` + class + `"}` } hx-target="#hud-container"
+        hx-swap="innerHTML" hx-indicator=".shop-loading">
+        Купить за {price}
+    </button>
+
+    <div class="shop-loading" hidden>⏳</div>
+
+</div>
+
+<style>
+    .shop-card {
+        background: rgba(255, 255, 255, 0.03);
+        padding: 12px;
+        border-radius: 12px;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .shop-buy {
+        margin-top: 8px;
+        background: var(--accent);
+        border: none;
+        padding: 6px;
+        border-radius: 8px;
+        cursor: pointer;
+    }
+</style>
+}
