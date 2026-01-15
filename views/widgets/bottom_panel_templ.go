@@ -10,7 +10,7 @@ import templruntime "github.com/a-h/templ/runtime"
 
 import "miners_game/views/components"
 
-func BottomPanel() templ.Component {
+func BottomPanel(activeTab string) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -31,19 +31,69 @@ func BottomPanel() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"bottom-panel\"><div class=\"tabs\"><button class=\"tab active\">👷 Шахтёры</button> <button class=\"tab\">🛠 Инструменты</button> <button class=\"tab\">🏪 Улучшения</button></div><div class=\"shop-grid\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div id=\"bottom-panel\" class=\"bottom-panel\"><div class=\"bottom-panel_tabs\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = components.ShopCard("Шахтёр", "+1.0/сек", "30 сек", "5", "small").Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = TabButton("miners", "👷 Шахтёры", activeTab).Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = components.ShopCard("Шахтёр+", "+1.5/сек", "45 сек", "50", "normal").Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = TabButton("tools", "🛠 Инструменты", activeTab).Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "</div></div><style>\r\n    .bottom-panel {\r\n        background: rgba(10,10,10,0.85);\r\n        backdrop-filter: blur(6px);\r\n        }\r\n\r\n    .tabs {\r\n        display: flex;\r\n        gap: 8px;\r\n        margin-bottom: 12px;\r\n    }\r\n\r\n    .tab {\r\n        background: rgba(255, 255, 255, 0.05);\r\n        border: none;\r\n        color: white;\r\n        padding: 8px 14px;\r\n        border-radius: 8px;\r\n        cursor: pointer;\r\n    }\r\n\r\n    .tab.active {\r\n        background: var(--accent);\r\n        color: black;\r\n    }\r\n\r\n    .shop-grid {\r\n        display: grid;\r\n        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));\r\n        gap: 12px;\r\n    }\r\n</style>")
+		templ_7745c5c3_Err = TabButton("upgrades", "🏪 Улучшения", activeTab).Render(ctx, templ_7745c5c3_Buffer)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "</div><div class=\"shop-grid\">")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		if activeTab == "miners" {
+			templ_7745c5c3_Err = components.ShopCard("Шахтёр", "+1.0/сек", "30 сек", "5", "small").Render(ctx, templ_7745c5c3_Buffer)
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, " ")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = components.ShopCard("Шахтёр+", "+1.5/сек", "45 сек", "50", "normal").Render(ctx, templ_7745c5c3_Buffer)
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
+		if activeTab == "tools" {
+			templ_7745c5c3_Err = components.ShopCard("Кирка", "+1.0/сек", "30 сек", "5", "small").Render(ctx, templ_7745c5c3_Buffer)
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, " ")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = components.ShopCard("Лопата+", "+1.5/сек", "45 сек", "50", "normal").Render(ctx, templ_7745c5c3_Buffer)
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
+		if activeTab == "upgrades" {
+			templ_7745c5c3_Err = components.ShopCard("Planet", "+1.0/сек", "30 сек", "5", "small").Render(ctx, templ_7745c5c3_Buffer)
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, " ")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = components.ShopCard("Crafter+", "+1.5/сек", "45 сек", "50", "normal").Render(ctx, templ_7745c5c3_Buffer)
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "</div></div><style>\r\n    .bottom-panel{\r\n        background: rgba(0, 0, 0, 0.4);\r\n        backdrop-filter: blur(8px);\r\n    }\r\n    .bottom-panel_tabs {\r\n        display: flex;\r\n        gap: 6px;\r\n        padding: 6px 8px;\r\n        margin-left: 8px;\r\n        margin-bottom: 10px;\r\n    }\r\n\r\n    .tab {\r\n        position: relative;\r\n        background: rgba(255,255,255,0.06);\r\n        border: none;\r\n        color: white;\r\n        padding: 6px 12px 10px;\r\n        border-radius: 8px;\r\n        font-size: 13px;\r\n    }\r\n\r\n    .tab[aria-current=\"true\"] {\r\n        background: rgba(255, 200, 80, 0.18);\r\n    }\r\n\r\n    .tab[aria-current=\"true\"]::after {\r\n        content: \"\";\r\n        position: absolute;\r\n        inset: auto 8px 4px 8px;\r\n        height: 3px;\r\n        border-radius: 2px;\r\n        background: var(--accent);\r\n    }\r\n\r\n    .shop-grid {\r\n        padding: 0 8px 8px;\r\n        margin-top: 4px;\r\n        margin-left: 8px;\r\n        display: grid;\r\n        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));\r\n        gap: 12px;\r\n    }\r\n\r\n</style>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

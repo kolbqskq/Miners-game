@@ -2,52 +2,76 @@ package widgets
 
 import "miners_game/views/components"
 
-templ BottomPanel() {
-<div class="bottom-panel">
+templ BottomPanel(activeTab string) {
+<div id="bottom-panel" class="bottom-panel">
 
-    <div class="tabs">
-        <button class="tab active">👷 Шахтёры</button>
-        <button class="tab">🛠 Инструменты</button>
-        <button class="tab">🏪 Улучшения</button>
+    <div class="bottom-panel_tabs">
+        @TabButton("miners", "👷 Шахтёры", activeTab)
+        @TabButton("tools", "🛠 Инструменты", activeTab)
+        @TabButton("upgrades", "🏪 Улучшения", activeTab)
     </div>
 
     <div class="shop-grid">
+    if activeTab == "miners"{
+
         @components.ShopCard("Шахтёр", "+1.0/сек", "30 сек", "5", "small")
         @components.ShopCard("Шахтёр+", "+1.5/сек", "45 сек", "50", "normal")
+    }
+    if activeTab == "tools"{
+        @components.ShopCard("Кирка", "+1.0/сек", "30 сек", "5", "small")
+        @components.ShopCard("Лопата+", "+1.5/сек", "45 сек", "50", "normal")
+    }
+    if activeTab == "upgrades"{
+        @components.ShopCard("Planet", "+1.0/сек", "30 сек", "5", "small")
+        @components.ShopCard("Crafter+", "+1.5/сек", "45 сек", "50", "normal")
+    }
     </div>
-
 </div>
 
 <style>
-    .bottom-panel {
-        background: rgba(10,10,10,0.85);
-        backdrop-filter: blur(6px);
-        }
-
-    .tabs {
+    .bottom-panel{
+        background: rgba(0, 0, 0, 0.4);
+        backdrop-filter: blur(8px);
+    }
+    .bottom-panel_tabs {
         display: flex;
-        gap: 8px;
-        margin-bottom: 12px;
+        gap: 6px;
+        padding: 6px 8px;
+        margin-left: 8px;
+        margin-bottom: 10px;
     }
 
     .tab {
-        background: rgba(255, 255, 255, 0.05);
+        position: relative;
+        background: rgba(255,255,255,0.06);
         border: none;
         color: white;
-        padding: 8px 14px;
+        padding: 6px 12px 10px;
         border-radius: 8px;
-        cursor: pointer;
+        font-size: 13px;
     }
 
-    .tab.active {
+    .tab[aria-current="true"] {
+        background: rgba(255, 200, 80, 0.18);
+    }
+
+    .tab[aria-current="true"]::after {
+        content: "";
+        position: absolute;
+        inset: auto 8px 4px 8px;
+        height: 3px;
+        border-radius: 2px;
         background: var(--accent);
-        color: black;
     }
 
     .shop-grid {
+        padding: 0 8px 8px;
+        margin-top: 4px;
+        margin-left: 8px;
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
         gap: 12px;
     }
+
 </style>
 }

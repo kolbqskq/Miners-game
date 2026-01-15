@@ -1,0 +1,13 @@
+package widgets
+
+templ TabButton(id string, label string, activeTab string) {
+<button 
+    class="tab" 
+    aria-current={id == activeTab} 
+    hx-get={"/game/panel/" + id} 
+    hx-target="#bottom-panel"
+    hx-swap="outerHTML"
+>
+    { label }
+</button>
+}

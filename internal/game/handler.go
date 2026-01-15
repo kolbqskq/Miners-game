@@ -41,9 +41,7 @@ func NewHandler(deps HandlerDeps) {
 	g.Get("/hud", h.hud)
 	g.Get("/new", h.newGame)
 	g.Post("buy", h.buy)
-	g.Get("/shop/miners", h.shopMiners)
-	g.Get("/shop/tools", h.shopTools)
-	g.Get("/shop/upgrades", h.shopUpgrades)
+	g.Get("/panel/:tab", h.shopPanel)
 
 }
 
@@ -117,14 +115,8 @@ func (h *Handler) buy(c *fiber.Ctx) error {
 	return tadapter.Render(c, component, fiber.StatusOK)
 }
 
-func (h *Handler) shopMiners(c *fiber.Ctx) error {
-	return c.SendStatus(200)
-}
-
-func (h *Handler) shopTools(c *fiber.Ctx) error {
-	return c.SendStatus(200)
-}
-
-func (h *Handler) shopUpgrades(c *fiber.Ctx) error {
-	return c.SendStatus(200)
+func (h *Handler) shopPanel(c *fiber.Ctx) error {
+	tab := c.Params("tab")
+	component:=widgets.BottomPanel(tab)
+	return tadapter.Render(c, component, fiber.StatusOK)
 }
