@@ -66,12 +66,12 @@ func (h *Handler) hud(c *fiber.Ctx) error {
 	saveID, ok := c.Locals("save_id").(string)
 	if !ok {
 		c.Set("HX-Redirect", "game/new")
-		c.SendStatus(fiber.StatusNoContent)
+		return c.SendStatus(fiber.StatusNoContent)
 	}
 	gameState := h.gameService.GetGameStateFromMemory(userID, saveID)
 	if gameState == nil {
 		c.Set("HX-Redirect", "/")
-		c.SendStatus(fiber.StatusNoContent)
+		return c.SendStatus(fiber.StatusNoContent)
 	}
 	incomeInt := gameState.RecalculateBalance()
 	balance := strconv.Itoa(int(gameState.Balance))

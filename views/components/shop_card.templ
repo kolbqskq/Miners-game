@@ -8,8 +8,12 @@ templ ShopCard(title, income, duration, price, class string) {
     <div class="shop-info">{income}</div>
     <div class="shop-info">⏱ {duration}</div>
 
-    <button class="shop-buy" hx-post="/game/buy" hx-vals={ `{"class":"` + class + `"}` } hx-target="#hud-container"
-        hx-swap="innerHTML" hx-indicator=".shop-loading">
+    <button class="shop-buy"
+        hx-post="/game/buy" 
+        hx-vals={ `{"class":"` + class + `"}` } 
+        hx-target="#hud-container"
+        hx-swap="innerHTML" hx-indicator=".shop-loading"
+    >
         Купить за {price}
     </button>
 

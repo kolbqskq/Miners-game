@@ -5,13 +5,17 @@ import "miners_game/views/layout"
 
 templ Game() {
 @GameStyle()
-
+<div
+    hx-post="/game/heartbeat"
+    hx-trigger="every 5s"
+    hx-swap="none"
+></div>
 <main class="game-page">
     @layout.Layout(layout.LayoutProps{
         Title: "Игра",
         MetaDescription: "Игра",
     }){
-    <div id="hud-container" hx-get="/game/hud" hx-trigger="every 1s" hx-swap="innerHTML">
+    <div id="hud-container" hx-get="/game/hud" hx-trigger="every 1s throttle:500ms" hx-swap="innerHTML">
         @widgets.HUD("0", "0")
     </div>
     <section class="game-scene-wrapper">
@@ -57,5 +61,25 @@ templ GameStyle() {
         position: relative;
         overflow: visible;
     }
+    .hud {
+        height: 64px;
+        padding: 0 24px;
+        background: rgba(0, 0, 0, 0.4);
+        backdrop-filter: blur(8px);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-weight: 600;
+        flex: 0 0 64px;
+    }
+
+    .hud-balance {
+        transition: transform 0.15s ease;
+    }
+
+    .hud-balance.updated {
+        transform: scale(1.05);
+    }
+
 </style>
 }

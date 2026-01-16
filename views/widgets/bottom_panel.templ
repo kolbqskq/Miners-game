@@ -64,6 +64,14 @@ templ BottomPanel(activeTab string) {
         background: var(--accent);
     }
 
+    .tab:hover {
+        background: rgba(255,255,255,0.1);
+    }
+
+    .tab:active {
+        transform: translateY(1px);
+    }
+
     .shop-grid {
         padding: 0 8px 8px;
         margin-top: 4px;
@@ -72,6 +80,5 @@ templ BottomPanel(activeTab string) {
         grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
         gap: 12px;
     }
-
 </style>
 }

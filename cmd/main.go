@@ -68,7 +68,7 @@ func main() {
 		UserRepository: userRepository,
 		GmailConfig:    gmailConfig,
 	})
-
+	
 	//Handlers:
 	pages.NewHandler(pages.HandlerDeps{
 		Router: app,

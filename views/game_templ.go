@@ -36,7 +36,7 @@ func Game() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<main class=\"game-page\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div hx-post=\"/game/heartbeat\" hx-trigger=\"every 5s\" hx-swap=\"none\"></div><main class=\"game-page\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -52,7 +52,7 @@ func Game() templ.Component {
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "<div id=\"hud-container\" hx-get=\"/game/hud\" hx-trigger=\"every 1s\" hx-swap=\"innerHTML\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "<div id=\"hud-container\" hx-get=\"/game/hud\" hx-trigger=\"every 1s throttle:500ms\" hx-swap=\"innerHTML\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -118,7 +118,7 @@ func GameStyle() templ.Component {
 			templ_7745c5c3_Var3 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, "<style>\r\n    :root {\r\n        --bg-dark: #0b0b0b;\r\n        --bg-mid: #141414;\r\n        --accent: #f5c16c;\r\n        --text-main: #ffffff;\r\n    }\r\n\r\n    body {\r\n        margin: 0;\r\n        background: radial-gradient(circle at top, #1a1a1a, var(--bg-dark));\r\n        color: var(--text-main);\r\n        font-family: Inter, system-ui, sans-serif;\r\n    }\r\n\r\n    .game-page {\r\n        min-height: 100vh;\r\n        display: flex;\r\n        flex-direction: column;\r\n    }\r\n    .game-bottom-panel{\r\n        flex: 0 0 auto;\r\n    }\r\n    .game-scene-wrapper{\r\n        flex: 1;\r\n        display: flex;\r\n        align-items: center;\r\n        justify-content: center;\r\n        position: relative;\r\n        overflow: visible;\r\n    }\r\n</style>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, "<style>\r\n    :root {\r\n        --bg-dark: #0b0b0b;\r\n        --bg-mid: #141414;\r\n        --accent: #f5c16c;\r\n        --text-main: #ffffff;\r\n    }\r\n\r\n    body {\r\n        margin: 0;\r\n        background: radial-gradient(circle at top, #1a1a1a, var(--bg-dark));\r\n        color: var(--text-main);\r\n        font-family: Inter, system-ui, sans-serif;\r\n    }\r\n\r\n    .game-page {\r\n        min-height: 100vh;\r\n        display: flex;\r\n        flex-direction: column;\r\n    }\r\n    .game-bottom-panel{\r\n        flex: 0 0 auto;\r\n    }\r\n    .game-scene-wrapper{\r\n        flex: 1;\r\n        display: flex;\r\n        align-items: center;\r\n        justify-content: center;\r\n        position: relative;\r\n        overflow: visible;\r\n    }\r\n    .hud {\r\n        height: 64px;\r\n        padding: 0 24px;\r\n        background: rgba(0, 0, 0, 0.4);\r\n        backdrop-filter: blur(8px);\r\n        display: flex;\r\n        justify-content: space-between;\r\n        align-items: center;\r\n        font-weight: 600;\r\n        flex: 0 0 64px;\r\n    }\r\n\r\n    .hud-balance {\r\n        transition: transform 0.15s ease;\r\n    }\r\n\r\n    .hud-balance.updated {\r\n        transform: scale(1.05);\r\n    }\r\n\r\n</style>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

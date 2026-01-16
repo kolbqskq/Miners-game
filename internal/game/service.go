@@ -47,7 +47,7 @@ func (s *Service) BuyMiner(class, userID, saveID string) (*GameState, int64, err
 		return gameState, 0, err
 	}
 
-	income:=gameState.RecalculateBalance()
+	income := gameState.RecalculateBalance()
 
 	if err := gameState.SpendBalance(price); err != nil {
 		return gameState, 0, err

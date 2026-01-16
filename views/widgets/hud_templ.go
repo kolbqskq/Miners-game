@@ -29,7 +29,7 @@ func HUD(Balance, Income string) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"hud\" id=\"hud\"><div class=\"hud-balance\" id=\"balance\">💰 ")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"hud\" id=\"hud\"><div class=\"hud-balance\">💰 ")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -42,7 +42,7 @@ func HUD(Balance, Income string) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, " угля</div><div class=\"hud-income\" id=\"income\">⛏ +")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, " угля</div><div class=\"hud-income\">⛏ +")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -55,7 +55,7 @@ func HUD(Balance, Income string) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "/сек</div></div><style>\r\n    .hud {\r\n        height: 64px;\r\n        padding: 0 24px;\r\n        background: rgba(0, 0, 0, 0.4);\r\n        backdrop-filter: blur(8px);\r\n        display: flex;\r\n        justify-content: space-between;\r\n        align-items: center;\r\n        font-weight: 600;\r\n        flex: 0 0 64px;\r\n    }\r\n\r\n    #balance {\r\n        transition: transform 0.15s ease;\r\n    }\r\n\r\n    #balance.updated {\r\n        transform: scale(1.05);\r\n    }\r\n</style>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "/сек</div></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
