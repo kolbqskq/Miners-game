@@ -17,12 +17,11 @@ func GameMiddleware(store *session.Store) fiber.Handler {
 			return c.SendStatus(fiber.StatusUnauthorized)
 		}
 
+		gameID, ok := sess.Get("game_id").(string)
+
+		c.Locals("game_id", gameID)
 		c.Locals("sess", sess)
 		c.Locals("user_id", userID)
-
-		if saveID, ok := sess.Get("save_id").(string); ok {
-			c.Locals("save_id", saveID)
-		}
 
 		return c.Next()
 	}

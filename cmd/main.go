@@ -5,11 +5,16 @@ import (
 	"miners_game/config"
 	"miners_game/internal/auth"
 	"miners_game/internal/game"
+	"miners_game/internal/game/loop"
+	"miners_game/internal/game/sessions"
 	"miners_game/internal/pages"
 	"miners_game/internal/user"
 	"miners_game/pkg/database"
 	"miners_game/pkg/logger"
 	"miners_game/pkg/middleware"
+	"os"
+	"os/signal"
+	"syscall"
 	"time"
 
 	"github.com/gofiber/contrib/fiberzerolog"
@@ -18,6 +23,7 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/session"
 	"github.com/gofiber/storage/postgres/v3"
 	"github.com/gookit/validate/locales/ruru"
+	"github.com/rs/zerolog"
 )
 
 func main() {
@@ -61,18 +67,23 @@ func main() {
 		Logger: customLogger,
 	})
 	//Services:
+	loopService := loop.NewService()
+	sessionService := sessions.NewService(time.Minute*5)
 	gameService := game.NewService(game.ServiceDeps{
-		GameRepository: gameRepository,
+		Repo:     gameRepository,
+		Loop:     loopService,
+		Sessions: sessionService,
 	})
 	authService := auth.NewService(auth.ServiceDeps{
 		UserRepository: userRepository,
 		GmailConfig:    gmailConfig,
 	})
-	
+
 	//Handlers:
 	pages.NewHandler(pages.HandlerDeps{
 		Router: app,
 		Logger: customLogger,
+		Store: store,
 	})
 	game.NewHandler(game.HandlerDeps{
 		Router:      app,
@@ -87,7 +98,53 @@ func main() {
 		Store:       store,
 	})
 
+	App(loopService, gameService, customLogger)
+
 	if err := app.Listen(":3000"); err != nil {
 		customLogger.Fatal().Err(err).Msg("не удалось запустить HTTP сервер")
 	}
+}
+
+func App(loopService *loop.Service, gameService *game.Service, logger *zerolog.Logger) {
+	go func() {
+		ticker := time.NewTicker(1 * time.Second)
+		defer ticker.Stop()
+
+		for range ticker.C {
+			now := time.Now().Unix()
+			loopService.Tick(now)
+		}
+	}()
+
+	go func() {
+		ticker := time.NewTicker(5 * time.Second)
+		defer ticker.Stop()
+
+		for range ticker.C {
+			gameService.HandleExpiredSessions()
+		}
+	}()
+
+	go func() {
+		ticker := time.NewTicker(1 * time.Minute)
+		defer ticker.Stop()
+
+		for range ticker.C {
+			gameService.SaveAll()
+		}
+	}()
+
+	sigCh := make(chan os.Signal, 1)
+	signal.Notify(
+		sigCh,
+		os.Interrupt,
+		syscall.SIGTERM,
+	)
+	go func() {
+		<-sigCh
+		gameService.SaveAll()
+		logger.Info().Msg("games saves complete")
+		os.Exit(0)
+	}()
+
 }

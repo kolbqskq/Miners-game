@@ -39,7 +39,7 @@ func BottomPanel(activeTab string) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = TabButton("tools", "🛠 Инструменты", activeTab).Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = TabButton("equipments", "🛠 Инструменты", activeTab).Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -52,7 +52,7 @@ func BottomPanel(activeTab string) templ.Component {
 			return templ_7745c5c3_Err
 		}
 		if activeTab == "miners" {
-			templ_7745c5c3_Err = components.ShopCard("Шахтёр", "+1.0/сек", "30 сек", "5", "small").Render(ctx, templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = components.ShopCard("Шахтёр", "+1.0/сек", "30 сек", "5", "small", "miner").Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -60,13 +60,13 @@ func BottomPanel(activeTab string) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = components.ShopCard("Шахтёр+", "+1.5/сек", "45 сек", "50", "normal").Render(ctx, templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = components.ShopCard("Шахтёр+", "+1.5/сек", "45 сек", "50", "normal", "miner").Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 		}
-		if activeTab == "tools" {
-			templ_7745c5c3_Err = components.ShopCard("Кирка", "+1.0/сек", "30 сек", "5", "small").Render(ctx, templ_7745c5c3_Buffer)
+		if activeTab == "equipments" {
+			templ_7745c5c3_Err = components.ShopCard("Кирка", "+1.0/сек", "30 сек", "5", "1", "equipment").Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -74,13 +74,13 @@ func BottomPanel(activeTab string) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = components.ShopCard("Лопата+", "+1.5/сек", "45 сек", "50", "normal").Render(ctx, templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = components.ShopCard("Лопата+", "+1.5/сек", "45 сек", "50", "2", "equipment").Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 		}
 		if activeTab == "upgrades" {
-			templ_7745c5c3_Err = components.ShopCard("Planet", "+1.0/сек", "30 сек", "5", "small").Render(ctx, templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = components.ShopCard("Planet", "+1.0/сек", "30 сек", "5", "2", "upgrade").Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -88,7 +88,7 @@ func BottomPanel(activeTab string) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = components.ShopCard("Crafter+", "+1.5/сек", "45 сек", "50", "normal").Render(ctx, templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = components.ShopCard("Crafter+", "+1.5/сек", "45 сек", "50", "1", "upgrade").Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

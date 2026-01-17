@@ -67,16 +67,3 @@ func NewMiner(class string) *Miner {
 	}
 	return miner
 }
-
-func (m *Miner) Gif() string {
-	switch m.Class {
-	case "small":
-		return "/public/gif/miner_small.mp4"
-	case "normal":
-		return "/public/gif/miner_normal.gif"
-	case "strong":
-		return "/public/gif/miner_strong.gif"
-	default:
-		return "public/gif/miner_small.gif"
-	}
-}

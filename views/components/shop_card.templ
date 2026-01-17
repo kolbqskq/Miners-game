@@ -1,6 +1,6 @@
 package components
 
-templ ShopCard(title, income, duration, price, class string) {
+templ ShopCard(title, income, duration, price, class, kind string) {
 <div class="shop-card">
 
     <div class="shop-title">{title}</div>
@@ -10,9 +10,11 @@ templ ShopCard(title, income, duration, price, class string) {
 
     <button class="shop-buy"
         hx-post="/game/buy" 
-        hx-vals={ `{"class":"` + class + `"}` } 
-        hx-target="#hud-container"
-        hx-swap="innerHTML" hx-indicator=".shop-loading"
+        hx-vals={ `{
+            "class": "` + class + `",
+            "kind": "` + kind + `"
+        }` }
+        hx-indicator=".shop-loading"
     >
         Купить за {price}
     </button>

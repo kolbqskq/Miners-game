@@ -5,17 +5,13 @@ import "miners_game/views/layout"
 
 templ Game() {
 @GameStyle()
-<div
-    hx-post="/game/heartbeat"
-    hx-trigger="every 5s"
-    hx-swap="none"
-></div>
+
 <main class="game-page">
     @layout.Layout(layout.LayoutProps{
         Title: "Игра",
         MetaDescription: "Игра",
     }){
-    <div id="hud-container" hx-get="/game/hud" hx-trigger="every 1s throttle:500ms" hx-swap="innerHTML">
+    <div id="hud-container" hx-get="/game/hud" hx-trigger="every 500ms" hx-swap="innerHTML">
         @widgets.HUD("0", "0")
     </div>
     <section class="game-scene-wrapper">

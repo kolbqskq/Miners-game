@@ -7,23 +7,23 @@ templ BottomPanel(activeTab string) {
 
     <div class="bottom-panel_tabs">
         @TabButton("miners", "👷 Шахтёры", activeTab)
-        @TabButton("tools", "🛠 Инструменты", activeTab)
+        @TabButton("equipments", "🛠 Инструменты", activeTab)
         @TabButton("upgrades", "🏪 Улучшения", activeTab)
     </div>
 
     <div class="shop-grid">
     if activeTab == "miners"{
 
-        @components.ShopCard("Шахтёр", "+1.0/сек", "30 сек", "5", "small")
-        @components.ShopCard("Шахтёр+", "+1.5/сек", "45 сек", "50", "normal")
+        @components.ShopCard("Шахтёр", "+1.0/сек", "30 сек", "5", "small", "miner")
+        @components.ShopCard("Шахтёр+", "+1.5/сек", "45 сек", "50", "normal", "miner")
     }
-    if activeTab == "tools"{
-        @components.ShopCard("Кирка", "+1.0/сек", "30 сек", "5", "small")
-        @components.ShopCard("Лопата+", "+1.5/сек", "45 сек", "50", "normal")
+    if activeTab == "equipments"{
+        @components.ShopCard("Кирка", "+1.0/сек", "30 сек", "5", "1", "equipment")
+        @components.ShopCard("Лопата+", "+1.5/сек", "45 сек", "50", "2", "equipment")
     }
     if activeTab == "upgrades"{
-        @components.ShopCard("Planet", "+1.0/сек", "30 сек", "5", "small")
-        @components.ShopCard("Crafter+", "+1.5/сек", "45 сек", "50", "normal")
+        @components.ShopCard("Planet", "+1.0/сек", "30 сек", "5", "2", "upgrade")
+        @components.ShopCard("Crafter+", "+1.5/сек", "45 сек", "50", "1", "upgrade")
     }
     </div>
 </div>
