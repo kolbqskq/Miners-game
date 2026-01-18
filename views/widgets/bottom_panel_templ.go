@@ -64,13 +64,21 @@ func BottomPanel(activeTab string) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, " ")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = components.ShopCard("ШахтёрГигабайт", "+3/сек", "45 сек", "450", "strong", "miner").Render(ctx, templ_7745c5c3_Buffer)
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
 		}
 		if activeTab == "equipments" {
 			templ_7745c5c3_Err = components.ShopCard("Кирка", "+1.0/сек", "30 сек", "5", "1", "equipment").Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, " ")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, " ")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -84,7 +92,7 @@ func BottomPanel(activeTab string) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, " ")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, " ")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -93,7 +101,7 @@ func BottomPanel(activeTab string) templ.Component {
 				return templ_7745c5c3_Err
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "</div></div><style>\r\n    .bottom-panel{\r\n        background: rgba(0, 0, 0, 0.4);\r\n        backdrop-filter: blur(8px);\r\n    }\r\n    .bottom-panel_tabs {\r\n        display: flex;\r\n        gap: 6px;\r\n        padding: 6px 8px;\r\n        margin-left: 8px;\r\n        margin-bottom: 10px;\r\n    }\r\n\r\n    .tab {\r\n        position: relative;\r\n        background: rgba(255,255,255,0.06);\r\n        border: none;\r\n        color: white;\r\n        padding: 6px 12px 10px;\r\n        border-radius: 8px;\r\n        font-size: 13px;\r\n    }\r\n\r\n    .tab[aria-current=\"true\"] {\r\n        background: rgba(255, 200, 80, 0.18);\r\n    }\r\n\r\n    .tab[aria-current=\"true\"]::after {\r\n        content: \"\";\r\n        position: absolute;\r\n        inset: auto 8px 4px 8px;\r\n        height: 3px;\r\n        border-radius: 2px;\r\n        background: var(--accent);\r\n    }\r\n\r\n    .tab:hover {\r\n        background: rgba(255,255,255,0.1);\r\n    }\r\n\r\n    .tab:active {\r\n        transform: translateY(1px);\r\n    }\r\n\r\n    .shop-grid {\r\n        padding: 0 8px 8px;\r\n        margin-top: 4px;\r\n        margin-left: 8px;\r\n        display: grid;\r\n        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));\r\n        gap: 12px;\r\n    }\r\n</style>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, "</div></div><style>\r\n    .bottom-panel{\r\n        background: rgba(0, 0, 0, 0.4);\r\n        backdrop-filter: blur(8px);\r\n    }\r\n    .bottom-panel_tabs {\r\n        display: flex;\r\n        gap: 6px;\r\n        padding: 6px 8px;\r\n        margin-left: 8px;\r\n        margin-bottom: 10px;\r\n    }\r\n\r\n    .tab {\r\n        position: relative;\r\n        background: rgba(255,255,255,0.06);\r\n        border: none;\r\n        color: white;\r\n        padding: 6px 12px 10px;\r\n        border-radius: 8px;\r\n        font-size: 13px;\r\n    }\r\n\r\n    .tab[aria-current=\"true\"] {\r\n        background: rgba(255, 200, 80, 0.18);\r\n    }\r\n\r\n    .tab[aria-current=\"true\"]::after {\r\n        content: \"\";\r\n        position: absolute;\r\n        inset: auto 8px 4px 8px;\r\n        height: 3px;\r\n        border-radius: 2px;\r\n        background: var(--accent);\r\n    }\r\n\r\n    .tab:hover {\r\n        background: rgba(255,255,255,0.1);\r\n    }\r\n\r\n    .tab:active {\r\n        transform: translateY(1px);\r\n    }\r\n\r\n    .shop-grid {\r\n        padding: 0 8px 8px;\r\n        margin-top: 4px;\r\n        margin-left: 8px;\r\n        display: grid;\r\n        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));\r\n        gap: 12px;\r\n    }\r\n</style>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

@@ -7,21 +7,21 @@ type Equipment struct {
 
 type EquipmentConfig struct {
 	Price int64
-	Value float32
+	Value int64
 }
 
 var EquipmentPresets = map[string]EquipmentConfig{
 	"1": {
 		Price: 450,
-		Value: 1.1,
+		Value: 110,
 	},
 	"2": {
 		Price: 450,
-		Value: 1.3,
+		Value: 130,
 	},
 	"3": {
 		Price: 450,
-		Value: 2,
+		Value: 200,
 	},
 }
 

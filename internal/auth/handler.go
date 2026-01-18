@@ -163,6 +163,7 @@ func (h *Handler) register(c *fiber.Ctx) error {
 			return tadapter.Render(c, component, fiber.StatusBadRequest)
 		}
 		code := fmt.Sprintf("%06d", rand.Intn(100000))
+		h.logger.Info().Msg(code)
 		hashedPassword, err := bcrypt.GenerateFromPassword([]byte(form.Password), bcrypt.DefaultCost)
 		if err != nil {
 			h.logger.Error().Msg("Ошибка хеширования пароля")

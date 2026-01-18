@@ -11,7 +11,7 @@ templ Game() {
         Title: "Игра",
         MetaDescription: "Игра",
     }){
-    <div id="hud-container" hx-get="/game/hud" hx-trigger="every 500ms" hx-swap="innerHTML">
+    <div id="hud-container" hx-get="/game/hud" hx-trigger="every 500msС" hx-swap="innerHTML">
         @widgets.HUD("0", "0")
     </div>
     <section class="game-scene-wrapper">

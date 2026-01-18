@@ -18,34 +18,26 @@ type Miner struct {
 }
 
 type MinerConfig struct {
-	Price     int64
-	Power     int64
-	Energy    int64
-	BreakTime int64
-	Progress  int64
+	Price    int64
+	Power    int64
+	Energy   int64
 }
 
 var MinerPresets = map[string]MinerConfig{
 	"small": {
-		Price:     5,
-		Power:     1,
-		Energy:    30,
-		BreakTime: 3,
-		Progress:  0,
+		Price:    5,
+		Power:    1,
+		Energy:   30,
 	},
 	"normal": {
-		Price:     50,
-		Energy:    45,
-		Power:     3,
-		BreakTime: 2,
-		Progress:  0,
+		Price:    50,
+		Energy:   45,
+		Power:    3,
 	},
 	"strong": {
-		Price:     450,
-		Energy:    60,
-		Power:     10,
-		BreakTime: 1,
-		Progress:  3,
+		Price:    450,
+		Energy:   60,
+		Power:    10,
 	},
 }
 
@@ -56,14 +48,13 @@ func GetMinerConfig(class string) MinerConfig {
 func NewMiner(class string) *Miner {
 
 	cfg := GetMinerConfig(class)
-	lifetime := cfg.Energy * cfg.BreakTime
 
 	now := time.Now().Unix()
 	miner := &Miner{
 		ID:      uuid.NewString(),
 		Class:   class,
 		StartAt: now,
-		EndAt:   now + int64(lifetime),
+		EndAt:   now + cfg.Energy,
 	}
 	return miner
 }

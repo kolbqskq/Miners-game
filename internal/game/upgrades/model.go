@@ -7,21 +7,21 @@ type Upgrade struct {
 
 type UpgradesConfig struct {
 	Price int64
-	Value float32
+	Value int64
 }
 
 var UpgradesPresets = map[string]UpgradesConfig{
 	"1": {
 		Price: 450,
-		Value: 2,
+		Value: 200,
 	},
 	"2": {
 		Price: 450,
-		Value: 2,
+		Value: 200,
 	},
 	"3": {
 		Price: 450,
-		Value: 2,
+		Value: 200,
 	},
 }
 

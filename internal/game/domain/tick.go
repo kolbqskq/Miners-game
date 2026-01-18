@@ -30,7 +30,7 @@ func (g *GameState) CalcIncome(from, to int64) int64 {
 	for _, v := range g.Miners {
 		total += v.CalcIncome(from, to)
 	}
-	var rise float32 = 1
+	var rise int64 = 100
 	for _, v := range g.Equipments {
 		if v.Own {
 			rise += equipments.GetEquipmentConfig(v.Name).Value
@@ -41,7 +41,7 @@ func (g *GameState) CalcIncome(from, to int64) int64 {
 			rise += upgrades.GetUpgradesConfig(v.Name).Value
 		}
 	}
-	return int64(float32(total) * rise)
+	return (total*rise)/100
 }
 
 func (g *GameState) deleteExpiredMiners(now int64) {
