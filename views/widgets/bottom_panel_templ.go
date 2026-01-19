@@ -31,6 +31,10 @@ func BottomPanel(activeTab string) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
+		templ_7745c5c3_Err = BottomPanelStyle().Render(ctx, templ_7745c5c3_Buffer)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
 		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div id=\"bottom-panel\" class=\"bottom-panel\"><div class=\"bottom-panel_tabs\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
@@ -52,7 +56,7 @@ func BottomPanel(activeTab string) templ.Component {
 			return templ_7745c5c3_Err
 		}
 		if activeTab == "miners" {
-			templ_7745c5c3_Err = components.ShopCard("Шахтёр", "+1.0/сек", "30 сек", "5", "small", "miner").Render(ctx, templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = components.ShopCard("Шахтёр", "+1.0/сек", "30 сек", "5", "small", "miner", "/public/icons/shop/miner-small.png", false, "").Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -60,7 +64,7 @@ func BottomPanel(activeTab string) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = components.ShopCard("Шахтёр+", "+1.5/сек", "45 сек", "50", "normal", "miner").Render(ctx, templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = components.ShopCard("Шахтёр+", "+1.5/сек", "45 сек", "50", "normal", "miner", "", false, "").Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -68,13 +72,13 @@ func BottomPanel(activeTab string) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = components.ShopCard("ШахтёрГигабайт", "+3/сек", "45 сек", "450", "strong", "miner").Render(ctx, templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = components.ShopCard("ШахтёрГигабайт", "+3/сек", "45 сек", "450", "strong", "miner", "", false, "").Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 		}
 		if activeTab == "equipments" {
-			templ_7745c5c3_Err = components.ShopCard("Кирка", "+1.0/сек", "30 сек", "5", "1", "equipment").Render(ctx, templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = components.ShopCard("Кирка", "+1.0/сек", "30 сек", "5", "1", "equipment", "", false, "").Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -82,13 +86,13 @@ func BottomPanel(activeTab string) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = components.ShopCard("Лопата+", "+1.5/сек", "45 сек", "50", "2", "equipment").Render(ctx, templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = components.ShopCard("Лопата+", "+1.5/сек", "45 сек", "50", "2", "equipment", "", false, "").Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 		}
 		if activeTab == "upgrades" {
-			templ_7745c5c3_Err = components.ShopCard("Planet", "+1.0/сек", "30 сек", "5", "2", "upgrade").Render(ctx, templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = components.ShopCard("Planet", "+1.0/сек", "30 сек", "5", "2", "upgrade", "", false, "").Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -96,12 +100,41 @@ func BottomPanel(activeTab string) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = components.ShopCard("Crafter+", "+1.5/сек", "45 сек", "50", "1", "upgrade").Render(ctx, templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = components.ShopCard("Crafter+", "+1.5/сек", "45 сек", "50", "1", "upgrade", "", false, "").Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, "</div></div><style>\r\n    .bottom-panel{\r\n        background: rgba(0, 0, 0, 0.4);\r\n        backdrop-filter: blur(8px);\r\n    }\r\n    .bottom-panel_tabs {\r\n        display: flex;\r\n        gap: 6px;\r\n        padding: 6px 8px;\r\n        margin-left: 8px;\r\n        margin-bottom: 10px;\r\n    }\r\n\r\n    .tab {\r\n        position: relative;\r\n        background: rgba(255,255,255,0.06);\r\n        border: none;\r\n        color: white;\r\n        padding: 6px 12px 10px;\r\n        border-radius: 8px;\r\n        font-size: 13px;\r\n    }\r\n\r\n    .tab[aria-current=\"true\"] {\r\n        background: rgba(255, 200, 80, 0.18);\r\n    }\r\n\r\n    .tab[aria-current=\"true\"]::after {\r\n        content: \"\";\r\n        position: absolute;\r\n        inset: auto 8px 4px 8px;\r\n        height: 3px;\r\n        border-radius: 2px;\r\n        background: var(--accent);\r\n    }\r\n\r\n    .tab:hover {\r\n        background: rgba(255,255,255,0.1);\r\n    }\r\n\r\n    .tab:active {\r\n        transform: translateY(1px);\r\n    }\r\n\r\n    .shop-grid {\r\n        padding: 0 8px 8px;\r\n        margin-top: 4px;\r\n        margin-left: 8px;\r\n        display: grid;\r\n        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));\r\n        gap: 12px;\r\n    }\r\n</style>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, "</div></div>")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		return nil
+	})
+}
+
+func BottomPanelStyle() templ.Component {
+	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
+		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
+		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
+			return templ_7745c5c3_CtxErr
+		}
+		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
+		if !templ_7745c5c3_IsBuffer {
+			defer func() {
+				templ_7745c5c3_BufErr := templruntime.ReleaseBuffer(templ_7745c5c3_Buffer)
+				if templ_7745c5c3_Err == nil {
+					templ_7745c5c3_Err = templ_7745c5c3_BufErr
+				}
+			}()
+		}
+		ctx = templ.InitializeContext(ctx)
+		templ_7745c5c3_Var2 := templ.GetChildren(ctx)
+		if templ_7745c5c3_Var2 == nil {
+			templ_7745c5c3_Var2 = templ.NopComponent
+		}
+		ctx = templ.ClearChildren(ctx)
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "<style>\r\n        .bottom-panel {\r\n        background: linear-gradient(180deg, rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.75));\r\n        backdrop-filter: blur(10px);\r\n        border-top: 1px solid rgba(255, 255, 255, 0.08);\r\n        padding-top: 8px;\r\n        position: relative;\r\n        overflow: hidden;\r\n    }\r\n\r\n    .bottom-panel::before {\r\n        content: \"\";\r\n        position: absolute;\r\n        inset: -20%;\r\n        background: radial-gradient(120% 80% at 50% 0%, rgba(255, 255, 255, 0.06), transparent 60%);\r\n        transform: translateY(0);\r\n        transition: transform 0.4s ease;\r\n        pointer-events: none;\r\n    }\r\n\r\n    .bottom-panel:hover::before {\r\n        transform: translateY(-12px);\r\n    }\r\n\r\n    /* ===== TABS ===== */\r\n    .bottom-panel_tabs {\r\n        display: flex;\r\n        gap: 8px;\r\n        padding: 8px 12px 6px;\r\n        margin: 0;\r\n        overflow-x: auto;\r\n        position: relative;\r\n        z-index: 2;\r\n    }\r\n\r\n    .bottom-panel::after {\r\n        content: \"\";\r\n        position: absolute;\r\n        left: 16px;\r\n        right: 16px;\r\n        top: 58px;\r\n        height: 1px;\r\n        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.12), transparent);\r\n    }\r\n\r\n    .bottom-panel_tabs::-webkit-scrollbar {\r\n        display: none;\r\n    }\r\n\r\n    .tab {\r\n        background: rgba(255, 255, 255, 0.06);\r\n        border: none;\r\n        color: rgba(255, 255, 255, 0.75);\r\n        padding: 9px 16px;\r\n        border-radius: 12px;\r\n        font-size: 13px;\r\n        font-weight: 700;\r\n        white-space: nowrap;\r\n        cursor: pointer;\r\n        transition: background 0.18s ease, color 0.18s ease, transform 0.12s ease;\r\n    }\r\n\r\n    .tab:hover {\r\n        background: rgba(255, 255, 255, 0.12);\r\n        color: white;\r\n    }\r\n\r\n    .tab:active {\r\n        transform: scale(0.96);\r\n    }\r\n\r\n    /* ACTIVE TAB — ПОЛНАЯ ЗАЛИВКА */\r\n    .tab[aria-current=\"true\"] {\r\n        background: linear-gradient(180deg, var(--accent), color-mix(in srgb, var(--accent) 85%, black));\r\n        color: black;\r\n    }\r\n\r\n    /* ===== SHOP GRID ANIMATION ===== */\r\n    .shop-grid {\r\n        padding: 6px 12px 12px;\r\n        display: grid;\r\n        grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));\r\n        gap: 14px;\r\n        position: relative;\r\n        z-index: 1;\r\n        animation: tab-fade-in 0.22s ease;\r\n    }\r\n\r\n    @keyframes tab-fade-in {\r\n        from {\r\n            opacity: 0;\r\n        }\r\n\r\n        to {\r\n            opacity: 1;\r\n        }\r\n}\r\n</style>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

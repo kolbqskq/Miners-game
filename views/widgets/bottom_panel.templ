@@ -3,6 +3,7 @@ package widgets
 import "miners_game/views/components"
 
 templ BottomPanel(activeTab string) {
+    @BottomPanelStyle()
 <div id="bottom-panel" class="bottom-panel">
 
     <div class="bottom-panel_tabs">
@@ -14,72 +15,119 @@ templ BottomPanel(activeTab string) {
     <div class="shop-grid">
     if activeTab == "miners"{
 
-        @components.ShopCard("Шахтёр", "+1.0/сек", "30 сек", "5", "small", "miner")
-        @components.ShopCard("Шахтёр+", "+1.5/сек", "45 сек", "50", "normal", "miner")
-        @components.ShopCard("ШахтёрГигабайт", "+3/сек", "45 сек", "450", "strong", "miner")
+        @components.ShopCard("Шахтёр", "+1.0/сек", "30 сек", "5", "small", "miner", "/public/icons/shop/miner-small.png", false, "")
+        @components.ShopCard("Шахтёр+", "+1.5/сек", "45 сек", "50", "normal", "miner", "", false, "")
+        @components.ShopCard("ШахтёрГигабайт", "+3/сек", "45 сек", "450", "strong", "miner", "", false, "")
     }
     if activeTab == "equipments"{
-        @components.ShopCard("Кирка", "+1.0/сек", "30 сек", "5", "1", "equipment")
-        @components.ShopCard("Лопата+", "+1.5/сек", "45 сек", "50", "2", "equipment")
+        @components.ShopCard("Кирка", "+1.0/сек", "30 сек", "5", "1", "equipment", "", false, "")
+        @components.ShopCard("Лопата+", "+1.5/сек", "45 сек", "50", "2", "equipment", "", false, "")
     }
     if activeTab == "upgrades"{
-        @components.ShopCard("Planet", "+1.0/сек", "30 сек", "5", "2", "upgrade")
-        @components.ShopCard("Crafter+", "+1.5/сек", "45 сек", "50", "1", "upgrade")
+        @components.ShopCard("Planet", "+1.0/сек", "30 сек", "5", "2", "upgrade", "", false, "")
+        @components.ShopCard("Crafter+", "+1.5/сек", "45 сек", "50", "1", "upgrade", "", false, "")
     }
     </div>
 </div>
+}
 
-<style>
-    .bottom-panel{
-        background: rgba(0, 0, 0, 0.4);
-        backdrop-filter: blur(8px);
+templ BottomPanelStyle() {
+    <style>
+        .bottom-panel {
+        background: linear-gradient(180deg, rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.75));
+        backdrop-filter: blur(10px);
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+        padding-top: 8px;
+        position: relative;
+        overflow: hidden;
     }
+
+    .bottom-panel::before {
+        content: "";
+        position: absolute;
+        inset: -20%;
+        background: radial-gradient(120% 80% at 50% 0%, rgba(255, 255, 255, 0.06), transparent 60%);
+        transform: translateY(0);
+        transition: transform 0.4s ease;
+        pointer-events: none;
+    }
+
+    .bottom-panel:hover::before {
+        transform: translateY(-12px);
+    }
+
+    /* ===== TABS ===== */
     .bottom-panel_tabs {
         display: flex;
-        gap: 6px;
-        padding: 6px 8px;
-        margin-left: 8px;
-        margin-bottom: 10px;
+        gap: 8px;
+        padding: 8px 12px 6px;
+        margin: 0;
+        overflow-x: auto;
+        position: relative;
+        z-index: 2;
+    }
+
+    .bottom-panel::after {
+        content: "";
+        position: absolute;
+        left: 16px;
+        right: 16px;
+        top: 58px;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.12), transparent);
+    }
+
+    .bottom-panel_tabs::-webkit-scrollbar {
+        display: none;
     }
 
     .tab {
-        position: relative;
-        background: rgba(255,255,255,0.06);
+        background: rgba(255, 255, 255, 0.06);
         border: none;
-        color: white;
-        padding: 6px 12px 10px;
-        border-radius: 8px;
+        color: rgba(255, 255, 255, 0.75);
+        padding: 9px 16px;
+        border-radius: 12px;
         font-size: 13px;
-    }
-
-    .tab[aria-current="true"] {
-        background: rgba(255, 200, 80, 0.18);
-    }
-
-    .tab[aria-current="true"]::after {
-        content: "";
-        position: absolute;
-        inset: auto 8px 4px 8px;
-        height: 3px;
-        border-radius: 2px;
-        background: var(--accent);
+        font-weight: 700;
+        white-space: nowrap;
+        cursor: pointer;
+        transition: background 0.18s ease, color 0.18s ease, transform 0.12s ease;
     }
 
     .tab:hover {
-        background: rgba(255,255,255,0.1);
+        background: rgba(255, 255, 255, 0.12);
+        color: white;
     }
 
     .tab:active {
-        transform: translateY(1px);
+        transform: scale(0.96);
     }
 
-    .shop-grid {
-        padding: 0 8px 8px;
-        margin-top: 4px;
-        margin-left: 8px;
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-        gap: 12px;
+    /* ACTIVE TAB — ПОЛНАЯ ЗАЛИВКА */
+    .tab[aria-current="true"] {
+        background: linear-gradient(180deg, var(--accent), color-mix(in srgb, var(--accent) 85%, black));
+        color: black;
     }
+
+    /* ===== SHOP GRID ANIMATION ===== */
+    .shop-grid {
+        padding: 6px 12px 12px;
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+        gap: 14px;
+        position: relative;
+        z-index: 1;
+        animation: tab-fade-in 0.22s ease;
+    }
+
+    @keyframes tab-fade-in {
+        from {
+            opacity: 0;
+        }
+
+        to {
+            opacity: 1;
+        }
+}
 </style>
 }

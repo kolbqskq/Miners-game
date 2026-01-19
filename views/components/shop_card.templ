@@ -1,45 +1,168 @@
 package components
 
-templ ShopCard(title, income, duration, price, class, kind string) {
+import "fmt"
+
+templ ShopCard(
+title, income, duration, price, class, kind, icon string,
+disabled bool,
+reason string,
+) {
+@ShopCardStyle()
+
+
 <div class="shop-card">
+    <div class="shop-header">
+        <div class="shop-meta">
+            <div class="shop-title">{title}</div>
+            <div class="shop-info">{income}</div>
+            <div class="shop-info">⏱ {duration}</div>
+        </div>
 
-    <div class="shop-title">{title}</div>
+        if icon != "" {
+        <div class="shop-icon">
+            <img src={icon} />
+        </div>
+        }
+    </div>
 
-    <div class="shop-info">{income}</div>
-    <div class="shop-info">⏱ {duration}</div>
-
-    <button class="shop-buy"
-        hx-post="/game/buy" 
-        hx-vals={ `{
-            "class": "` + class + `",
-            "kind": "` + kind + `"
-        }` }
-        hx-indicator=".shop-loading"
-    >
-        Купить за {price}
+<button 
+    class="shop-buy" 
+    if disabled { disabled class="shop-buy disabled" } 
+    if !disabled { hx-post="/game/buy" 
+    hx-vals={ fmt.Sprintf(`{"class": "%s", "kind": "%s"}`, class, kind) }
+    hx-target="closest .shop-card" 
+    hx-swap="outerHTML" }> 
+    if disabled {
+        {reason} } else { Купить за {price} } 
     </button>
-
-    <div class="shop-loading" hidden>⏳</div>
-
 </div>
+}
 
-<style>
+
+
+templ ShopCardStyle() { 
+    <style>
     .shop-card {
-        background: rgba(255, 255, 255, 0.03);
-        padding: 12px;
-        border-radius: 12px;
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02));
+        border-radius: 18px;
+        padding: 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        min-height: 160px;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+        transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
+    }
+
+    .shop-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    }
+
+    .shop-header {
+        display: flex;
+        align-items: stretch;
+        gap: 12px;
+    }
+
+    .shop-meta {
+        flex: 1;
+        min-width: 0;
         display: flex;
         flex-direction: column;
         gap: 6px;
     }
 
+    .shop-title {
+        font-size: 18px;
+        font-weight: 700;
+        line-height: 1.25;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        min-height: calc(1.25em * 2);
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .shop-info {
+        font-size: 14px;
+        opacity: 0.8;
+    }
+
+    .shop-icon {
+        width: 96px;
+        height: 136px;
+        margin-left: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        border-radius: 14px;
+        background: rgba(0, 0, 0, 0.15);
+    }
+
+    .shop-icon img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        opacity: 0.98;
+    }
+
+    /* КНОПКА ПОКУПКИ */
     .shop-buy {
-        margin-top: 8px;
-        background: var(--accent);
+        margin-top: auto;
+        align-self: stretch;
+        background: linear-gradient(180deg, var(--accent), color-mix(in srgb, var(--accent) 85%, black));
         border: none;
-        padding: 6px;
-        border-radius: 8px;
+        border-radius: 12px;
+        padding: 12px 20px;
+        font-size: 15px;
+        font-weight: 700;
         cursor: pointer;
+        transition: transform 0.12s ease, box-shadow 0.12s ease, opacity 0.12s ease;
+    }
+
+    .shop-buy:hover {
+        transform: scale(1.03);
+        box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.08);
+    }
+
+    .shop-buy:active {
+        transform: scale(0.95);
+    }
+
+    /* АНИМАЦИЯ ПОКУПКИ */
+    .shop-buy:active~*,
+    .shop-buy:active {
+        animation: buy-flash 0.35s ease;
+    }
+
+    @keyframes buy-flash {
+        0% {
+            box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+        }
+
+        50% {
+            box-shadow: 0 0 24px rgba(255, 255, 255, 0.35);
+        }
+
+        100% {
+            box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+        }
+    }
+
+    /* DISABLED */
+    .shop-buy.disabled {
+        background: rgba(255, 255, 255, 0.12);
+        color: rgba(255, 255, 255, 0.5);
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+    }
+
+    .shop-card:has(.shop-buy.disabled) {
+        opacity: 0.6;
     }
 </style>
 }
