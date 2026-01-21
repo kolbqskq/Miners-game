@@ -1,5 +1,11 @@
 package equipments
 
+import (
+	"miners_game/internal/game/shop"
+	"sort"
+	"strconv"
+)
+
 type Equipment struct {
 	Name string
 	Own  bool
@@ -46,4 +52,29 @@ func NewEquipments() []Equipment {
 			Own:  false,
 		},
 	}
+}
+
+func EquipmentShopCards() []shop.ShopCard {
+	cards := make([]shop.ShopCard, 0, len(EquipmentPresets))
+	for k, v := range EquipmentPresets {
+		card := shop.ShopCard{
+			ID:       "equipment-" + k,
+			Title:    k,
+			Income:   strconv.Itoa(int(v.Value)),
+			Duration: "",
+			Price:    strconv.Itoa(int(v.Price)),
+			Name:     k,
+			Kind:     "equipment",
+			Icon:     "/public/icons/shop/equipment-" + k + ".png",
+			Disabled: false,
+			Reason:   "",
+		}
+		cards = append(cards, card)
+	}
+	sort.Slice(cards, func(i, j int) bool {
+		pi, _ := strconv.Atoi(cards[i].Price)
+		pj, _ := strconv.Atoi(cards[j].Price)
+		return pi < pj
+	})
+	return cards
 }

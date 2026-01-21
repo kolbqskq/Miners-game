@@ -68,7 +68,7 @@ func main() {
 	})
 	//Services:
 	loopService := loop.NewService()
-	sessionService := sessions.NewService(time.Minute*5)
+	sessionService := sessions.NewService(time.Minute)  //timeout
 	gameService := game.NewService(game.ServiceDeps{
 		Repo:     gameRepository,
 		Loop:     loopService,

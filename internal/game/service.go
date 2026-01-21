@@ -6,6 +6,7 @@ import (
 	"miners_game/internal/game/equipments"
 	"miners_game/internal/game/loop"
 	"miners_game/internal/game/sessions"
+	"miners_game/internal/game/shop"
 	"miners_game/internal/game/upgrades"
 	"miners_game/internal/miners"
 	"miners_game/pkg/errs"
@@ -38,7 +39,7 @@ func NewService(deps ServiceDeps) *Service {
 	}
 }
 
-func (a *Service) EnterGame(userID, gameID string) (*domain.GameState, error) {
+func (a *Service) enterGame(userID, gameID string) (*domain.GameState, error) {
 	id := userID + "/" + gameID
 
 	a.mu.RLock()
@@ -74,52 +75,53 @@ func (a *Service) EnterGame(userID, gameID string) (*domain.GameState, error) {
 	return game, nil
 }
 
-func (a *Service) Heartbeat(userID, gameID string) {
-	id := userID + "/" + gameID
-	a.sessions.MarkActive(id)
-}
-
-func (a *Service) BuyMiner(userID, gameID, class string) error {
+func (a *Service) buyMiner(userID, gameID, class, kind string) (shop.ShopCard, error) {
 	game, err := a.buy(userID, gameID)
 	if err != nil {
-		return err
+		return shop.ShopCard{}, err
 	}
 	price := miners.GetMinerConfig(class).Price
 	if err := game.SpendBalance(price); err != nil {
-		return err
+		return getErrShopCard(class, kind, err.Error()), err
 	}
 	game.AddMiner(class)
 
-	return nil
+	return shop.ShopCard{}, nil
 }
 
-func (a *Service) BuyEquipment(userID, gameID, name string) error {
+func (a *Service) buyEquipment(userID, gameID, name, kind string) (shop.ShopCard, error) {
 	game, err := a.buy(userID, gameID)
 	if err != nil {
-		return err
+		return shop.ShopCard{}, err
+	}
+	if game.IsOwnEquipment(name) {
+		return getErrShopCard(name, kind, errs.ErrAlreadyOwn.Error()), errs.ErrAlreadyOwn
 	}
 
 	price := equipments.GetEquipmentConfig(name).Price
 	if err := game.SpendBalance(price); err != nil {
-		return err
+		return getErrShopCard(name, kind, err.Error()), err
 	}
 	game.AddEquipment(name)
-	return nil
+	return shop.ShopCard{}, nil
 }
 
-func (a *Service) BuyUpgrade(userID, gameID, name string) error {
+func (a *Service) buyUpgrade(userID, gameID, name, kind string) (shop.ShopCard, error) {
 	game, err := a.buy(userID, gameID)
 	if err != nil {
-		return err
+		return shop.ShopCard{}, err
+	}
+	if game.IsOwnUpgrade(name) {
+		return getErrShopCard(name, kind, errs.ErrAlreadyOwn.Error()), errs.ErrAlreadyOwn
 	}
 
 	price := upgrades.GetUpgradesConfig(name).Price
 	if err := game.SpendBalance(price); err != nil {
-		return err
+		return getErrShopCard(name, kind, err.Error()), err
 	}
 	game.AddUpgrade(name)
 
-	return nil
+	return shop.ShopCard{}, nil
 }
 
 func (a *Service) HandleExpiredSessions() {
@@ -138,16 +140,21 @@ func (a *Service) HandleExpiredSessions() {
 	}
 }
 
-func (a *Service) GetHud(userID, gameID string) (string, string, error) {
-	game, err := a.EnterGame(userID, gameID)
+func (a *Service) getHud(userID, gameID string) (string, string, error) {
+	id := userID + "/" + gameID
+
+	game, err := a.enterGame(userID, gameID)
 	if err != nil {
 		return "", "", err
 	}
-	
+
 	game.Mu.Lock()
 	balance := strconv.Itoa(int(game.Balance))
 	income := strconv.Itoa(int(game.IncomePerSec))
 	game.Mu.Unlock()
+
+	a.sessions.MarkActive(id)
+
 	return balance, income, nil
 }
 
@@ -164,7 +171,7 @@ func (a *Service) SaveAll() {
 func (a *Service) buy(userID, gameID string) (*domain.GameState, error) {
 	id := userID + "/" + gameID
 	if !a.sessions.IsActive(id) {
-		return nil, errors.New("NotActive") // error
+		return nil, errs.ErrSessionIsNotActive
 	}
 
 	a.mu.RLock()
@@ -172,8 +179,41 @@ func (a *Service) buy(userID, gameID string) (*domain.GameState, error) {
 	a.mu.RUnlock()
 
 	if !ok {
-		return nil, errors.New("game not loaded")
+		return nil, errs.ErrGameNotFound
 	}
-
 	return game, nil
+}
+
+func (a *Service) getShopState(kind string) []shop.ShopCard {
+	switch kind {
+	case "miner":
+		return miners.MinerShopCards()
+	case "equipment":
+		return equipments.EquipmentShopCards()
+	case "upgrade":
+		return upgrades.UpgradeShopCards()
+	}
+	return nil
+}
+
+func getErrShopCard(name, kind, reason string) shop.ShopCard {
+	card := getShopCardByName(name, kind)
+	card.Disabled = true
+	card.Reason = reason
+	return card
+}
+
+func getShopCardByName(name, kind string) shop.ShopCard {
+	cases := map[string]func() []shop.ShopCard{
+		"miner":     miners.MinerShopCards,
+		"equipment": equipments.EquipmentShopCards,
+		"upgrade":   upgrades.UpgradeShopCards,
+	}
+	cards := cases[kind]()
+	for _, v := range cards {
+		if v.Name == name {
+			return v
+		}
+	}
+	return shop.ShopCard{}
 }

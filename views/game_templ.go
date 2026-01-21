@@ -10,6 +10,7 @@ import templruntime "github.com/a-h/templ/runtime"
 
 import "miners_game/views/widgets"
 import "miners_game/views/layout"
+import "miners_game/internal/miners"
 
 func Game() templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
@@ -72,7 +73,7 @@ func Game() templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = widgets.BottomPanel("miners").Render(ctx, templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = widgets.BottomPanel("miner", miners.MinerShopCards()).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

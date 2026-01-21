@@ -1,9 +1,11 @@
 package game
 
 import (
+	"miners_game/internal/game/shop"
 	"miners_game/pkg/middleware"
 	"miners_game/pkg/tadapter"
 	"miners_game/views"
+	"miners_game/views/components"
 	"miners_game/views/widgets"
 
 	"github.com/gofiber/fiber/v2"
@@ -39,7 +41,7 @@ func NewHandler(deps HandlerDeps) {
 	g.Get("/hud", h.hud)
 	g.Get("/new", h.newGame)
 	g.Post("/buy", h.buy)
-	g.Get("/panel/:tab", h.shopPanel)
+	g.Get("/panel/:tab", h.shopTab)
 }
 
 func (h *Handler) game(c *fiber.Ctx) error {
@@ -49,7 +51,7 @@ func (h *Handler) game(c *fiber.Ctx) error {
 	if gameID == "" {
 		gameID = uuid.NewString()
 	}
-	if _, err := h.gameService.EnterGame(userID, gameID); err != nil {
+	if _, err := h.gameService.enterGame(userID, gameID); err != nil {
 		h.logger.Error().Msg("EnterGame failed")
 		return c.SendStatus(fiber.StatusInternalServerError)
 	}
@@ -64,12 +66,12 @@ func (h *Handler) game(c *fiber.Ctx) error {
 
 func (h *Handler) hud(c *fiber.Ctx) error {
 	userID := c.Locals("user_id").(string)
-
 	gameID, ok := c.Locals("game_id").(string)
 	if !ok || gameID == "" {
+		c.Set("HX-Redirect", "/")
 		return c.SendStatus(fiber.StatusNoContent)
 	}
-	balance, income, err := h.gameService.GetHud(userID, gameID)
+	balance, income, err := h.gameService.getHud(userID, gameID)
 	if err != nil {
 		h.logger.Warn().Msg("Hud bad request")
 		return c.SendStatus(fiber.StatusNoContent)
@@ -85,7 +87,7 @@ func (h *Handler) newGame(c *fiber.Ctx) error {
 
 	gameID := uuid.NewString()
 
-	_, err := h.gameService.EnterGame(userID, gameID)
+	_, err := h.gameService.enterGame(userID, gameID)
 	if err != nil {
 		return c.SendStatus(fiber.StatusNoContent)
 	}
@@ -105,33 +107,28 @@ func (h *Handler) buy(c *fiber.Ctx) error {
 	if !ok {
 		return c.SendStatus(fiber.StatusNoContent)
 	}
-	class := c.FormValue("class")
+	name := c.FormValue("name")
 	kind := c.FormValue("kind")
-	switch kind {
-	case "miner":
-		err := h.gameService.BuyMiner(userID, gameID, class)
-		if err != nil {
-			h.logger.Error().Msg(err.Error())
-			return c.SendStatus(fiber.StatusNoContent)
-		}
-	case "equipment":
-		err := h.gameService.BuyEquipment(userID, gameID, class)
-		if err != nil {
-			h.logger.Error().Msg(err.Error())
-			return c.SendStatus(fiber.StatusNoContent)
-		}
-	case "upgrade":
-		err := h.gameService.BuyUpgrade(userID, gameID, class)
-		if err != nil {
-			h.logger.Error().Msg(err.Error())
-			return c.SendStatus(fiber.StatusNoContent)
+
+	cases := map[string]func(string, string, string, string) (shop.ShopCard, error){
+		"miner":     h.gameService.buyMiner,
+		"equipment": h.gameService.buyEquipment,
+		"upgrade":   h.gameService.buyUpgrade,
+	}
+	if cs, ok := cases[kind]; ok {
+		if card, err := cs(userID, gameID, name, kind); err != nil {
+			component := components.ShopCard(card)
+			h.logger.Error().Msg("buy error")
+			return tadapter.Render(c, component, fiber.StatusOK)
 		}
 	}
+
 	return c.SendStatus(fiber.StatusNoContent)
 }
 
-func (h *Handler) shopPanel(c *fiber.Ctx) error {
+func (h *Handler) shopTab(c *fiber.Ctx) error {
 	tab := c.Params("tab")
-	component := widgets.BottomPanel(tab)
+	cards := h.gameService.getShopState(tab)
+	component := widgets.BottomPanel(tab, cards)
 	return tadapter.Render(c, component, fiber.StatusOK)
 }

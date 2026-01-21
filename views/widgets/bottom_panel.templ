@@ -1,32 +1,22 @@
 package widgets
 
 import "miners_game/views/components"
+import "miners_game/internal/game/shop"
 
-templ BottomPanel(activeTab string) {
+templ BottomPanel(activeTab string, cards []shop.ShopCard) {
     @BottomPanelStyle()
 <div id="bottom-panel" class="bottom-panel">
 
     <div class="bottom-panel_tabs">
-        @TabButton("miners", "👷 Шахтёры", activeTab)
-        @TabButton("equipments", "🛠 Инструменты", activeTab)
-        @TabButton("upgrades", "🏪 Улучшения", activeTab)
+        @TabButton("miner", "👷 Шахтёры", activeTab)
+        @TabButton("equipment", "🛠 Инструменты", activeTab)
+        @TabButton("upgrade", "🏪 Улучшения", activeTab)
     </div>
 
     <div class="shop-grid">
-    if activeTab == "miners"{
-
-        @components.ShopCard("Шахтёр", "+1.0/сек", "30 сек", "5", "small", "miner", "/public/icons/shop/miner-small.png", false, "")
-        @components.ShopCard("Шахтёр+", "+1.5/сек", "45 сек", "50", "normal", "miner", "", false, "")
-        @components.ShopCard("ШахтёрГигабайт", "+3/сек", "45 сек", "450", "strong", "miner", "", false, "")
-    }
-    if activeTab == "equipments"{
-        @components.ShopCard("Кирка", "+1.0/сек", "30 сек", "5", "1", "equipment", "", false, "")
-        @components.ShopCard("Лопата+", "+1.5/сек", "45 сек", "50", "2", "equipment", "", false, "")
-    }
-    if activeTab == "upgrades"{
-        @components.ShopCard("Planet", "+1.0/сек", "30 сек", "5", "2", "upgrade", "", false, "")
-        @components.ShopCard("Crafter+", "+1.5/сек", "45 сек", "50", "1", "upgrade", "", false, "")
-    }
+        for _, card:=range cards{
+            @components.ShopCard(card)
+        }
     </div>
 </div>
 }

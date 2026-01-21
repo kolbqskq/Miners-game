@@ -2,6 +2,7 @@ package views
 
 import "miners_game/views/widgets"
 import "miners_game/views/layout"
+import "miners_game/internal/miners"
 
 templ Game() {
 @GameStyle()
@@ -19,7 +20,7 @@ templ Game() {
     </section>
     
     <section class="game-bottom-panel">
-        @widgets.BottomPanel("miners")
+        @widgets.BottomPanel("miner", miners.MinerShopCards())
     </section>
     }
 </main>

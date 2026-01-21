@@ -1,39 +1,36 @@
 package components
 
 import "fmt"
+import "miners_game/internal/game/shop"
 
-templ ShopCard(
-title, income, duration, price, class, kind, icon string,
-disabled bool,
-reason string,
-) {
+templ ShopCard(card shop.ShopCard) {
 @ShopCardStyle()
 
 
 <div class="shop-card">
     <div class="shop-header">
         <div class="shop-meta">
-            <div class="shop-title">{title}</div>
-            <div class="shop-info">{income}</div>
-            <div class="shop-info">⏱ {duration}</div>
+            <div class="shop-title">{card.Title}</div>
+            <div class="shop-info">{card.Income}</div>
+            <div class="shop-info">{card.Duration}</div>
         </div>
 
-        if icon != "" {
+        if card.Icon != "" {
         <div class="shop-icon">
-            <img src={icon} />
+            <img src={card.Icon} />
         </div>
         }
     </div>
 
 <button 
     class="shop-buy" 
-    if disabled { disabled class="shop-buy disabled" } 
-    if !disabled { hx-post="/game/buy" 
-    hx-vals={ fmt.Sprintf(`{"class": "%s", "kind": "%s"}`, class, kind) }
+    if card.Disabled { disabled class="shop-buy disabled" } 
+    if !card.Disabled { hx-post="/game/buy" 
+    hx-vals={ fmt.Sprintf(`{"name": "%s", "kind": "%s"}`, card.Name, card.Kind) }
     hx-target="closest .shop-card" 
     hx-swap="outerHTML" }> 
-    if disabled {
-        {reason} } else { Купить за {price} } 
+    if card.Disabled {
+        {card.Reason} } else { Купить за {card.Price} } 
     </button>
 </div>
 }
@@ -109,7 +106,6 @@ templ ShopCardStyle() {
         opacity: 0.98;
     }
 
-    /* КНОПКА ПОКУПКИ */
     .shop-buy {
         margin-top: auto;
         align-self: stretch;
@@ -132,7 +128,6 @@ templ ShopCardStyle() {
         transform: scale(0.95);
     }
 
-    /* АНИМАЦИЯ ПОКУПКИ */
     .shop-buy:active~*,
     .shop-buy:active {
         animation: buy-flash 0.35s ease;
@@ -152,7 +147,6 @@ templ ShopCardStyle() {
         }
     }
 
-    /* DISABLED */
     .shop-buy.disabled {
         background: rgba(255, 255, 255, 0.12);
         color: rgba(255, 255, 255, 0.5);
