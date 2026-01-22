@@ -1,8 +1,8 @@
 package widgets
 
-templ Scene() {
+templ Scene(upgrade string) {
 @SceneStyle()
-    <div class={ "scene stage-" + "0" }>
+    <div class={ "scene stage-" + upgrade}>
         <div class="planet-mask">
             <img class="planet-img" src="/public/planet/lvl_0.png">
             <img class="planet-img" src="/public/planet/lvl_1.png">

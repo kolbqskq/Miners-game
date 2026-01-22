@@ -42,6 +42,8 @@ func NewHandler(deps HandlerDeps) {
 	g.Get("/new", h.newGame)
 	g.Post("/buy", h.buy)
 	g.Get("/panel/:tab", h.shopTab)
+	g.Get("/upgrade", h.refreshUpgrade)
+	g.Get("/shop/card/:kind/:name", h.shopCard)
 }
 
 func (h *Handler) game(c *fiber.Ctx) error {
@@ -122,7 +124,9 @@ func (h *Handler) buy(c *fiber.Ctx) error {
 			return tadapter.Render(c, component, fiber.StatusOK)
 		}
 	}
-
+	if kind == "upgrade" {
+		c.Set("HX-Trigger", "refresh-upgrade")
+	}
 	return c.SendStatus(fiber.StatusNoContent)
 }
 
@@ -130,5 +134,30 @@ func (h *Handler) shopTab(c *fiber.Ctx) error {
 	tab := c.Params("tab")
 	cards := h.gameService.getShopState(tab)
 	component := widgets.BottomPanel(tab, cards)
+	return tadapter.Render(c, component, fiber.StatusOK)
+}
+
+func (h *Handler) refreshUpgrade(c *fiber.Ctx) error {
+	userID := c.Locals("user_id").(string)
+	gameID, ok := c.Locals("game_id").(string)
+	if !ok {
+		h.logger.Debug().Msg("up_err1")
+		return c.SendStatus(fiber.StatusNoContent)
+	}
+	currUpgrade, err := h.gameService.getCurrUpgrade(userID, gameID)
+	if err != nil {
+		h.logger.Debug().Msg("up_err2")
+		return c.SendStatus(fiber.StatusNoContent)
+	}
+	h.logger.Debug().Msg("up_err3")
+	component := widgets.Scene(currUpgrade)
+	return tadapter.Render(c, component, fiber.StatusOK)
+}
+
+func (h *Handler) shopCard(c *fiber.Ctx) error {
+	kind := c.Params("kind")
+	name := c.Params("name")
+	card := GetShopCardByName(name, kind)
+	component := components.ShopCard(card)
 	return tadapter.Render(c, component, fiber.StatusOK)
 }

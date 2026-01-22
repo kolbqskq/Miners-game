@@ -36,115 +36,121 @@ func ShopCard(card shop.ShopCard) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"shop-card\"><div class=\"shop-header\"><div class=\"shop-meta\"><div class=\"shop-title\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"shop-card\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		var templ_7745c5c3_Var2 string
-		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(card.Title)
-		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/components/shop_card.templ`, Line: 13, Col: 47}
+		if card.Disabled {
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, " hx-get=\"")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			var templ_7745c5c3_Var2 string
+			templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("/game/shop/card/%s/%s", card.Kind, card.Name))
+			if templ_7745c5c3_Err != nil {
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/components/shop_card.templ`, Line: 12, Col: 75}
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "\" hx-trigger=\"load delay:2s\" hx-swap=\"outerHTML\"")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "</div><div class=\"shop-info\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "><div class=\"shop-header\"><div class=\"shop-meta\"><div class=\"shop-title\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var3 string
-		templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(card.Income)
+		templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(card.Title)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/components/shop_card.templ`, Line: 14, Col: 47}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/components/shop_card.templ`, Line: 19, Col: 47}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "</div><div class=\"shop-info\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "</div><div class=\"shop-info\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var4 string
-		templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(card.Duration)
+		templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(card.Income)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/components/shop_card.templ`, Line: 15, Col: 49}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/components/shop_card.templ`, Line: 20, Col: 47}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "</div></div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "</div><div class=\"shop-info\">")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		var templ_7745c5c3_Var5 string
+		templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(card.Duration)
+		if templ_7745c5c3_Err != nil {
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/components/shop_card.templ`, Line: 21, Col: 49}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, "</div></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		if card.Icon != "" {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "<div class=\"shop-icon\"><img src=\"")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "<div class=\"shop-icon\"><img src=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			var templ_7745c5c3_Var5 string
-			templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(card.Icon)
+			var templ_7745c5c3_Var6 string
+			templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(card.Icon)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/components/shop_card.templ`, Line: 20, Col: 31}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/components/shop_card.templ`, Line: 26, Col: 31}
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "\"></div>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, "\"></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, "</div>")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		templ_7745c5c3_Err = templ.RenderScriptItems(ctx, templ_7745c5c3_Buffer, fmt.Sprintf("setTimeout(() => { this.disabled = false; this.classList.remove('disabled'); this.innerText='Купить за %s' }, 5000)", card.Price))
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "<button class=\"shop-buy\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 10, "</div><button class=\"shop-buy\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		if card.Disabled {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, " disabled class=\"shop-buy disabled\" hx-on::load=\"")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			var templ_7745c5c3_Var6 templ.ComponentScript = fmt.Sprintf("setTimeout(() => { this.disabled = false; this.classList.remove('disabled'); this.innerText='Купить за %s' }, 5000)", card.Price)
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var6.Call)
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 10, "\"")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 11, " disabled class=\"shop-buy disabled\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 		}
 		if !card.Disabled {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 11, " hx-post=\"/game/buy\" hx-vals=\"")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 12, " hx-post=\"/game/buy\" hx-vals=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var7 string
 			templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf(`{"name": "%s", "kind": "%s"}`, card.Name, card.Kind))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/components/shop_card.templ`, Line: 33, Col: 79}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/components/shop_card.templ`, Line: 35, Col: 79}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var7))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 12, "\" hx-target=\"closest .shop-card\" hx-swap=\"outerHTML\"")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 13, "\" hx-target=\"closest .shop-card\" hx-swap=\"outerHTML\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 13, ">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 14, ">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -152,28 +158,28 @@ func ShopCard(card shop.ShopCard) templ.Component {
 			var templ_7745c5c3_Var8 string
 			templ_7745c5c3_Var8, templ_7745c5c3_Err = templ.JoinStringErrs(card.Reason)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/components/shop_card.templ`, Line: 37, Col: 20}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/components/shop_card.templ`, Line: 39, Col: 20}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var8))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 		} else {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 14, "Купить за ")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 15, "Купить за ")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var9 string
 			templ_7745c5c3_Var9, templ_7745c5c3_Err = templ.JoinStringErrs(card.Price)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/components/shop_card.templ`, Line: 37, Col: 60}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/components/shop_card.templ`, Line: 39, Col: 60}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var9))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 15, "</button></div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 16, "</button></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -202,7 +208,7 @@ func ShopCardStyle() templ.Component {
 			templ_7745c5c3_Var10 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 16, "<style>\r\n    .shop-card {\r\n        background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02));\r\n        border-radius: 18px;\r\n        padding: 16px;\r\n        display: flex;\r\n        flex-direction: column;\r\n        gap: 12px;\r\n        min-height: 160px;\r\n        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.06);\r\n        transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;\r\n    }\r\n\r\n    .shop-card:hover {\r\n        transform: translateY(-2px);\r\n        box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.08);\r\n    }\r\n\r\n    .shop-header {\r\n        display: flex;\r\n        align-items: stretch;\r\n        gap: 12px;\r\n    }\r\n\r\n    .shop-meta {\r\n        flex: 1;\r\n        min-width: 0;\r\n        display: flex;\r\n        flex-direction: column;\r\n        gap: 6px;\r\n    }\r\n\r\n    .shop-title {\r\n        font-size: 18px;\r\n        font-weight: 700;\r\n        line-height: 1.25;\r\n        display: -webkit-box;\r\n        -webkit-box-orient: vertical;\r\n        -webkit-line-clamp: 2;\r\n        min-height: calc(1.25em * 2);\r\n        overflow: hidden;\r\n        text-overflow: ellipsis;\r\n    }\r\n\r\n    .shop-info {\r\n        font-size: 14px;\r\n        opacity: 0.8;\r\n    }\r\n\r\n    .shop-icon {\r\n        width: 96px;\r\n        height: 136px;\r\n        margin-left: 12px;\r\n        display: flex;\r\n        align-items: center;\r\n        justify-content: center;\r\n        overflow: hidden;\r\n        border-radius: 14px;\r\n        background: rgba(0, 0, 0, 0.15);\r\n    }\r\n\r\n    .shop-icon img {\r\n        width: 100%;\r\n        height: 100%;\r\n        object-fit: cover;\r\n        opacity: 0.98;\r\n    }\r\n\r\n    .shop-buy {\r\n        margin-top: auto;\r\n        align-self: stretch;\r\n        background: linear-gradient(180deg, var(--accent), color-mix(in srgb, var(--accent) 85%, black));\r\n        border: none;\r\n        border-radius: 12px;\r\n        padding: 12px 20px;\r\n        font-size: 15px;\r\n        font-weight: 700;\r\n        cursor: pointer;\r\n        transition: transform 0.12s ease, box-shadow 0.12s ease, opacity 0.12s ease;\r\n    }\r\n\r\n    .shop-buy:hover {\r\n        transform: scale(1.03);\r\n        box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.08);\r\n    }\r\n\r\n    .shop-buy:active {\r\n        transform: scale(0.95);\r\n    }\r\n\r\n    .shop-buy:active~*,\r\n    .shop-buy:active {\r\n        animation: buy-flash 0.35s ease;\r\n    }\r\n\r\n    @keyframes buy-flash {\r\n        0% {\r\n            box-shadow: 0 0 0 rgba(0, 0, 0, 0);\r\n        }\r\n\r\n        50% {\r\n            box-shadow: 0 0 24px rgba(255, 255, 255, 0.35);\r\n        }\r\n\r\n        100% {\r\n            box-shadow: 0 0 0 rgba(0, 0, 0, 0);\r\n        }\r\n    }\r\n\r\n    .shop-buy.disabled {\r\n        background: rgba(255, 255, 255, 0.12);\r\n        color: rgba(255, 255, 255, 0.5);\r\n        cursor: not-allowed;\r\n        transform: none;\r\n        box-shadow: none;\r\n    }\r\n\r\n    .shop-card:has(.shop-buy.disabled) {\r\n        opacity: 0.6;\r\n    }\r\n</style>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 17, "<style>\r\n    .shop-card {\r\n        background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02));\r\n        border-radius: 18px;\r\n        padding: 16px;\r\n        display: flex;\r\n        flex-direction: column;\r\n        gap: 12px;\r\n        min-height: 160px;\r\n        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.06);\r\n        transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;\r\n    }\r\n\r\n    .shop-card:hover {\r\n        transform: translateY(-2px);\r\n        box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.08);\r\n    }\r\n\r\n    .shop-header {\r\n        display: flex;\r\n        align-items: stretch;\r\n        gap: 12px;\r\n    }\r\n\r\n    .shop-meta {\r\n        flex: 1;\r\n        min-width: 0;\r\n        display: flex;\r\n        flex-direction: column;\r\n        gap: 6px;\r\n    }\r\n\r\n    .shop-title {\r\n        font-size: 18px;\r\n        font-weight: 700;\r\n        line-height: 1.25;\r\n        display: -webkit-box;\r\n        -webkit-box-orient: vertical;\r\n        -webkit-line-clamp: 2;\r\n        min-height: calc(1.25em * 2);\r\n        overflow: hidden;\r\n        text-overflow: ellipsis;\r\n    }\r\n\r\n    .shop-info {\r\n        font-size: 14px;\r\n        opacity: 0.8;\r\n    }\r\n\r\n    .shop-icon {\r\n        width: 96px;\r\n        height: 136px;\r\n        margin-left: 12px;\r\n        display: flex;\r\n        align-items: center;\r\n        justify-content: center;\r\n        overflow: hidden;\r\n        border-radius: 14px;\r\n        background: rgba(0, 0, 0, 0.15);\r\n    }\r\n\r\n    .shop-icon img {\r\n        width: 100%;\r\n        height: 100%;\r\n        object-fit: cover;\r\n        opacity: 0.98;\r\n    }\r\n\r\n    .shop-buy {\r\n        margin-top: auto;\r\n        align-self: stretch;\r\n        background: linear-gradient(180deg, var(--accent), color-mix(in srgb, var(--accent) 85%, black));\r\n        border: none;\r\n        border-radius: 12px;\r\n        padding: 12px 20px;\r\n        font-size: 15px;\r\n        font-weight: 700;\r\n        cursor: pointer;\r\n        transition: transform 0.12s ease, box-shadow 0.12s ease, opacity 0.12s ease;\r\n    }\r\n\r\n    .shop-buy:hover {\r\n        transform: scale(1.03);\r\n        box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.08);\r\n    }\r\n\r\n    .shop-buy:active {\r\n        transform: scale(0.95);\r\n    }\r\n\r\n    .shop-buy:active~*,\r\n    .shop-buy:active {\r\n        animation: buy-flash 0.35s ease;\r\n    }\r\n\r\n    @keyframes buy-flash {\r\n        0% {\r\n            box-shadow: 0 0 0 rgba(0, 0, 0, 0);\r\n        }\r\n\r\n        50% {\r\n            box-shadow: 0 0 24px rgba(255, 255, 255, 0.35);\r\n        }\r\n\r\n        100% {\r\n            box-shadow: 0 0 0 rgba(0, 0, 0, 0);\r\n        }\r\n    }\r\n\r\n    .shop-buy.disabled {\r\n        background: rgba(255, 255, 255, 0.12);\r\n        color: rgba(255, 255, 255, 0.5);\r\n        cursor: not-allowed;\r\n        transform: none;\r\n        box-shadow: none;\r\n    }\r\n\r\n    .shop-card:has(.shop-buy.disabled) {\r\n        opacity: 0.6;\r\n    }\r\n</style>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

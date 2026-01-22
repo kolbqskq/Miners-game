@@ -15,8 +15,8 @@ templ Game() {
     <div id="hud-container" hx-get="/game/hud" hx-trigger="every 500msС" hx-swap="innerHTML">
         @widgets.HUD("0", "0")
     </div>
-    <section class="game-scene-wrapper">
-            @widgets.Scene()
+    <section class="game-scene-wrapper" hx-get="/game/upgrade" hx-trigger="refresh-upgrade from:body" hx-swap="innerHTML">
+            @widgets.Scene("0")
     </section>
     
     <section class="game-bottom-panel">

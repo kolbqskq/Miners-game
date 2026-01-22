@@ -7,7 +7,13 @@ templ ShopCard(card shop.ShopCard) {
 @ShopCardStyle()
 
 
-<div class="shop-card">
+<div class="shop-card"
+    if card.Disabled {
+        hx-get={ fmt.Sprintf("/game/shop/card/%s/%s", card.Kind, card.Name) }
+        hx-trigger="load delay:2s"
+        hx-swap="outerHTML"
+    }
+>
     <div class="shop-header">
         <div class="shop-meta">
             <div class="shop-title">{card.Title}</div>

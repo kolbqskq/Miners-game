@@ -124,6 +124,17 @@ func (a *Service) buyUpgrade(userID, gameID, name, kind string) (shop.ShopCard, 
 	return shop.ShopCard{}, nil
 }
 
+func (a *Service) getCurrUpgrade(userID, gameID string) (string, error) {
+	game, err := a.buy(userID, gameID)
+	if err != nil {
+		return "", err
+	}
+	game.Mu.RLock()
+	curr := game.GetMaxUpgrade()
+	game.Mu.RUnlock()
+	return curr, nil
+}
+
 func (a *Service) HandleExpiredSessions() {
 	expired := a.sessions.CheckExpired()
 	for _, id := range expired {
@@ -197,13 +208,13 @@ func (a *Service) getShopState(kind string) []shop.ShopCard {
 }
 
 func getErrShopCard(name, kind, reason string) shop.ShopCard {
-	card := getShopCardByName(name, kind)
+	card := GetShopCardByName(name, kind)
 	card.Disabled = true
 	card.Reason = reason
 	return card
 }
 
-func getShopCardByName(name, kind string) shop.ShopCard {
+func GetShopCardByName(name, kind string) shop.ShopCard {
 	cases := map[string]func() []shop.ShopCard{
 		"miner":     miners.MinerShopCards,
 		"equipment": equipments.EquipmentShopCards,

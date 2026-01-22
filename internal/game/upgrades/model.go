@@ -23,11 +23,11 @@ var UpgradesPresets = map[string]UpgradesConfig{
 	},
 	"2": {
 		Price: 450,
-		Value: 200,
+		Value: 400,
 	},
 	"3": {
 		Price: 450,
-		Value: 200,
+		Value: 600,
 	},
 }
 

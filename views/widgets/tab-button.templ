@@ -1,10 +1,12 @@
 package widgets
 
+import "fmt"
+
 templ TabButton(id string, label string, activeTab string) {
 <button 
     class="tab" 
     aria-current={id == activeTab} 
-    hx-get={"/game/panel/" + id} 
+    hx-get={ fmt.Sprintf("/game/panel/%s", id) }
     hx-target="#bottom-panel"
     hx-swap="outerHTML"
 >

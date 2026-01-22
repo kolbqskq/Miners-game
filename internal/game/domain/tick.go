@@ -36,12 +36,11 @@ func (g *GameState) CalcIncome(from, to int64) int64 {
 			rise += equipments.GetEquipmentConfig(v.Name).Value
 		}
 	}
-	for _, v := range g.Upgrades {
-		if v.Own {
-			rise += upgrades.GetUpgradesConfig(v.Name).Value
-		}
+	currUpgrade := g.GetMaxUpgrade()
+	if currUpgrade != "0" {
+		rise += upgrades.GetUpgradesConfig(currUpgrade).Value
 	}
-	return (total*rise)/100
+	return (total * rise) / 100
 }
 
 func (g *GameState) deleteExpiredMiners(now int64) {
