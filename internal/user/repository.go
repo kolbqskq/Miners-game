@@ -2,7 +2,7 @@ package user
 
 import (
 	"context"
-	"fmt"
+	"miners_game/pkg/errs"
 
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
@@ -10,19 +10,19 @@ import (
 )
 
 type Repository struct {
-	DbPool *pgxpool.Pool
-	Logger *zerolog.Logger
+	dbPool *pgxpool.Pool
+	logger zerolog.Logger
 }
 
 type RepositoryDeps struct {
 	DbPool *pgxpool.Pool
-	Logger *zerolog.Logger
+	Logger zerolog.Logger
 }
 
 func NewRepository(deps RepositoryDeps) *Repository {
 	return &Repository{
-		DbPool: deps.DbPool,
-		Logger: deps.Logger,
+		dbPool: deps.DbPool,
+		logger: deps.Logger,
 	}
 }
 
@@ -38,8 +38,8 @@ func (r *Repository) SaveUser(user *User) error {
 		"username": user.UserName,
 	}
 
-	if _, err := r.DbPool.Exec(context.Background(), query, args); err != nil {
-		r.Logger.Error().Err(err).Msg("Ошибка сохранения пользователя") //log
+	if _, err := r.dbPool.Exec(context.Background(), query, args); err != nil {
+		r.logger.Error().Err(err).Str("user_id", user.ID).Msg("failed to save user")
 		return err
 	}
 
@@ -52,7 +52,7 @@ func (r *Repository) FindByEmail(email string) (*User, error) {
 		FROM users
 		WHERE email = @email
 	`
-	rows := r.DbPool.QueryRow(context.Background(), query, pgx.NamedArgs{
+	rows := r.dbPool.QueryRow(context.Background(), query, pgx.NamedArgs{
 		"email": email,
 	})
 
@@ -62,11 +62,10 @@ func (r *Repository) FindByEmail(email string) (*User, error) {
 
 	if err := rows.Scan(&userID, &userName, &password); err != nil {
 		if err == pgx.ErrNoRows {
-			r.Logger.Error().Msg("Пользователь не найден в БД") //log
-			return nil, fmt.Errorf("Пользователь не найден") //errs
+			return nil, errs.ErrUserNotFound
 		}
-		r.Logger.Error().Err(err).Msg("Ошибка загрузки пользователя") //log
-		return nil, err
+		r.logger.Error().Err(err).Str("user_id", userID).Msg("failed to find user")
+		return nil, errs.ErrServer
 	}
 	return &User{
 		ID:       userID,

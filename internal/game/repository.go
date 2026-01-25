@@ -3,7 +3,6 @@ package game
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"miners_game/internal/game/domain"
 	"miners_game/internal/game/equipments"
 	"miners_game/internal/game/upgrades"
@@ -16,37 +15,37 @@ import (
 )
 
 type Repository struct {
-	DbPool *pgxpool.Pool
-	Logger *zerolog.Logger
+	dbPool *pgxpool.Pool
+	logger zerolog.Logger
 }
 
 type RepositoryDeps struct {
 	DbPool *pgxpool.Pool
-	Logger *zerolog.Logger
+	Logger zerolog.Logger
 }
 
 func NewRepository(deps RepositoryDeps) *Repository {
 	return &Repository{
-		DbPool: deps.DbPool,
-		Logger: deps.Logger,
+		dbPool: deps.DbPool,
+		logger: deps.Logger,
 	}
 }
 
 func (r *Repository) Save(gameState *domain.GameState) error {
 	minersJSON, err := json.Marshal(gameState.Miners)
 	if err != nil {
-		r.Logger.Error().Err(err).Msg("error Marshal minersJSON")
-		return fmt.Errorf("Ошибка преобразования minersJSON: %w", err)
+		r.logger.Error().Err(err).Msg("failed to marshal miners")
+		return errs.ErrServer
 	}
 	equipmentsJSON, err := json.Marshal(gameState.Equipments)
 	if err != nil {
-		r.Logger.Error().Msg("error Marshal equipmentsJSON")
-		return fmt.Errorf("Ошибка преобразования equipmentsJSON: %w", err)
+		r.logger.Error().Err(err).Msg("failed to marshal equipments")
+		return errs.ErrServer
 	}
 	upgradesJSON, err := json.Marshal(gameState.Upgrades)
 	if err != nil {
-		r.Logger.Error().Msg("error Marshal upgradesJSON")
-		return fmt.Errorf("Ошибка преобразования upgradesJSON: %w", err)
+		r.logger.Error().Err(err).Msg("failed to marshal upgrades")
+		return errs.ErrServer
 	}
 	query := `
 			INSERT INTO games (user_id, game_id, balance, income, last_update_at, miners, equipments, upgrades)
@@ -62,9 +61,9 @@ func (r *Repository) Save(gameState *domain.GameState) error {
 		"equipments":     equipmentsJSON,
 		"upgrades":       upgradesJSON,
 	}
-	if _, err = r.DbPool.Exec(context.Background(), query, args); err != nil {
-		r.Logger.Error().Err(err).Msg("Ошибка сохранения игры в БД")
-		return fmt.Errorf("Невозможно сохронить игру: %w", err)
+	if _, err = r.dbPool.Exec(context.Background(), query, args); err != nil {
+		r.logger.Error().Err(err).Str("user_id", gameState.UserID).Str("game_id", gameState.GameID).Msg("failed to save game state")
+		return errs.ErrServer
 	}
 	return nil
 }
@@ -75,7 +74,7 @@ func (r *Repository) Load(userID, gameID string) (*domain.GameState, error) {
 		FROM games
 		WHERE user_id = @user_id AND game_id = @game_id
 	`
-	rows := r.DbPool.QueryRow(context.Background(), query, pgx.NamedArgs{
+	rows := r.dbPool.QueryRow(context.Background(), query, pgx.NamedArgs{
 		"user_id": userID,
 		"game_id": gameID,
 	})
@@ -88,25 +87,26 @@ func (r *Repository) Load(userID, gameID string) (*domain.GameState, error) {
 
 	if err := rows.Scan(&balance, &income, &lastUpdateAt, &minersJSON, &equipmentsJSON, &upgradesJSON); err != nil {
 		if err == pgx.ErrNoRows {
-			r.Logger.Error().Msg("Запрос на не существующее сохранение в БД")
 			return nil, errs.ErrGameNotFound
 		}
-		r.Logger.Error().Err(err).Msg("Ошибка загрузки сохранения")
-		return nil, err
+		r.logger.Error().Err(err).Str("user_id", userID).Str("game_id", gameID).Msg("failed to load game state")
+		return nil, errs.ErrServer
 	}
 
 	var miners map[string]*miners.Miner
 	var equipments []equipments.Equipment
 	var upgrades []upgrades.Upgrade
 	if err := json.Unmarshal(minersJSON, &miners); err != nil {
-		r.Logger.Error().Err(err).Msg("error Unmarshal GetGameState")
-		return nil, err
+		r.logger.Error().Err(err).Msg("failed to unmarshal miners")
+		return nil, errs.ErrServer
 	}
 	if err := json.Unmarshal(equipmentsJSON, &equipments); err != nil {
-		return nil, err
+		r.logger.Error().Err(err).Msg("failed to unmarshal equipments")
+		return nil, errs.ErrServer
 	}
 	if err := json.Unmarshal(upgradesJSON, &upgrades); err != nil {
-		return nil, err
+		r.logger.Error().Err(err).Msg("failed to unmarshal upgrades")
+		return nil, errs.ErrServer
 	}
 
 	gs := &domain.GameState{

@@ -20,6 +20,7 @@ import (
 	"github.com/gofiber/contrib/fiberzerolog"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/recover"
+	"github.com/gofiber/fiber/v2/middleware/requestid"
 	"github.com/gofiber/fiber/v2/middleware/session"
 	"github.com/gofiber/storage/postgres/v3"
 	"github.com/gookit/validate/locales/ruru"
@@ -34,10 +35,13 @@ func main() {
 	gmailConfig := config.NewGmailConfig()
 	ruru.RegisterGlobal()
 
+	timeout := time.Minute //время жизни сессии
+
 	customLogger := logger.NewLogger(loggerConfig)
 
 	app := fiber.New()
 
+	app.Use(requestid.New())
 	app.Use(fiberzerolog.New(fiberzerolog.Config{
 		Logger: customLogger,
 	}))
@@ -55,24 +59,32 @@ func main() {
 		Storage: storage,
 	})
 	gob.Register(auth.RegisterSession{})
+
+	app.Use(middleware.LoggerContextMiddleware(customLogger))
 	app.Use(middleware.AuthMiddleware(store))
 
 	//Repositories:
 	gameRepository := game.NewRepository(game.RepositoryDeps{
 		DbPool: dbPool,
-		Logger: customLogger,
+		Logger: customLogger.With().Str("repository", "game").Logger(),
 	})
 	userRepository := user.NewRepository(user.RepositoryDeps{
 		DbPool: dbPool,
-		Logger: customLogger,
+		Logger: customLogger.With().Str("repository", "user").Logger(),
 	})
 	//Services:
-	loopService := loop.NewService()
-	sessionService := sessions.NewService(time.Minute)  //timeout
+	loopService := loop.NewService(loop.ServiceDeps{
+		Logger: customLogger.With().Str("service", "loop").Logger(),
+	})
+	sessionService := sessions.NewService(sessions.ServiceDeps{
+		Timeout: timeout,
+		Logger:  customLogger.With().Str("service", "session").Logger(),
+	})
 	gameService := game.NewService(game.ServiceDeps{
 		Repo:     gameRepository,
 		Loop:     loopService,
 		Sessions: sessionService,
+		Logger:   customLogger.With().Str("service", "game").Logger(),
 	})
 	authService := auth.NewService(auth.ServiceDeps{
 		UserRepository: userRepository,
@@ -83,11 +95,10 @@ func main() {
 	pages.NewHandler(pages.HandlerDeps{
 		Router: app,
 		Logger: customLogger,
-		Store: store,
+		Store:  store,
 	})
 	game.NewHandler(game.HandlerDeps{
 		Router:      app,
-		Logger:      customLogger,
 		GameService: gameService,
 		Store:       store,
 	})
@@ -121,7 +132,7 @@ func App(loopService *loop.Service, gameService *game.Service, logger *zerolog.L
 		defer ticker.Stop()
 
 		for range ticker.C {
-			gameService.HandleExpiredSessions()
+			gameService.DeleteExpiredSessions()
 		}
 	}()
 

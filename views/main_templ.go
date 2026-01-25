@@ -76,7 +76,7 @@ func Main() templ.Component {
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "<div class=\"main__hero-cta\"><a class=\"main__link-button\" hx-get=\"/game/new\" hx-trigger=\"click\">Начать игру</a></div><div class=\"main__hero-art\"><img src=\"/public/images/home-miner.png\" alt=\"Шахтер\"></div></div>")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "<div class=\"main__hero-cta\"><a class=\"main__link-button\" href=\"/game\">Начать игру</a></div><div class=\"main__hero-art\"><img src=\"/public/images/home-miner.png\" alt=\"Шахтер\"></div></div>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}

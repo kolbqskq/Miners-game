@@ -5,6 +5,7 @@ import "miners_game/internal/game/shop"
 
 templ BottomPanel(activeTab string, cards []shop.ShopCard) {
     @BottomPanelStyle()
+    @components.ShopCardStyle()
 <div id="bottom-panel" class="bottom-panel">
 
     <div class="bottom-panel_tabs">
@@ -46,7 +47,6 @@ templ BottomPanelStyle() {
         transform: translateY(-12px);
     }
 
-    /* ===== TABS ===== */
     .bottom-panel_tabs {
         display: flex;
         gap: 8px;
@@ -93,13 +93,11 @@ templ BottomPanelStyle() {
         transform: scale(0.96);
     }
 
-    /* ACTIVE TAB — ПОЛНАЯ ЗАЛИВКА */
     .tab[aria-current="true"] {
         background: linear-gradient(180deg, var(--accent), color-mix(in srgb, var(--accent) 85%, black));
         color: black;
     }
 
-    /* ===== SHOP GRID ANIMATION ===== */
     .shop-grid {
         padding: 6px 12px 12px;
         display: grid;

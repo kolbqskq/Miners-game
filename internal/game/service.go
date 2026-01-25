@@ -13,6 +13,8 @@ import (
 	"strconv"
 	"sync"
 	"time"
+
+	"github.com/rs/zerolog"
 )
 
 type Service struct {
@@ -20,14 +22,16 @@ type Service struct {
 	loop     *loop.Service
 	sessions *sessions.Service
 
-	games map[string]*domain.GameState
-	mu    sync.RWMutex
+	games  map[string]*domain.GameState
+	logger zerolog.Logger
+	mu     sync.RWMutex
 }
 
 type ServiceDeps struct {
 	Repo     IGameRepository
 	Loop     *loop.Service
 	Sessions *sessions.Service
+	Logger   zerolog.Logger
 }
 
 func NewService(deps ServiceDeps) *Service {
@@ -35,6 +39,7 @@ func NewService(deps ServiceDeps) *Service {
 		repo:     deps.Repo,
 		loop:     deps.Loop,
 		sessions: deps.Sessions,
+		logger:   deps.Logger,
 		games:    make(map[string]*domain.GameState),
 	}
 }
@@ -72,6 +77,7 @@ func (a *Service) enterGame(userID, gameID string) (*domain.GameState, error) {
 	a.loop.Register(id, game)
 	a.sessions.MarkActive(id)
 
+	a.logger.Info().Str("user_id", userID).Str("game_id", gameID).Msg("game entered")
 	return game, nil
 }
 
@@ -135,7 +141,7 @@ func (a *Service) getCurrUpgrade(userID, gameID string) (string, error) {
 	return curr, nil
 }
 
-func (a *Service) HandleExpiredSessions() {
+func (a *Service) DeleteExpiredSessions() {
 	expired := a.sessions.CheckExpired()
 	for _, id := range expired {
 		a.loop.Unregister(id)
@@ -146,9 +152,13 @@ func (a *Service) HandleExpiredSessions() {
 		a.mu.Unlock()
 
 		if game != nil {
-			a.repo.Save(game)
+			if err := a.repo.Save(game); err != nil {
+				a.logger.Error().Err(err).Msg("failed to delete expired sessions")
+				return
+			}
 		}
 	}
+	a.logger.Info().Int("count", len(expired)).Msg("expired sessions deleted")
 }
 
 func (a *Service) getHud(userID, gameID string) (string, string, error) {
@@ -177,6 +187,8 @@ func (a *Service) SaveAll() {
 		a.repo.Save(game)
 		game.Mu.RUnlock()
 	}
+
+	a.logger.Info().Int("count", len(a.games)).Msg("saved all games")
 }
 
 func (a *Service) buy(userID, gameID string) (*domain.GameState, error) {

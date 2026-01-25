@@ -3,16 +3,24 @@ package loop
 import (
 	"miners_game/internal/game/domain"
 	"sync"
+
+	"github.com/rs/zerolog"
 )
 
 type Service struct {
-	games map[string]*domain.GameState
-	mu    sync.RWMutex
+	games  map[string]*domain.GameState
+	mu     sync.RWMutex
+	logger zerolog.Logger
 }
 
-func NewService() *Service {
+type ServiceDeps struct {
+	Logger zerolog.Logger
+}
+
+func NewService(deps ServiceDeps) *Service {
 	return &Service{
-		games: make(map[string]*domain.GameState),
+		games:  make(map[string]*domain.GameState),
+		logger: deps.Logger,
 	}
 }
 
@@ -29,10 +37,14 @@ func (s *Service) Register(id string, game *domain.GameState) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	s.games[id] = game
+
+	s.logger.Debug().Str("game_id", id).Msg("game registered in loop")
 }
 
 func (s *Service) Unregister(id string) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	delete(s.games, id)
+
+	s.logger.Debug().Str("geme_id", id).Msg("game unregistered from loop")
 }

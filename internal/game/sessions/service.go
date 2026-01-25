@@ -3,6 +3,8 @@ package sessions
 import (
 	"sync"
 	"time"
+
+	"github.com/rs/zerolog"
 )
 
 type Session struct {
@@ -12,13 +14,20 @@ type Session struct {
 type Service struct {
 	sessions map[string]*Session
 	timeout  time.Duration
+	logger   zerolog.Logger
 	mu       sync.RWMutex
 }
 
-func NewService(timeout time.Duration) *Service {
+type ServiceDeps struct {
+	Timeout time.Duration
+	Logger  zerolog.Logger
+}
+
+func NewService(deps ServiceDeps) *Service {
 	return &Service{
 		sessions: make(map[string]*Session),
-		timeout:  timeout,
+		timeout:  deps.Timeout,
+		logger:   deps.Logger,
 	}
 }
 
@@ -59,6 +68,9 @@ func (s *Service) CheckExpired() []string {
 			expired = append(expired, id)
 			delete(s.sessions, id)
 		}
+	}
+	if len(expired) > 0 {
+		s.logger.Info().Int("count", len(expired)).Msg("expired sessions cleaned")
 	}
 	return expired
 }

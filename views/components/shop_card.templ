@@ -4,10 +4,10 @@ import "fmt"
 import "miners_game/internal/game/shop"
 
 templ ShopCard(card shop.ShopCard) {
-@ShopCardStyle()
 
 
 <div class="shop-card"
+    data-disabled={card.Disabled}
     if card.Disabled {
         hx-get={ fmt.Sprintf("/game/shop/card/%s/%s", card.Kind, card.Name) }
         hx-trigger="load delay:2s"
@@ -35,8 +35,10 @@ templ ShopCard(card shop.ShopCard) {
     hx-vals={ fmt.Sprintf(`{"name": "%s", "kind": "%s"}`, card.Name, card.Kind) }
     hx-target="closest .shop-card" 
     hx-swap="outerHTML" }> 
-    if card.Disabled {
-        {card.Reason} } else { Купить за {card.Price} } 
+    <span class="shop-buy-label">
+        if card.Disabled {
+        {card.Reason} } else { Купить за {card.Price} }
+    </span>
     </button>
 </div>
 }
@@ -113,17 +115,36 @@ templ ShopCardStyle() {
     }
 
     .shop-buy {
+        position: relative;
+        height: 48px;
         margin-top: auto;
         align-self: stretch;
         background: linear-gradient(180deg, var(--accent), color-mix(in srgb, var(--accent) 85%, black));
         border: none;
         border-radius: 12px;
-        padding: 12px 20px;
         font-size: 15px;
         font-weight: 700;
         cursor: pointer;
         transition: transform 0.12s ease, box-shadow 0.12s ease, opacity 0.12s ease;
     }
+
+    .shop-buy-label {
+    position: absolute;
+    inset: 0;
+    padding: 0 20px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    text-align: center;
+    line-height: 1.2;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    }
+
 
     .shop-buy:hover {
         transform: scale(1.03);
@@ -153,16 +174,42 @@ templ ShopCardStyle() {
         }
     }
 
-    .shop-buy.disabled {
-        background: rgba(255, 255, 255, 0.12);
-        color: rgba(255, 255, 255, 0.5);
-        cursor: not-allowed;
+   .shop-card[data-disabled="true"] .shop-buy {
+        background: rgba(0, 0, 0, 0.35);
+        color: rgba(255, 255, 255, 0.55);
+        font-weight: 600;
+        cursor: default;
+        letter-spacing: 0.2px;
         transform: none;
         box-shadow: none;
     }
 
-    .shop-card:has(.shop-buy.disabled) {
-        opacity: 0.6;
+    .shop-card[data-disabled="true"] {
+        opacity: 0.55;
+        filter: grayscale(0.35);
+        transform: none !important;
+        box-shadow:
+            0 4px 12px rgba(0, 0, 0, 0.35),
+            inset 0 1px 0 rgba(255, 255, 255, 0.04);
     }
+    .shop-card[data-disabled="true"]:hover {
+    transform: none;
+    box-shadow:
+        0 4px 12px rgba(0, 0, 0, 0.35),
+        inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    }
+    .shop-card[data-disabled="true"]::after {
+    content: "🔒";
+    position: absolute;
+    top: 12px;
+    right: 12px;
+
+    font-size: 18px;
+    opacity: 0.35;
+    pointer-events: none;
+    }
+
+
+
 </style>
 }

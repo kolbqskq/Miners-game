@@ -6,23 +6,27 @@ import (
 	"miners_game/internal/user"
 
 	"github.com/go-resty/resty/v2"
+	"github.com/rs/zerolog"
 	"golang.org/x/crypto/bcrypt"
 )
 
 type Service struct {
-	userRepo       user.IUserRepository
-	gmailConfig    *config.GmailConfig
+	userRepo    user.IUserRepository
+	gmailConfig *config.GmailConfig
+	logger      zerolog.Logger
 }
 
 type ServiceDeps struct {
 	UserRepository user.IUserRepository
 	GmailConfig    *config.GmailConfig
+	Logger         zerolog.Logger
 }
 
 func NewService(deps ServiceDeps) *Service {
 	return &Service{
-		userRepo:       deps.UserRepository,
-		gmailConfig:    deps.GmailConfig,
+		userRepo:    deps.UserRepository,
+		gmailConfig: deps.GmailConfig,
+		logger:      deps.Logger,
 	}
 }
 
