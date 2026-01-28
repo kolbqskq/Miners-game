@@ -19,11 +19,14 @@ import (
 
 	"github.com/gofiber/contrib/fiberzerolog"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/adaptor"
 	"github.com/gofiber/fiber/v2/middleware/recover"
 	"github.com/gofiber/fiber/v2/middleware/requestid"
 	"github.com/gofiber/fiber/v2/middleware/session"
 	"github.com/gofiber/storage/postgres/v3"
 	"github.com/gookit/validate/locales/ruru"
+	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/rs/zerolog"
 )
 
@@ -39,13 +42,20 @@ func main() {
 
 	customLogger := logger.NewLogger(loggerConfig)
 
+	reg := prometheus.NewRegistry()
+
+	//Metrics:
+	httpMetrics := middleware.NewMetrics(reg)
+
 	app := fiber.New()
 
 	app.Use(requestid.New())
+	app.Use(middleware.LoggerContextMiddleware(customLogger))
 	app.Use(fiberzerolog.New(fiberzerolog.Config{
 		Logger: customLogger,
 	}))
 	app.Use(recover.New())
+	app.Use(middleware.MetricsMiddleware(httpMetrics))
 	app.Static("/public", "./public")
 	dbPool := database.CreateDbPool(dbConfig, customLogger)
 	defer dbPool.Close()
@@ -60,9 +70,8 @@ func main() {
 	})
 	gob.Register(auth.RegisterSession{})
 
-	app.Use(middleware.LoggerContextMiddleware(customLogger))
 	app.Use(middleware.AuthMiddleware(store))
-
+	
 	//Repositories:
 	gameRepository := game.NewRepository(game.RepositoryDeps{
 		DbPool: dbPool,
@@ -89,12 +98,12 @@ func main() {
 	authService := auth.NewService(auth.ServiceDeps{
 		UserRepository: userRepository,
 		GmailConfig:    gmailConfig,
+		Logger:         customLogger.With().Str("service", "auth").Logger(),
 	})
 
 	//Handlers:
 	pages.NewHandler(pages.HandlerDeps{
 		Router: app,
-		Logger: customLogger,
 		Store:  store,
 	})
 	game.NewHandler(game.HandlerDeps{
@@ -104,10 +113,10 @@ func main() {
 	})
 	auth.NewHandler(auth.HandlerDeps{
 		Router:      app,
-		Logger:      customLogger,
 		AuthService: authService,
 		Store:       store,
 	})
+	app.Get("/metrics", adaptor.HTTPHandler(promhttp.HandlerFor(reg, promhttp.HandlerOpts{})))
 
 	App(loopService, gameService, customLogger)
 

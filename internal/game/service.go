@@ -158,7 +158,9 @@ func (a *Service) DeleteExpiredSessions() {
 			}
 		}
 	}
-	a.logger.Info().Int("count", len(expired)).Msg("expired sessions deleted")
+	if len(expired) > 0 {
+		a.logger.Info().Int("count", len(expired)).Msg("expired sessions deleted")
+	}
 }
 
 func (a *Service) getHud(userID, gameID string) (string, string, error) {
@@ -187,8 +189,9 @@ func (a *Service) SaveAll() {
 		a.repo.Save(game)
 		game.Mu.RUnlock()
 	}
-
-	a.logger.Info().Int("count", len(a.games)).Msg("saved all games")
+	if len(a.games) > 0 {
+		a.logger.Info().Int("count", len(a.games)).Msg("saved all games")
+	}
 }
 
 func (a *Service) buy(userID, gameID string) (*domain.GameState, error) {

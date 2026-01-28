@@ -12,7 +12,7 @@ templ RegisterForm() {
         </p>
     </div>
     <div id="register-result"> </div>
-    <form hx-post="/auth/register" hx-trigger="submit" hx-target="#register-mail__form" hx-target-error="#register-result" hx-swap="outerHTML swap:1s"  class="register-form__inputs">
+    <form hx-post="/auth/register" hx-trigger="submit" hx-target-error="#register-result" hx-swap="innerHTML swap:1s"  class="register-form__inputs">
             @components.Input(components.InputProps{
                 Name: "email",
                 Placeholder: "Email",

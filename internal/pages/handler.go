@@ -6,25 +6,21 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/session"
-	"github.com/rs/zerolog"
 )
 
 type Handler struct {
 	router fiber.Router
-	logger *zerolog.Logger
 	store  *session.Store
 }
 
 type HandlerDeps struct {
 	Router fiber.Router
-	Logger *zerolog.Logger
 	Store  *session.Store
 }
 
 func NewHandler(deps HandlerDeps) {
 	h := &Handler{
 		router: deps.Router,
-		logger: deps.Logger,
 		store:  deps.Store,
 	}
 	h.router.Get("/", h.home)

@@ -1,9 +1,9 @@
 package auth
 
 import (
-	"fmt"
 	"miners_game/config"
 	"miners_game/internal/user"
+	"miners_game/pkg/errs"
 
 	"github.com/go-resty/resty/v2"
 	"github.com/rs/zerolog"
@@ -30,32 +30,36 @@ func NewService(deps ServiceDeps) *Service {
 	}
 }
 
-func (s *Service) Register(email, username, hashedPassword string) (string, error) {
+func (s *Service) register(email, username, hashedPassword string) (string, error) {
 	existedUser, _ := s.userRepo.FindByEmail(email)
 	if existedUser != nil {
-		return "", fmt.Errorf("Пользователь уже существует") //errs
+		s.logger.Warn().Str("email", email).Msg("failed register account already exist")
+		return "", errs.ErrEmailAlreadyExist
 	}
 	user := user.NewUser(email, hashedPassword, username)
 
 	if err := s.userRepo.SaveUser(user); err != nil {
-		return "", err
+		s.logger.Error().Err(err).Str("email", email).Msg("failed to save user")
+		return "", errs.ErrServer
 	}
 
 	return user.ID, nil
 }
 
-func (s *Service) Login(email, password string) (string, string, error) {
+func (s *Service) login(email, password string) (string, string, error) {
 	user, _ := s.userRepo.FindByEmail(email)
 	if user == nil {
-		return "", "", fmt.Errorf("Непральный email или пароль") //errs
+		s.logger.Warn().Msg("failed to login incorrect email")
+		return "", "", errs.ErrIncorrectLogin
 	}
 	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password)); err != nil {
-		return "", "", fmt.Errorf("Непральный email или пароль") //errs
+		s.logger.Warn().Msg("failed to login incorrect password")
+		return "", "", errs.ErrIncorrectLogin
 	}
 	return user.ID, user.UserName, nil
 }
 
-func (s *Service) SendEmail(to, code string) error {
+func (s *Service) sendEmail(to, code string) error {
 	client := resty.New()
 
 	payload := map[string]interface{}{
@@ -78,8 +82,17 @@ func (s *Service) SendEmail(to, code string) error {
 		Post("https://api.mailersend.com/v1/email")
 
 	if err != nil {
-		return err
+		s.logger.Error().Err(err).Msg("failed to send Email")
+		return errs.ErrServer
 	}
-
+	s.logger.Debug().Str("email", to).Msg("email sended")
 	return nil
+}
+
+func (s *Service) emailExist(email string) bool {
+	user, _ := s.userRepo.FindByEmail(email)
+	if user != nil {
+		return true
+	}
+	return false
 }

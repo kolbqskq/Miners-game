@@ -38,7 +38,7 @@ func (s *Service) Register(id string, game *domain.GameState) {
 	defer s.mu.Unlock()
 	s.games[id] = game
 
-	s.logger.Debug().Str("game_id", id).Msg("game registered in loop")
+	s.logger.Debug().Str("game_id/save_id", id).Msg("game registered in loop")
 }
 
 func (s *Service) Unregister(id string) {
@@ -46,5 +46,5 @@ func (s *Service) Unregister(id string) {
 	defer s.mu.Unlock()
 	delete(s.games, id)
 
-	s.logger.Debug().Str("geme_id", id).Msg("game unregistered from loop")
+	s.logger.Debug().Str("game_id/save_id", id).Msg("game unregistered from loop")
 }

@@ -24,6 +24,7 @@ func AuthMiddleware(store *session.Store) fiber.Handler {
 
 		userLogger := logger.With().Str("user_id", userID).Logger()
 
+		c.Locals("sess", sess)
 		c.Locals("logger", userLogger)
 		c.Locals("user_id", userID)
 		c.Locals("username", userName)
