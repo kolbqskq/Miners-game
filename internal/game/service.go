@@ -22,15 +22,17 @@ type Service struct {
 	loop     *loop.Service
 	sessions *sessions.Service
 
-	games  map[string]*domain.GameState
-	logger zerolog.Logger
-	mu     sync.RWMutex
+	games   map[string]*domain.GameState
+	logger  zerolog.Logger
+	metrics *Metrics
+	mu      sync.RWMutex
 }
 
 type ServiceDeps struct {
 	Repo     IGameRepository
 	Loop     *loop.Service
 	Sessions *sessions.Service
+	Metrics  *Metrics
 	Logger   zerolog.Logger
 }
 
@@ -41,6 +43,7 @@ func NewService(deps ServiceDeps) *Service {
 		sessions: deps.Sessions,
 		logger:   deps.Logger,
 		games:    make(map[string]*domain.GameState),
+		metrics:  deps.Metrics,
 	}
 }
 
@@ -82,7 +85,9 @@ func (a *Service) enterGame(userID, gameID string) (*domain.GameState, error) {
 }
 
 func (a *Service) buyMiner(userID, gameID, class, kind string) (shop.ShopCard, error) {
-	game, err := a.buy(userID, gameID)
+	var err error
+	defer a.buyMetrics(&err)
+	game, err := a.getGameState(userID, gameID)
 	if err != nil {
 		return shop.ShopCard{}, err
 	}
@@ -96,7 +101,9 @@ func (a *Service) buyMiner(userID, gameID, class, kind string) (shop.ShopCard, e
 }
 
 func (a *Service) buyEquipment(userID, gameID, name, kind string) (shop.ShopCard, error) {
-	game, err := a.buy(userID, gameID)
+	var err error
+	defer a.buyMetrics(&err)
+	game, err := a.getGameState(userID, gameID)
 	if err != nil {
 		return shop.ShopCard{}, err
 	}
@@ -113,7 +120,9 @@ func (a *Service) buyEquipment(userID, gameID, name, kind string) (shop.ShopCard
 }
 
 func (a *Service) buyUpgrade(userID, gameID, name, kind string) (shop.ShopCard, error) {
-	game, err := a.buy(userID, gameID)
+	var err error
+	defer a.buyMetrics(&err)
+	game, err := a.getGameState(userID, gameID)
 	if err != nil {
 		return shop.ShopCard{}, err
 	}
@@ -131,7 +140,7 @@ func (a *Service) buyUpgrade(userID, gameID, name, kind string) (shop.ShopCard, 
 }
 
 func (a *Service) getCurrUpgrade(userID, gameID string) (string, error) {
-	game, err := a.buy(userID, gameID)
+	game, err := a.getGameState(userID, gameID)
 	if err != nil {
 		return "", err
 	}
@@ -194,7 +203,7 @@ func (a *Service) SaveAll() {
 	}
 }
 
-func (a *Service) buy(userID, gameID string) (*domain.GameState, error) {
+func (a *Service) getGameState(userID, gameID string) (*domain.GameState, error) {
 	id := userID + "/" + gameID
 	if !a.sessions.IsActive(id) {
 		return nil, errs.ErrSessionIsNotActive
@@ -242,4 +251,15 @@ func GetShopCardByName(name, kind string) shop.ShopCard {
 		}
 	}
 	return shop.ShopCard{}
+}
+
+func (s *Service) buyMetrics(err *error) func() {
+	return func() {
+		s.metrics.BuyAttemptsTotal.Inc()
+		if *err != nil {
+			s.metrics.BuyFailedTotal.Inc()
+		} else {
+			s.metrics.BuySuccessTotal.Inc()
+		}
+	}
 }

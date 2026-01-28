@@ -1,19 +1,16 @@
 package auth
 
 import (
-	"miners_game/pkg/code"
+	"errors"
 	"miners_game/pkg/errs"
 	"miners_game/pkg/tadapter"
 	"miners_game/views"
 	"miners_game/views/components"
 	"miners_game/views/layout"
-	"time"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/session"
-	"github.com/gookit/validate"
 	"github.com/rs/zerolog"
-	"golang.org/x/crypto/bcrypt"
 )
 
 const (
@@ -49,7 +46,7 @@ func (h *Handler) logout(c *fiber.Ctx) error {
 
 	sess := c.Locals("sess").(*session.Session)
 	if err := sess.Destroy(); err != nil {
-		logger.Error().Err(err).Str("handler", "logout").Msg("failed to destroy session")
+		logger.Error().Err(err).Msg("failed to destroy session")
 		return c.SendStatus(fiber.StatusInternalServerError)
 	}
 	c.Locals("user_id", "")
@@ -65,14 +62,8 @@ func (h *Handler) login(c *fiber.Ctx) error {
 		Email:    c.FormValue("email"),
 		Password: c.FormValue("password"),
 	}
-	v := validate.Struct(&form)
-	if !v.Validate() {
-		logger.Warn().Err(v.Errors).Msg("failed to validate login form")
-		component := components.Notification(v.Errors.OneError().Error(), components.NotificationFail)
-		return tadapter.Render(c, component, fiber.StatusBadRequest)
-	}
 
-	userID, userName, err := h.authService.login(form.Email, form.Password)
+	userID, userName, err := h.authService.login(form)
 	if err != nil {
 		component := components.Notification(err.Error(), components.NotificationFail)
 		return tadapter.Render(c, component, fiber.StatusBadRequest)
@@ -83,7 +74,7 @@ func (h *Handler) login(c *fiber.Ctx) error {
 	sess.Set("user_id", userID)
 	sess.Set("username", userName)
 	if err := sess.Save(); err != nil {
-		logger.Error().Err(err).Str("handler", "login").Msg("failed to save session")
+		logger.Error().Err(err).Msg("failed to save session")
 		component := components.Notification("Server error", components.NotificationFail)
 		return tadapter.Render(c, component, fiber.StatusInternalServerError)
 	}
@@ -103,40 +94,27 @@ func (h *Handler) register(c *fiber.Ctx) error {
 	case RegisterStepEmail:
 		data := sess.Get("register")
 		if data == nil {
-			component := components.Notification("Сессия истекла", components.NotificationFail)
-			return tadapter.Render(c, component, fiber.StatusBadRequest)
-
+			component := components.Notification(errs.ErrServer.Error(), components.NotificationFail)
+			return tadapter.Render(c, component, fiber.StatusInternalServerError)
 		}
-		reg := data.(RegisterSession)
-		if time.Now().Unix() > reg.ExpiresAt {
-			sess.Delete("register")
-			if err := sess.Save(); err != nil {
-				logger.Error().Err(err).Msg("failed to save session")
-				return c.SendStatus(fiber.StatusInternalServerError)
-			}
-			component := components.Notification("Сессия истекла", components.NotificationFail)
-			return tadapter.Render(c, component, fiber.StatusBadRequest)
-
-		}
-		if c.FormValue("code") == "" {
-			component := components.Notification("Введите код", components.NotificationFail)
-			return tadapter.Render(c, component, fiber.StatusBadRequest)
-		}
-		if c.FormValue("code") != reg.Code {
-			component := components.Notification("Неверный код", components.NotificationFail)
-			return tadapter.Render(c, component, fiber.StatusBadRequest)
-
-		}
-		userID, err := h.authService.register(reg.Email, reg.Username, reg.HashedPassword)
+		regSess := data.(RegisterSession)
+		code := c.FormValue("code")
+		userID, err := h.authService.completeRegistration(regSess, code)
 		if err != nil {
+			if errors.Is(err, errs.ErrExpireSession) {
+				sess.Delete("register")
+				sess.Save()
+			}
 			component := components.Notification(err.Error(), components.NotificationFail)
 			return tadapter.Render(c, component, fiber.StatusBadRequest)
 		}
 		sess.Delete("register")
 		sess.Set("user_id", userID)
-		sess.Set("username", reg.Username)
+		sess.Set("username", regSess.Username)
 		if err := sess.Save(); err != nil {
 			logger.Error().Err(err).Msg("failed to save session")
+			component := components.Notification(errs.ErrServer.Error(), components.NotificationFail)
+			return tadapter.Render(c, component, fiber.StatusInternalServerError)
 		}
 		component2 := components.Notification("Регистрация успешна!", components.NotificationSuccess)
 
@@ -149,36 +127,18 @@ func (h *Handler) register(c *fiber.Ctx) error {
 			Password:        c.FormValue("password"),
 			PasswordConfirm: c.FormValue("passwordConfirm"),
 		}
-		v := validate.Struct(&form)
-		if !v.Validate() {
-			logger.Warn().Err(v.Errors).Msg("failed to validate register form")
-			component := components.Notification(v.Errors.OneError().Error(), components.NotificationFail)
-			return tadapter.Render(c, component, fiber.StatusBadRequest)
-		}
-		if h.authService.emailExist(form.Email) {
-			logger.Warn().Msg("failed email already exist")
-			component := components.Notification(errs.ErrEmailAlreadyExist.Error(), components.NotificationFail)
-			return tadapter.Render(c, component, fiber.StatusBadRequest)
-		}
-		code := code.Generate()
-		logger.Debug().Msg("code: " + code)
-		hashedPassword, err := bcrypt.GenerateFromPassword([]byte(form.Password), bcrypt.DefaultCost)
+		regSess, err := h.authService.startRegistration(form)
 		if err != nil {
-			logger.Error().Err(err).Msg("failed to hash password")
-			return c.SendStatus(fiber.StatusInternalServerError)
+			logger.Warn().Err(err).Msg("failed register step default")
+			component := components.Notification(err.Error(), components.NotificationFail)
+			return tadapter.Render(c, component, fiber.StatusBadRequest)
 		}
-		sess.Set("register", RegisterSession{
-			Email:          form.Email,
-			Code:           code,
-			Username:       form.UserName,
-			HashedPassword: string(hashedPassword),
-			ExpiresAt:      time.Now().Add(10 * time.Minute).Unix(),
-		})
+		sess.Set("register", regSess)
 		if err := sess.Save(); err != nil {
-			logger.Error().Err(err).Msg("failed to save session")
-			return c.SendStatus(fiber.StatusInternalServerError)
+			logger.Error().Err(err).Msg("failed save session")
+			component := components.Notification(errs.ErrServer.Error(), components.NotificationFail)
+			return tadapter.Render(c, component, fiber.StatusInternalServerError)
 		}
-		go h.authService.sendEmail(form.Email, code)
 		return tadapter.Render(c, views.RegisterVerification(), fiber.StatusOK)
 	}
 

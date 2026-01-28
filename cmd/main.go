@@ -46,6 +46,8 @@ func main() {
 
 	//Metrics:
 	httpMetrics := middleware.NewMetrics(reg)
+	authMetrics := auth.NewMetrics(reg)
+	gameMetrics := game.NewMetrics(reg)
 
 	app := fiber.New()
 
@@ -71,7 +73,7 @@ func main() {
 	gob.Register(auth.RegisterSession{})
 
 	app.Use(middleware.AuthMiddleware(store))
-	
+
 	//Repositories:
 	gameRepository := game.NewRepository(game.RepositoryDeps{
 		DbPool: dbPool,
@@ -93,11 +95,13 @@ func main() {
 		Repo:     gameRepository,
 		Loop:     loopService,
 		Sessions: sessionService,
+		Metrics:  gameMetrics,
 		Logger:   customLogger.With().Str("service", "game").Logger(),
 	})
 	authService := auth.NewService(auth.ServiceDeps{
 		UserRepository: userRepository,
 		GmailConfig:    gmailConfig,
+		Metrics:        authMetrics,
 		Logger:         customLogger.With().Str("service", "auth").Logger(),
 	})
 
