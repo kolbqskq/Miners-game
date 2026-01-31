@@ -46,7 +46,7 @@ func (h *Handler) game(c *fiber.Ctx) error {
 	userID := c.Locals("user_id").(string)
 	gameID := c.Locals("game_id").(string)
 
-	if _, err := h.gameService.enterGame(userID, gameID); err != nil {
+	if _, err := h.gameService.EnterGame(userID, gameID); err != nil {
 		logger.Error().Err(err).Msg("failed enterGame service")
 		return c.SendStatus(fiber.StatusInternalServerError)
 	}
@@ -59,7 +59,7 @@ func (h *Handler) hud(c *fiber.Ctx) error {
 	logger := c.Locals("logger").(zerolog.Logger)
 	userID := c.Locals("user_id").(string)
 	gameID := c.Locals("game_id").(string)
-	balance, income, err := h.gameService.getHud(userID, gameID)
+	balance, income, err := h.gameService.GetHud(userID, gameID)
 	if err != nil {
 		logger.Error().Err(err).Msg("failed getHud service")
 		return c.SendStatus(fiber.StatusNoContent)
@@ -77,9 +77,9 @@ func (h *Handler) buy(c *fiber.Ctx) error {
 	kind := c.FormValue("kind")
 
 	cases := map[string]func(string, string, string, string) (shop.ShopCard, error){
-		"miner":     h.gameService.buyMiner,
-		"equipment": h.gameService.buyEquipment,
-		"upgrade":   h.gameService.buyUpgrade,
+		"miner":     h.gameService.BuyMiner,
+		"equipment": h.gameService.BuyEquipment,
+		"upgrade":   h.gameService.BuyUpgrade,
 	}
 	if cs, ok := cases[kind]; ok {
 		if card, err := cs(userID, gameID, name, kind); err != nil {

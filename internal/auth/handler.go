@@ -63,7 +63,7 @@ func (h *Handler) login(c *fiber.Ctx) error {
 		Password: c.FormValue("password"),
 	}
 
-	userID, userName, err := h.authService.login(form)
+	userID, userName, err := h.authService.Login(form)
 	if err != nil {
 		component := components.Notification(err.Error(), components.NotificationFail)
 		return tadapter.Render(c, component, fiber.StatusBadRequest)
@@ -99,7 +99,7 @@ func (h *Handler) register(c *fiber.Ctx) error {
 		}
 		regSess := data.(RegisterSession)
 		code := c.FormValue("code")
-		userID, err := h.authService.completeRegistration(regSess, code)
+		userID, err := h.authService.CompleteRegistration(regSess, code)
 		if err != nil {
 			if errors.Is(err, errs.ErrExpireSession) {
 				sess.Delete("register")
@@ -127,7 +127,7 @@ func (h *Handler) register(c *fiber.Ctx) error {
 			Password:        c.FormValue("password"),
 			PasswordConfirm: c.FormValue("passwordConfirm"),
 		}
-		regSess, err := h.authService.startRegistration(form)
+		regSess, err := h.authService.StartRegistration(form)
 		if err != nil {
 			logger.Warn().Err(err).Msg("failed register step default")
 			component := components.Notification(err.Error(), components.NotificationFail)

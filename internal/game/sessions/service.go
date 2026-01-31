@@ -56,7 +56,7 @@ func (s *Service) IsActive(id string) bool {
 	return time.Since(session.LastSeen) <= s.timeout
 }
 
-func (s *Service) CheckExpired() []string {
+func (s *Service) GetExpired() []string {
 	now := time.Now()
 	expired := []string{}
 

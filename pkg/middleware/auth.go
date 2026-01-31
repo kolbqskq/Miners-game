@@ -12,7 +12,7 @@ func AuthMiddleware(store *session.Store) fiber.Handler {
 		sess, err := store.Get(c)
 		if err != nil {
 			logger.Error().Err(err).Msg("failed to get session")
-			return c.SendStatus(500)
+			return c.SendStatus(fiber.StatusInternalServerError)
 		}
 		userID := ""
 		userName := ""

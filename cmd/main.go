@@ -4,6 +4,7 @@ import (
 	"encoding/gob"
 	"miners_game/config"
 	"miners_game/internal/auth"
+	"miners_game/internal/auth/email"
 	"miners_game/internal/game"
 	"miners_game/internal/game/loop"
 	"miners_game/internal/game/sessions"
@@ -36,6 +37,7 @@ func main() {
 	loggerConfig := config.NewLogConfig()
 	dbConfig := config.NewDatabaseConfig()
 	gmailConfig := config.NewGmailConfig()
+
 	ruru.RegisterGlobal()
 
 	timeout := time.Minute //время жизни сессии
@@ -84,6 +86,9 @@ func main() {
 		Logger: customLogger.With().Str("repository", "user").Logger(),
 	})
 	//Services:
+	emailService := email.NewService(email.ServiceDeps{
+		Logger: customLogger.With().Str("service", "email").Logger(),
+	})
 	loopService := loop.NewService(loop.ServiceDeps{
 		Logger: customLogger.With().Str("service", "loop").Logger(),
 	})
@@ -100,6 +105,7 @@ func main() {
 	})
 	authService := auth.NewService(auth.ServiceDeps{
 		UserRepository: userRepository,
+		EmailService:   emailService,
 		GmailConfig:    gmailConfig,
 		Metrics:        authMetrics,
 		Logger:         customLogger.With().Str("service", "auth").Logger(),
