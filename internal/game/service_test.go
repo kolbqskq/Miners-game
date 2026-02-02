@@ -120,7 +120,7 @@ func TestEnterGameFromMemorySuccess(t *testing.T) {
 		t.Fatalf("expected success, got err %v:", err)
 	}
 	if repo.LoadCalled {
-		t.Fatalf("load sound not be called")
+		t.Fatalf("load should not be called")
 	}
 	if session.isActive == false {
 		t.Fatalf("expected session should be active")

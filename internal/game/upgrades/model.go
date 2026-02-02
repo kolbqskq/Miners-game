@@ -12,22 +12,26 @@ type Upgrade struct {
 }
 
 type UpgradesConfig struct {
+	Title string
 	Price int64
 	Value int64
 }
 
 var UpgradesPresets = map[string]UpgradesConfig{
 	"1": {
-		Price: 450,
-		Value: 200,
+		Title: "Индустриализация",
+		Price: 1500,
+		Value: 50,
 	},
 	"2": {
-		Price: 450,
-		Value: 400,
+		Title: "Энергосети",
+		Price: 5000,
+		Value: 150,
 	},
 	"3": {
-		Price: 450,
-		Value: 600,
+		Title: "Глобальная логистика",
+		Price: 15000,
+		Value: 300,
 	},
 }
 
@@ -59,8 +63,8 @@ func UpgradeShopCards() []shop.ShopCard {
 	for k, v := range UpgradesPresets {
 		card := shop.ShopCard{
 			ID:       "upgrade-" + k,
-			Title:    k,
-			Income:   strconv.Itoa(int(v.Value)),
+			Title:    v.Title,
+			Income:   "+" + strconv.Itoa(int(v.Value)) + "%",
 			Duration: "",
 			Price:    strconv.Itoa(int(v.Price)),
 			Name:     k,

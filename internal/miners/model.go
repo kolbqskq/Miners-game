@@ -29,21 +29,21 @@ type MinerConfig struct {
 
 var MinerPresets = map[string]MinerConfig{
 	"small": {
-		Price:  5,
+		Price:  10,
 		Power:  1,
 		Energy: 30,
 		Title:  "Шахтер",
 	},
 	"normal": {
-		Price:  50,
+		Price:  80,
 		Energy: 45,
-		Power:  3,
+		Power:  5,
 		Title:  "Шахтер+",
 	},
 	"strong": {
-		Price:  450,
+		Price:  700,
 		Energy: 60,
-		Power:  10,
+		Power:  20,
 		Title:  "Гигабайт",
 	},
 }

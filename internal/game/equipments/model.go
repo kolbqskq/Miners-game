@@ -12,22 +12,26 @@ type Equipment struct {
 }
 
 type EquipmentConfig struct {
+	Title string
 	Price int64
 	Value int64
 }
 
 var EquipmentPresets = map[string]EquipmentConfig{
 	"1": {
-		Price: 450,
-		Value: 110,
+		Title: "Кирка",
+		Price: 200,
+		Value: 10,
 	},
 	"2": {
-		Price: 450,
-		Value: 130,
+		Title: "Бур",
+		Price: 600,
+		Value: 25,
 	},
 	"3": {
-		Price: 450,
-		Value: 200,
+		Title: "Динамит",
+		Price: 1800,
+		Value: 40,
 	},
 }
 
@@ -59,8 +63,8 @@ func EquipmentShopCards() []shop.ShopCard {
 	for k, v := range EquipmentPresets {
 		card := shop.ShopCard{
 			ID:       "equipment-" + k,
-			Title:    k,
-			Income:   strconv.Itoa(int(v.Value)),
+			Title:    v.Title,
+			Income:   "+" + strconv.Itoa(int(v.Value)) + "%",
 			Duration: "",
 			Price:    strconv.Itoa(int(v.Price)),
 			Name:     k,
