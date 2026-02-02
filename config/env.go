@@ -10,10 +10,10 @@ import (
 
 func Init() {
 	if err := godotenv.Load(); err != nil {
-		log.Println("No .env file")
+		log.Println("Не удалось прочитать .env")
 		return
 	}
-	log.Println(".env file loaded")
+	log.Println(".env файл загружен")
 }
 
 type DatabaseConfig struct {
@@ -57,8 +57,8 @@ type LogConfig struct {
 	Format string
 }
 
-type GmailConfig struct{
-	Email string
+type GmailConfig struct {
+	Email       string
 	AppPassword string
 }
 
@@ -69,9 +69,23 @@ func NewLogConfig() *LogConfig {
 	}
 }
 
-func NewGmailConfig() *GmailConfig{
+func NewGmailConfig() *GmailConfig {
 	return &GmailConfig{
-		Email: getString("SMTP_EMAIL",""),
-		AppPassword: getString("SMTP_PASSWORD",""),
+		Email:       getString("SMTP_EMAIL", ""),
+		AppPassword: getString("SMTP_PASSWORD", ""),
+	}
+}
+
+type RobotsConfig struct {
+	Robots []byte
+}
+
+func NewRobotsConfig() *RobotsConfig {
+	rob, err := os.ReadFile("public/robots.txt")
+	if err != nil {
+		log.Panicln("Не удалось прочитать robots.txt")
+	}
+	return &RobotsConfig{
+		Robots: rob,
 	}
 }

@@ -1,6 +1,2 @@
 User-agent: *
 Disallow: *?*
-
-Host https://miners.ru
-
-Sitemap: https://miners.ru/sitemap.xml

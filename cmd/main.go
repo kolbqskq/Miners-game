@@ -9,6 +9,7 @@ import (
 	"miners_game/internal/game/loop"
 	"miners_game/internal/game/sessions"
 	"miners_game/internal/pages"
+	"miners_game/internal/robots"
 	"miners_game/internal/user"
 	"miners_game/pkg/database"
 	"miners_game/pkg/logger"
@@ -37,6 +38,7 @@ func main() {
 	loggerConfig := config.NewLogConfig()
 	dbConfig := config.NewDatabaseConfig()
 	gmailConfig := config.NewGmailConfig()
+	robotsConfig := config.NewRobotsConfig()
 
 	ruru.RegisterGlobal()
 
@@ -125,6 +127,10 @@ func main() {
 		Router:      app,
 		AuthService: authService,
 		Store:       store,
+	})
+	robots.NewHandler(robots.RobotsHandlerDeps{
+		Router: app,
+		Data:   robotsConfig.Robots,
 	})
 	app.Get("/metrics", adaptor.HTTPHandler(promhttp.HandlerFor(reg, promhttp.HandlerOpts{})))
 
