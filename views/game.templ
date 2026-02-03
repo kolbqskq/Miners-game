@@ -15,7 +15,7 @@ templ Game() {
     <div id="hud-container" hx-get="/game/hud" hx-trigger="every 500msС" hx-swap="innerHTML">
         @widgets.HUD("0", "0")
     </div>
-    <section class="game-scene-wrapper" hx-get="/game/upgrade" hx-trigger="refresh-upgrade from:body" hx-swap="innerHTML">
+    <section class="game-scene-wrapper" hx-get="/game/upgrade" hx-trigger="load, refresh-upgrade from:body" hx-swap="innerHTML">
             @widgets.Scene("0")
     </section>
     
@@ -37,9 +37,39 @@ templ GameStyle() {
 
     body {
         margin: 0;
-        background: radial-gradient(circle at top, #1a1a1a, var(--bg-dark));
+        background: black;
+        min-height: 100vh;
         color: var(--text-main);
         font-family: Inter, system-ui, sans-serif;
+        overflow-x: hidden;
+    }
+    body::before{
+        content: "";
+        position: fixed;
+        inset: 0;
+        background-image: url(/public/backgrounds/stars4.jpg);
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        z-index: -3;
+        transform: scale(1.05);
+    }
+    body::after{
+        content: "";
+        position: fixed;
+        inset: 0;
+        background:
+            radial-gradient(
+                circle at top,
+                rgba(225,255,255,0.06),
+                rgba(0,0,0,0.85) 70%,
+            ),
+            radial-gradient(
+                circle at center,
+                transparent 55%,
+                rgba(0,0,0,0.85)
+            );
+        z-index: -2;
     }
 
     .game-page {
@@ -58,6 +88,19 @@ templ GameStyle() {
         position: relative;
         overflow: visible;
     }
+    .game-scene-wrapper::before {
+    content: "";
+    position: absolute;
+    inset: -20%;
+    background: radial-gradient(
+        circle at center,
+        transparent 38%,
+        rgba(0, 0, 0, 0.65) 70%
+    );
+    pointer-events: none;
+    z-index: 0;
+    }
+
     .hud {
         height: 64px;
         padding: 0 24px;
@@ -68,6 +111,8 @@ templ GameStyle() {
         align-items: center;
         font-weight: 600;
         flex: 0 0 64px;
+        position: relative;
+        z-index: 100;
     }
 
     .hud-balance {

@@ -17,8 +17,10 @@ templ ShopCard(card shop.ShopCard) {
     <div class="shop-header">
         <div class="shop-meta">
             <div class="shop-title">{card.Title}</div>
-            <div class="shop-info">{card.Income}</div>
-            <div class="shop-info">{card.Duration}</div>
+            <div class="shop-stats">
+                <div class="shop-info">{card.Income}</div>
+                <div class="shop-info">{card.Duration}</div>
+            </div>
         </div>
 
         if card.Icon != "" {
@@ -58,7 +60,7 @@ templ ShopCardStyle() {
         box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.06);
         transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
     }
-
+    
     .shop-card:hover {
         transform: translateY(-2px);
         box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.08);
@@ -75,28 +77,38 @@ templ ShopCardStyle() {
         min-width: 0;
         display: flex;
         flex-direction: column;
+    }
+    .shop-stats{
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
         gap: 6px;
     }
 
     .shop-title {
-        font-size: 18px;
         font-weight: 700;
         line-height: 1.25;
+        margin-bottom: 8px;
+
+        font-size: clamp(15px, 2.4vw, 18px);
+
+        white-space: normal;
+        word-break: keep-all;
+        overflow-wrap: normal;
+        hyphens: none;
+
         display: -webkit-box;
         -webkit-box-orient: vertical;
         -webkit-line-clamp: 2;
-        min-height: calc(1.25em * 2);
         overflow: hidden;
-        text-overflow: ellipsis;
+
+        letter-spacing: -0.015em;
     }
 
-    .shop-info {
-        font-size: 14px;
-        opacity: 0.8;
-    }
 
     .shop-icon {
-        width: 96px;
+        width: 80px;
         height: 136px;
         margin-left: 12px;
         display: flex;
@@ -172,6 +184,10 @@ templ ShopCardStyle() {
         100% {
             box-shadow: 0 0 0 rgba(0, 0, 0, 0);
         }
+    }
+
+    .shop-card[data-disabled="false"] .shop-title {
+    color: rgba(255, 255, 255, 0.95);
     }
 
    .shop-card[data-disabled="true"] .shop-buy {

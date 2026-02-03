@@ -29,7 +29,12 @@ func NewHandler(deps HandlerDeps) {
 }
 
 func (h *Handler) home(c *fiber.Ctx) error {
-	component := views.Main()
+	isAuth := false
+	user_id, ok := c.Locals("user_id").(string)
+	if ok && user_id != "" {
+		isAuth = true
+	}
+	component := views.Main(isAuth)
 	return tadapter.Render(c, component, fiber.StatusOK)
 }
 

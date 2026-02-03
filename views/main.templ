@@ -3,7 +3,7 @@ package views
 import "miners_game/views/layout"
 import "miners_game/views/components"
 
-templ Main() {
+templ Main(isAuth bool) {
 
 @layout.Layout(layout.LayoutProps{
     Title: "Начни майнить",
@@ -17,7 +17,10 @@ templ Main() {
                 @components.SubTitle("Просто попробуй!")
 
                 <div class="main__hero-cta">
-                    <a class="main__link-button" href="/game">
+                    <a class="main__link-button"
+                    if isAuth{href="/game"}else{
+                        href="/register"
+                    } >
                         Начать игру
                     </a>
                 </div>

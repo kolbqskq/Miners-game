@@ -19,7 +19,7 @@ type UpgradesConfig struct {
 
 var UpgradesPresets = map[string]UpgradesConfig{
 	"1": {
-		Title: "Индустриализация",
+		Title: "Индастриал",
 		Price: 1500,
 		Value: 50,
 	},

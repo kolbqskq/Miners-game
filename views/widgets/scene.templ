@@ -19,8 +19,10 @@ templ SceneStyle() {
     width: 620px;
     height: 620px;
     overflow: visible;
+    filter: drop-shadow(0 40px 80px rgba(0,0,0,0.65));
+    filter: saturate(1.08) contrast(1.05);
+    z-index: 1;
 }
-
 
 .planet-mask {
     position: absolute;
@@ -29,6 +31,47 @@ templ SceneStyle() {
     height: 620px;
     border-radius: 50%;
     overflow: hidden;
+
+    -webkit-mask-image: radial-gradient(
+        circle,
+        black 80%,
+        rgba(0, 0, 0, 0.85) 84%,
+        transparent 90%
+    );
+    mask-image: radial-gradient(
+        circle,
+        black 78%,
+        rgba(0, 0, 0, 0.85) 82%,
+        transparent 88%
+    );
+    z-index: 1;
+}
+.planet-mask::after {
+    content: "";
+    position: absolute;
+    inset: -6%;
+    border-radius: 50%;
+    background: radial-gradient(
+        circle,
+        transparent 62%,
+        rgba(255, 255, 255, 0.35) 75%,
+        rgba(0,0,0,0.65) 100%
+    );
+    pointer-events: none;
+    z-index: 3;
+}
+.planet-mask::before {
+    content: "";
+    position: absolute;
+    inset: -1.5%;
+    border-radius: 50%;
+    background: radial-gradient(
+        circle at 30% 30%,
+        rgba(255, 255, 255, 0.18),
+        transparent 60%
+    );
+    mix-blend-mode: screen;
+    pointer-events: none;
 }
 
 
@@ -45,12 +88,20 @@ templ SceneStyle() {
     opacity: 0;
     transition: opacity 0.25s ease;
     pointer-events: none;
+
+    animation: planet-float 8s ease-in-out infinite;
 }
 
 .scene.stage-0 img[src*="lvl_0"] { opacity: 1; }
 .scene.stage-1 img[src*="lvl_1"] { opacity: 1; }
 .scene.stage-2 img[src*="lvl_2"] { opacity: 1; }
 .scene.stage-3 img[src*="lvl_3"] { opacity: 1; }
+
+@keyframes planet-float {
+    0%   { transform: translate(-50%, -50%) translateY(0); }
+    50%  { transform: translate(-50%, -50%) translateY(-6px); }
+    100% { transform: translate(-50%, -50%) translateY(0); }
+}
 
 </style>
 }

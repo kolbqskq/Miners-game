@@ -11,7 +11,7 @@ import templruntime "github.com/a-h/templ/runtime"
 import "miners_game/views/layout"
 import "miners_game/views/components"
 
-func Main() templ.Component {
+func Main(isAuth bool) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -76,7 +76,22 @@ func Main() templ.Component {
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "<div class=\"main__hero-cta\"><a class=\"main__link-button\" href=\"/game\">Начать игру</a></div><div class=\"main__hero-art\"><img src=\"/public/images/home-miner.png\" alt=\"Шахтер\"></div></div>")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "<div class=\"main__hero-cta\"><a class=\"main__link-button\"")
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+				if isAuth {
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, " href=\"/game\"")
+					if templ_7745c5c3_Err != nil {
+						return templ_7745c5c3_Err
+					}
+				} else {
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, " href=\"/register\"")
+					if templ_7745c5c3_Err != nil {
+						return templ_7745c5c3_Err
+					}
+				}
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, ">Начать игру</a></div><div class=\"main__hero-art\"><img src=\"/public/images/home-miner.png\" alt=\"Шахтер\"></div></div>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -86,7 +101,7 @@ func Main() templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "</main>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, "</main>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -124,7 +139,7 @@ func MainStyle() templ.Component {
 			templ_7745c5c3_Var4 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "<style>\r\n        html, body {\r\n            margin: 0;\r\n            padding: 0;\r\n        }\r\n        .main{\r\n            width: 100%;\r\n        }\r\n        .main__hero{\r\n            max-width: 720px;\r\n            margin: 0 auto;\r\n\r\n            display: flex;\r\n            flex-direction: column;\r\n            align-items: center;\r\n            text-align: center;\r\n\r\n            gap: 24px;\r\n            margin-top: 80px;\r\n        }\r\n        .main__hero-cta{\r\n            margin-top: 40px;\r\n        }\r\n        .main__hero p{\r\n            opacity: 0.75;\r\n        }\r\n        .main__link-button{\r\n            text-decoration: none;\r\n            display: inline-block;\r\n            padding: 18px 36px;\r\n            font-size: 17px;\r\n            font-weight: 500;\r\n\r\n            background: linear-gradient(\r\n                180deg,\r\n                #f6c453 0%,\r\n                #e0a800 100%\r\n            );\r\n            color: #111;\r\n\r\n            border: none;\r\n            border-radius: 14px;\r\n            box-shadow: 0 10px 30px rgba(0,0,0,0.35);\r\n            transition: \r\n                transform 0.15s ease,\r\n                box-shadow 0.15s ease;\r\n            animation: ctaPulse 2.8s ease-in-out infinite;\r\n        }\r\n        .main__link-button:hover{\r\n            transform: translateY(-2px);\r\n            box-shadow: 0 16px 40px rgba(0,0,0,0.45);\r\n        }\r\n        .main__hero-art {\r\n            margin-top: 64px;\r\n\r\n            display: flex;\r\n            justify-content: center;\r\n            pointer-events: none;\r\n        }\r\n        .main__hero-art img{\r\n            width: 280px;\r\n            height: auto;\r\n\r\n            opacity: 0.9;\r\n\r\n            filter: drop-shadow(0 20px 40px rgba(0,0,0,0.45));\r\n            animation: minerIdle 4s ease-in-out infinite;\r\n        }\r\n        .main__hero h1{\r\n            font-weight: 700;\r\n            letter-spacing: -0.02em;\r\n            line-height: 1.05;\r\n        }\r\n        .main__hero p{\r\n            font-size: 18px;\r\n            line-height: 1.5;\r\n            opacity: 0.7;\r\n        }\r\n\r\n        @keyframes ctaPulse{\r\n            0%, 100% {transform: translateY(0) scale(1);}\r\n            50% {transform: translateY(-4px) scale(1.03);}\r\n            100% {transform: translateY(0) scale(1);}\r\n        }\r\n        @keyframes minerIdle{\r\n            0%, 100%{transform: translateY(0);}\r\n            50%{transform: translateY(8px);}\r\n        }\r\n    </style>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "<style>\r\n        html, body {\r\n            margin: 0;\r\n            padding: 0;\r\n        }\r\n        .main{\r\n            width: 100%;\r\n        }\r\n        .main__hero{\r\n            max-width: 720px;\r\n            margin: 0 auto;\r\n\r\n            display: flex;\r\n            flex-direction: column;\r\n            align-items: center;\r\n            text-align: center;\r\n\r\n            gap: 24px;\r\n            margin-top: 80px;\r\n        }\r\n        .main__hero-cta{\r\n            margin-top: 40px;\r\n        }\r\n        .main__hero p{\r\n            opacity: 0.75;\r\n        }\r\n        .main__link-button{\r\n            text-decoration: none;\r\n            display: inline-block;\r\n            padding: 18px 36px;\r\n            font-size: 17px;\r\n            font-weight: 500;\r\n\r\n            background: linear-gradient(\r\n                180deg,\r\n                #f6c453 0%,\r\n                #e0a800 100%\r\n            );\r\n            color: #111;\r\n\r\n            border: none;\r\n            border-radius: 14px;\r\n            box-shadow: 0 10px 30px rgba(0,0,0,0.35);\r\n            transition: \r\n                transform 0.15s ease,\r\n                box-shadow 0.15s ease;\r\n            animation: ctaPulse 2.8s ease-in-out infinite;\r\n        }\r\n        .main__link-button:hover{\r\n            transform: translateY(-2px);\r\n            box-shadow: 0 16px 40px rgba(0,0,0,0.45);\r\n        }\r\n        .main__hero-art {\r\n            margin-top: 64px;\r\n\r\n            display: flex;\r\n            justify-content: center;\r\n            pointer-events: none;\r\n        }\r\n        .main__hero-art img{\r\n            width: 280px;\r\n            height: auto;\r\n\r\n            opacity: 0.9;\r\n\r\n            filter: drop-shadow(0 20px 40px rgba(0,0,0,0.45));\r\n            animation: minerIdle 4s ease-in-out infinite;\r\n        }\r\n        .main__hero h1{\r\n            font-weight: 700;\r\n            letter-spacing: -0.02em;\r\n            line-height: 1.05;\r\n        }\r\n        .main__hero p{\r\n            font-size: 18px;\r\n            line-height: 1.5;\r\n            opacity: 0.7;\r\n        }\r\n\r\n        @keyframes ctaPulse{\r\n            0%, 100% {transform: translateY(0) scale(1);}\r\n            50% {transform: translateY(-4px) scale(1.03);}\r\n            100% {transform: translateY(0) scale(1);}\r\n        }\r\n        @keyframes minerIdle{\r\n            0%, 100%{transform: translateY(0);}\r\n            50%{transform: translateY(8px);}\r\n        }\r\n    </style>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
