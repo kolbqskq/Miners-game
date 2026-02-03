@@ -55,6 +55,7 @@ func getString(key, defaultValue string) string {
 type LogConfig struct {
 	Level  int
 	Format string
+	File   string
 }
 
 type GmailConfig struct {
@@ -66,6 +67,7 @@ func NewLogConfig() *LogConfig {
 	return &LogConfig{
 		Level:  getInt("LOG_LEVEL", 0),
 		Format: getString("LOG_FORMAT", "json"),
+		File:   getString("LOG_FILE", "logs/app.log"),
 	}
 }
 
